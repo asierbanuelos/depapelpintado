@@ -5534,10 +5534,10 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			}
 		}
 		$select_inner='demo_items.*';
-		$order_by=" ORDER BY portada desc, orden asc, item_id desc";
+		$order_by=" ORDER BY portada desc, orden asc, RAND()";
 		if ($cat_seo_ambiente!=0){
 			$select_inner.=', demo_item_cat_ambiente.idcategoria AS amb_orden';
-			$order_by=" ORDER BY amb_orden desc, portada desc, orden asc, item_id desc";
+			$order_by=" ORDER BY amb_orden desc, portada desc, orden asc, RAND()";
 		}
 		if ($order!='')
 			$order_by=" ORDER BY $order ";
