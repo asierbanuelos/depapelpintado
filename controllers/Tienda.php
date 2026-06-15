@@ -2030,7 +2030,24 @@ class Tienda extends CI_Controller {
             $datos_item['item_coleccion_id']=0;
         $marca = $this->flexi_cart_model->get_fab((int)$datos_item['item_cat_fk']);
         $coleccion = $this->flexi_cart_model->get_coleccion((int)$datos_item['item_coleccion_id']);
-        
+
+        // Si el artículo ya no existe (fue eliminado por estar oculto), redirigir a su categoría principal
+        if (!isset($datos_item['item_id'])){
+            $a_categorias_principales = array(
+                0 => 'tienda/papel_pintado',
+                1 => 'tienda/murales',
+                2 => 'tienda/revestimientos',
+                3 => 'tienda/telas',
+                4 => 'tienda/alfombras',
+                5 => 'tienda/herramientas',
+                6 => 'tienda/complementos',
+            );
+            $borrado = $this->db->where('item_id', (int)$array['id'])->get('demo_items_borrados_redirect')->row();
+            if ($borrado && isset($a_categorias_principales[(int)$borrado->item_tipo])){
+                redirect($a_categorias_principales[(int)$borrado->item_tipo], 'location', 301);
+            }
+        }
+
         if ($this->data['categ']!=5 && (empty($marca) || $marca->activo==0 || $marca->publico==0)){
             // Marca inexistente, desactivada o no publicada
             //echo "<br />Marca inexistente, desactivada o no publicada.";
