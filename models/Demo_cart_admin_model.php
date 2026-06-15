@@ -427,7 +427,7 @@ class Demo_cart_admin_model extends CI_Model {
 		}
 		if($estilo!=0){
 			$temp->join('demo_estilo_item', 'item_id = estilo_item_item')
-			->join('demo_estilo', 'estilo_id = estilo_item_estilo')->where('nueva_categoria_id',$estilo);
+			->join('demo_estilo', 'estilo_id = estilo_item_estilo')->where('estilo_id',$estilo);
 		}
 		if($categ>=0){
 			$temp->where('item_tipo',$categ);
@@ -493,7 +493,7 @@ class Demo_cart_admin_model extends CI_Model {
 		}
 		if($estilo!=0){
 			$temp->join('demo_estilo_item', 'item_id = estilo_item_item')
-			->join('demo_estilo', 'estilo_id = estilo_item_estilo')->where('nueva_categoria_id',$estilo);
+			->join('demo_estilo', 'estilo_id = estilo_item_estilo')->where('estilo_id',$estilo);
 		}
 		if($categ>=0){
 			$temp->where('item_tipo',$categ);

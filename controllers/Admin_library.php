@@ -636,7 +636,7 @@ class Admin_library extends CI_Controller {
       $this->data['mod']=$this->demo_cart_admin_model->get_mod_array();
       $this->data['gama']=$this->demo_cart_admin_model->get_gama_array();
       $this->data['estilo']=$this->demo_cart_admin_model->get_estilo_array();
-      $this->data['count']=$this->demo_cart_admin_model->get_items_count($fab,$col,$todos,$precio,$referencia);
+      $this->data['count']=$this->demo_cart_admin_model->get_items_count($fab,$col,$todos,$gama,$estilo,$categ,$precio,$referencia);
       $this->data['all']=$this->demo_cart_admin_model->get_items_filter($fab,$col,$page,$todos,$order,$gama,$estilo,$categ,$precio,$referencia);
       //echo "<br />". $this->db->last_query();
       $this->data['nuevas_categorias']=$this->demo_cart_admin_model->get_categorias_seo_array_para_edicion();
