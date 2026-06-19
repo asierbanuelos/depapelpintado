@@ -538,7 +538,7 @@ if (isset($menu_categorias_seo) && is_array($menu_categorias_seo) && count($menu
 elseif (isset($filtros_categorias_seo['menu_categorias_seo']) && is_array($filtros_categorias_seo['menu_categorias_seo']) && count($filtros_categorias_seo['menu_categorias_seo'])>0)
   $menu_categorias_seo_filtro=$filtros_categorias_seo['menu_categorias_seo'];
 
-if (count($menu_categorias_seo_filtro)>0){
+if (!isset($productos_coleccion) && count($menu_categorias_seo_filtro)>0){
     foreach ($menu_categorias_seo_filtro as $txt_familia_categoria => $a_categorias_familia) {
       // Saltar calidad si ya se muestra desde filtros_categorias_seo['calidades']
       $txt_check = strpos($txt_familia_categoria, '__')!==false ? explode('__',$txt_familia_categoria,2)[1] : $txt_familia_categoria;
@@ -600,7 +600,8 @@ if (count($menu_categorias_seo_filtro)>0){
         }
         //$nombre_negrita=str_replace(strtolower($familia_producto), strtolower($familia_producto).' <span>', strtolower($datos_categorias_familia['nombre'])).'</span>';
         //echo "    <li><a href='/{$datos_categorias_familia['url']}'>{$datos_categorias_familia['nombre']}</a></li>";
-        echo "    <li><a href='/{$datos_categorias_familia['url']}'>".ucfirst($nombre_negrita)."</a></li>";
+        $suffix_coleccion_seo = (isset($id_coleccion) && (int)$id_coleccion > 0) ? '?id_coleccion='.(int)$id_coleccion : '';
+        echo "    <li><a href='/{$datos_categorias_familia['url']}{$suffix_coleccion_seo}'>".ucfirst($nombre_negrita)."</a></li>";
       }
       echo "    </ul>";
       echo "    <button class='pl-4 my_collapsible my_collapsible_categorias my_collapsible_filtros $class_ver_mas' aria-label='Ver más'></button>";

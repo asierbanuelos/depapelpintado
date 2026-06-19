@@ -1067,7 +1067,10 @@ class Tienda extends CI_Controller {
         $this->data['texto_h1_seccion']=$categoria_seo->h1_categoria; 
         $this->data['texto__intro_seo']= $categoria_seo->descripcion_categoria; 
        
-        $this->data['filtros_categorias_seo']= $this->flexi_cart_model->get_filtros_izquierda_listado( $categoria_seo->tipo_producto, $categoria_seo->nueva_categoria_id);
+        $id_coleccion_seo = isset($_REQUEST['id_coleccion']) ? (int)$_REQUEST['id_coleccion'] : 0;
+        if ($id_coleccion_seo > 0)
+            $this->data['id_coleccion'] = $id_coleccion_seo;
+        $this->data['filtros_categorias_seo']= $this->flexi_cart_model->get_filtros_izquierda_listado( $categoria_seo->tipo_producto, $categoria_seo->nueva_categoria_id, $id_coleccion_seo);
         /*
         if ($categoria_seo->nueva_categoria_id==110){
             print '<pre><xmp>';
