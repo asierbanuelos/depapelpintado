@@ -150,7 +150,49 @@ class Admin_library extends CI_Controller {
       $this->data['pagina']=$this->contenido_model->add_image();
       redirect ('admin_library/slider');
     }
-   
+
+    // ---- FAQs ----
+
+    function faqs(){
+      $this->load->model('demo_cart_admin_model');
+      $this->load->model('demo_cart_admin_model');
+      $page_type = $this->input->get('tipo') ? $this->input->get('tipo') : '';
+      $page_id   = (int)$this->input->get('page_id');
+      $this->data['faqs']      = $this->demo_cart_admin_model->get_faqs_admin($page_type, $page_id);
+      $this->data['categorias_seo'] = $this->demo_cart_admin_model->get_categorias_seo_array_para_edicion();
+      $this->data['filtro_tipo']    = $page_type;
+      $this->data['filtro_page_id'] = $page_id;
+      $this->load->view('demo/admin_examples/faqs/listado', $this->data);
+    }
+
+    function faq_nueva(){
+      $this->load->model('demo_cart_admin_model');
+      $this->data['faq']        = null;
+      $this->data['categorias_seo'] = $this->demo_cart_admin_model->get_categorias_seo_array_para_edicion();
+      $this->load->view('demo/admin_examples/faqs/editar', $this->data);
+    }
+
+    function faq_editar($id=0){
+      $this->load->model('demo_cart_admin_model');
+      $this->data['faq']        = $this->demo_cart_admin_model->get_faq((int)$id);
+      $this->data['categorias_seo'] = $this->demo_cart_admin_model->get_categorias_seo_array_para_edicion();
+      $this->load->view('demo/admin_examples/faqs/editar', $this->data);
+    }
+
+    function faq_guardar(){
+      $this->load->model('demo_cart_admin_model');
+      $this->demo_cart_admin_model->save_faq();
+      redirect('admin_library/faqs');
+    }
+
+    function faq_eliminar($id=0){
+      $this->load->model('demo_cart_admin_model');
+      $this->demo_cart_admin_model->delete_faq((int)$id);
+      redirect('admin_library/faqs');
+    }
+
+    // ---- /FAQs ----
+
     function articulos(){
       $this->load->model('demo_cart_admin_model');
       $this->data['fab']=$this->demo_cart_admin_model->get_cat_array();

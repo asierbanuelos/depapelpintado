@@ -140,6 +140,46 @@ elseif(isset($losmas) && $losmas==1){
 </div>
 <?php endif; ?>
 
+<?php if (!empty($faqs)): ?>
+<div class="units-row faq-section" style="background:#f9f9f9;padding:40px 0;">
+  <div class="unit-centered unit-80">
+    <h2 style="font-size:26px;font-weight:400;color:#333;text-align:center;margin-bottom:28px;">Preguntas frecuentes</h2>
+    <div class="faq-list" itemscope itemtype="https://schema.org/FAQPage">
+      <?php foreach ($faqs as $faq): ?>
+      <div class="faq-item" itemprop="mainEntity" itemscope itemtype="https://schema.org/Question" style="border-bottom:1px solid #e0e0e0;">
+        <button class="faq-question" onclick="this.classList.toggle('open');var a=this.nextElementSibling;a.style.display=(a.style.display==='block')?'none':'block';" itemprop="name" style="width:100%;text-align:left;background:none;border:none;padding:16px 40px 16px 0;font-size:16px;font-weight:600;color:#333;cursor:pointer;position:relative;line-height:1.4;">
+          <?= htmlspecialchars($faq->pregunta) ?>
+          <span style="position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:22px;color:#B05380;line-height:1;">+</span>
+        </button>
+        <div itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer" style="display:none;padding:0 0 16px 0;color:#555;font-size:15px;line-height:1.7;">
+          <span itemprop="text"><?= nl2br(htmlspecialchars($faq->respuesta)) ?></span>
+        </div>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</div>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    <?php foreach ($faqs as $i => $faq): ?>
+    <?= $i > 0 ? ',' : '' ?>
+    {
+      "@type": "Question",
+      "name": <?= json_encode($faq->pregunta, JSON_UNESCAPED_UNICODE) ?>,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": <?= json_encode($faq->respuesta, JSON_UNESCAPED_UNICODE) ?>
+      }
+    }
+    <?php endforeach; ?>
+  ]
+}
+</script>
+<?php endif; ?>
+
 <?php // newsletter_banner_footer se carga en footer.php ?>
 
 <?php

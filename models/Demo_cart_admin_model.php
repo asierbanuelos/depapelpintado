@@ -1337,6 +1337,47 @@ class Demo_cart_admin_model extends CI_Model {
       }
     }
 
+    // ---- FAQs ----
+
+    function get_faqs_admin($page_type='', $page_id=0){
+      $q = $this->db->select('*')->from('demo_faqs');
+      if ($page_type !== '') $q = $q->where('page_type', $page_type);
+      if ($page_id > 0) $q = $q->where('page_id', (int)$page_id);
+      return $q->order_by('page_type ASC, page_id ASC, orden ASC, faq_id ASC')->get()->result();
+    }
+
+    function get_faq($faq_id){
+      return $this->db->where('faq_id',(int)$faq_id)->get('demo_faqs')->row();
+    }
+
+    function get_faqs_frontend($page_type, $page_id=0){
+      return $this->db->where('page_type',$page_type)->where('page_id',(int)$page_id)
+        ->where('activo',1)->order_by('orden ASC, faq_id ASC')->get('demo_faqs')->result();
+    }
+
+    function save_faq(){
+      $data = $this->input->post(NULL, TRUE);
+      $row = array(
+        'page_type' => ($data['page_type'] === 'categoria') ? 'categoria' : 'home',
+        'page_id'   => (int)$data['page_id'],
+        'pregunta'  => $data['pregunta'],
+        'respuesta' => $data['respuesta'],
+        'orden'     => (int)$data['orden'],
+        'activo'    => isset($data['activo']) ? 1 : 0,
+      );
+      $faq_id = (int)$data['faq_id'];
+      if ($faq_id > 0)
+        $this->db->where('faq_id', $faq_id)->update('demo_faqs', $row);
+      else
+        $this->db->insert('demo_faqs', $row);
+    }
+
+    function delete_faq($faq_id){
+      $this->db->where('faq_id',(int)$faq_id)->delete('demo_faqs');
+    }
+
+    // ---- /FAQs ----
+
     function demo_update_col(){
       $data=$this->input->post(NULL, TRUE);
       $cats=implode(',',$data['cats']);

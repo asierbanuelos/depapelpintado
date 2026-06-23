@@ -687,7 +687,9 @@ class Tienda extends CI_Controller {
         $this->data['estilo'] = $this->flexi_cart_model->get_estilos();
         //$this->data['all']=$this->flexi_cart_model->get_items_filter();
 
-        
+        $this->load->model('demo_cart_admin_model');
+        $this->data['faqs'] = $this->demo_cart_admin_model->get_faqs_frontend('home', 0);
+
         $recaptcha_v3=new stdClass;
         $recaptcha_v3->aktibaturik=true;
         $recaptcha_v3->action='';
@@ -1094,6 +1096,9 @@ class Tienda extends CI_Controller {
         
         $this->data['ocultar_submenu']=true;
         $this->data['mostrar_estilos_viejos']=true;
+
+        $this->load->model('demo_cart_admin_model');
+        $this->data['faqs'] = $this->demo_cart_admin_model->get_faqs_frontend('categoria', $categoria_seo->nueva_categoria_id);
 
         if (isset($_GET['eneko'])){
             print '<pre><xmp>';
