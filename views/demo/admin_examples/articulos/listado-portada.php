@@ -70,17 +70,19 @@ $a_tipos[5]='Herramientas';
           ?>
           </div>
           <div class="col one t-two m-three">
-            <span class="imguploader" ref="<?= $value['item_cat_fk'] . ":" . $value['item_ref']. ":" . $value['item_coleccion_id'] ?>" style="background-color: #000;display:block;width:74px;height:74px">
+            <span class="imguploader" ref="<?= $value['item_cat_fk'] . ":" . $value['item_ref']. ":" . $value['item_coleccion_id'] ?>" style="background-color: #000;display:block;width:74px;height:74px;cursor:pointer;">
               <? if ($value['img'] != "") { ?>
                 <img src="<?php echo $includes_dir . str_replace("../", "", $value['img']); ?>th.jpg" width="74" height="74"/>
               <? } ?>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" style="display:none" class="img-file-input" data-ref="<?= $value['item_cat_fk'] . ":" . $value['item_ref']. ":" . $value['item_coleccion_id'] ?>" data-type="1"/>
             </span>
           </div>
           <div class="col one t-two m-three">
-            <span class="imguploader2" ref="<?= $value['item_cat_fk'] . ":" . $value['item_ref']. ":" . $value['item_coleccion_id'] ?>" style="background-color: #000;display:block;width:74px;height:74px">
+            <span class="imguploader2" ref="<?= $value['item_cat_fk'] . ":" . $value['item_ref']. ":" . $value['item_coleccion_id'] ?>" style="background-color: #000;display:block;width:74px;height:74px;cursor:pointer;">
               <? if ($value['imgamb'] != "") { ?>
                 <img src="<?php echo $includes_dir . str_replace("../", "", $value['imgamb']); ?>th.jpg" width="74" height="74"/>
               <? } ?>
+              <input type="file" accept="image/jpeg,image/jpg,image/png,image/webp" style="display:none" class="img-file-input" data-ref="<?= $value['item_cat_fk'] . ":" . $value['item_ref']. ":" . $value['item_coleccion_id'] ?>" data-type="2"/>
             </span>
           </div>
           <div class="col seven t-four m-three">
@@ -97,7 +99,49 @@ $a_tipos[5]='Herramientas';
       <?
       }
 
-  $this->load->view('includes/scripts'); 
-  ?> 
+  $this->load->view('includes/scripts');
+  ?>
+  <script>
+  function sendFileToServer(formData, spanObj, fileObj, endpoint) {
+    var uploadURL = "<?= $includes_dir ?>grid/" + endpoint;
+    $.ajax({
+      url: uploadURL, type: "POST", contentType: false, processData: false,
+      cache: false, data: formData, dataType: 'json',
+      success: function(data) {
+        if (data && data.ok) {
+          var reader = new FileReader();
+          reader.onload = function(e) {
+            spanObj.find('img').remove();
+            spanObj.prepend('<img src="' + e.target.result + '" width="74" height="74" style="pointer-events:none"/>');
+          };
+          reader.readAsDataURL(fileObj);
+          spanObj.css('outline', '2px solid #00aa00');
+        } else {
+          spanObj.css('outline', '2px solid red');
+          alert('Error: ' + (data ? data.msg : 'respuesta inesperada'));
+        }
+      },
+      error: function(xhr) {
+        spanObj.css('outline', '2px solid red');
+        alert('Error de conexión: ' + xhr.status + ' - ' + xhr.responseText);
+      }
+    });
+  }
+  $(document).on('click', '.imguploader, .imguploader2', function(e) {
+    if (!$(e.target).is('a, button')) $(this).find('.img-file-input').trigger('click');
+  });
+  $(document).on('change', '.img-file-input', function(e) {
+    var ref = $(this).data('ref');
+    var type = parseInt($(this).data('type'));
+    var files = e.target.files;
+    var span = $(this).parent();
+    if (!files.length) return;
+    var fd = new FormData();
+    fd.append('file', files[0]);
+    fd.append('fname', ref);
+    sendFileToServer(fd, span, files[0], type === 1 ? 'up000uy.php' : 'up001uy.php');
+    $(this).val('');
+  });
+  </script>
 </body>
 </html>
