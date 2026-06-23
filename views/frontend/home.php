@@ -868,17 +868,28 @@ if ($gaur <= '2022-08-26')
 </div>
 
 <?php if (!empty($faqs)): ?>
-<div class="units-row units-padding faq-section" style="background:#f9f9f9;padding:40px 0;">
-  <div class="unit-centered unit-80">
-    <h2 style="font-size:28px;font-weight:400;color:#333;text-align:center;margin-bottom:30px;">Preguntas frecuentes</h2>
-    <div class="faq-list" itemscope itemtype="https://schema.org/FAQPage">
+<style>
+.faq-home-section { background: #f9f6f4; padding: 56px 0 64px; }
+.faq-home-section h2 { font-size: 26px; font-weight: 400; color: #333; text-align: center; margin: 0 0 36px; letter-spacing: .02em; }
+.faq-home-list { max-width: 760px; margin: 0 auto; }
+.faq-home-item { background: #fff; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.07); overflow: hidden; }
+.faq-home-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; background: none; border: none; padding: 20px 22px; font-size: 15px; font-weight: 600; color: #333; cursor: pointer; text-align: left; gap: 16px; line-height: 1.45; }
+.faq-home-btn:hover { color: #B05380; }
+.faq-home-icon { flex-shrink: 0; font-size: 22px; color: #B05380; font-weight: 300; transition: transform .25s; line-height: 1; }
+.faq-home-btn.open .faq-home-icon { transform: rotate(45deg); }
+.faq-home-body { display: none; padding: 0 22px 20px; font-size: 14px; color: #555; line-height: 1.75; border-top: 1px solid #f0ece9; }
+</style>
+<div class="faq-home-section">
+  <div class="container">
+    <h2>Preguntas frecuentes</h2>
+    <div class="faq-home-list" itemscope itemtype="https://schema.org/FAQPage">
       <?php foreach ($faqs as $faq): ?>
-      <div class="faq-item" itemprop="mainEntity" itemscope itemtype="https://schema.org/Question" style="border-bottom:1px solid #e0e0e0;margin-bottom:0;">
-        <button class="faq-question" onclick="this.classList.toggle('open');var a=this.nextElementSibling;a.style.display=(a.style.display==='block')?'none':'block';" itemprop="name" style="width:100%;text-align:left;background:none;border:none;padding:18px 40px 18px 0;font-size:17px;font-weight:600;color:#333;cursor:pointer;position:relative;line-height:1.4;">
-          <?= htmlspecialchars($faq->pregunta) ?>
-          <span class="faq-icon" style="position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:22px;color:#B05380;line-height:1;">+</span>
+      <div class="faq-home-item" itemprop="mainEntity" itemscope itemtype="https://schema.org/Question">
+        <button class="faq-home-btn" itemprop="name" onclick="var b=this.nextElementSibling;b.style.display=b.style.display==='block'?'none':'block';this.classList.toggle('open');">
+          <span><?= htmlspecialchars($faq->pregunta) ?></span>
+          <span class="faq-home-icon">+</span>
         </button>
-        <div class="faq-answer" itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer" style="display:none;padding:0 0 18px 0;color:#555;font-size:15px;line-height:1.7;">
+        <div class="faq-home-body" itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer">
           <span itemprop="text"><?= nl2br(htmlspecialchars($faq->respuesta)) ?></span>
         </div>
       </div>

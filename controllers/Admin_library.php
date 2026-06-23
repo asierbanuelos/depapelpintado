@@ -155,19 +155,27 @@ class Admin_library extends CI_Controller {
 
     function faqs(){
       $this->load->model('demo_cart_admin_model');
-      $this->load->model('demo_cart_admin_model');
-      $page_type = $this->input->get('tipo') ? $this->input->get('tipo') : '';
-      $page_id   = (int)$this->input->get('page_id');
-      $this->data['faqs']      = $this->demo_cart_admin_model->get_faqs_admin($page_type, $page_id);
+      $filtro_tipo    = $this->input->get('tipo') ? $this->input->get('tipo') : '';
+      $filtro_page_id = (int)$this->input->get('page_id');
+      // Traer todas siempre; la vista las separa en pestañas
+      $this->data['faqs']           = $this->demo_cart_admin_model->get_faqs_admin('', 0);
       $this->data['categorias_seo'] = $this->demo_cart_admin_model->get_categorias_seo_array_para_edicion();
-      $this->data['filtro_tipo']    = $page_type;
-      $this->data['filtro_page_id'] = $page_id;
+      $this->data['filtro_tipo']    = $filtro_tipo;
+      $this->data['filtro_page_id'] = $filtro_page_id;
       $this->load->view('demo/admin_examples/faqs/listado', $this->data);
     }
 
     function faq_nueva(){
       $this->load->model('demo_cart_admin_model');
-      $this->data['faq']        = null;
+      $prefill = new stdClass();
+      $prefill->faq_id   = 0;
+      $prefill->page_type = $this->input->get('tipo') === 'categoria' ? 'categoria' : 'home';
+      $prefill->page_id   = (int)$this->input->get('page_id');
+      $prefill->pregunta  = '';
+      $prefill->respuesta = '';
+      $prefill->orden     = 0;
+      $prefill->activo    = 1;
+      $this->data['faq']        = $prefill;
       $this->data['categorias_seo'] = $this->demo_cart_admin_model->get_categorias_seo_array_para_edicion();
       $this->load->view('demo/admin_examples/faqs/editar', $this->data);
     }
