@@ -29,6 +29,11 @@
       ?>
       <div style="height: 20px"></div>
       <div style="font-size:40px;font-weight: 300;color: #B05380;text-align:center;border-bottom: 1px solid #B05380;">EDITAR ARTÍCULO</div>
+      <?php if (isset($_GET['saved'])): ?>
+      <div style="background:#d4edda;color:#155724;border:1px solid #c3e6cb;border-radius:4px;padding:12px 20px;margin:16px 0;font-size:15px;font-weight:600;">
+        ✓ Cambios guardados correctamente.
+      </div>
+      <?php endif; ?>
       <div style="height: 20px"></div>
       <div style="display:none"><?= form_input('item_id',$item_id,'') ?></div>
       <div class="sec row">

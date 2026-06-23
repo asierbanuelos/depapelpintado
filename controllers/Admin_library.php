@@ -781,21 +781,9 @@ class Admin_library extends CI_Controller {
     //echo json_encode($return);
   }
   function update_art_test(){
-    /*
-    print '<pre><xmp>';
-    print_r($_POST);
-    print '</xmp></pre>';
-    exit;
-    */
     $this->load->model('demo_cart_admin_model');
-    $this->ret['val'] = $this->demo_cart_admin_model->demo_update_item();
-    //$this->db->cache_delete_all();
-    //$this->load->view('demo/admin_examples/articulos/noimgitem', $this->ret);
-    //echo json_encode($return);
-
-    //$this->editar_articulo($_POST['item_id']);
-    //redirect('admin_library/editar_articulo/'.$_POST['item_id']);
-    redirect('admin_library/noimg#articulo_'.$_POST['item_id']);
+    $this->demo_cart_admin_model->demo_update_item();
+    redirect('admin_library/editar_articulo/'.(int)$_POST['item_id'].'?saved=1');
 
   }
 	function update_art_masivo(){
