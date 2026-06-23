@@ -1895,6 +1895,244 @@ class Admin_library extends CI_Controller {
       }
     }
 
+    function listado_articulos_portada($idtipo=0){
+      $this->load->model('demo_cart_admin_model');
+      $this->data['a_articulos'] = $this->db->select("demo_items.item_id, item_ref, item_cat_fk, item_coleccion_id, item_tipo, img, imgamb, cat_name, coleccion_name, demo_items.orden", FALSE)
+        ->from('demo_items')
+        ->join('demo_categories', 'item_cat_fk = cat_id')
+        ->join('demo_coleccion', 'item_coleccion_id = coleccion_id')
+        ->where('portada', 1)
+        ->where('item_tipo', (int)$idtipo)
+        ->order_by('demo_items.orden ASC')
+        ->get()->result_array();
+      $this->data['idtipo'] = (int)$idtipo;
+      $this->load->view('demo/admin_examples/articulos/listado-portada', $this->data);
+    }
+
+    function quitar_portada($idtipo=0, $item_id=0){
+      $this->load->model('demo_cart_admin_model');
+      $this->demo_cart_admin_model->quita_portada((int)$idtipo, (int)$item_id);
+      redirect('admin_library/listado_articulos_portada/'.(int)$idtipo);
+    }
+
+    function quitar_todos_portada($idtipo=0){
+      $this->load->model('demo_cart_admin_model');
+      $this->demo_cart_admin_model->quita_portada((int)$idtipo, 0);
+      redirect('admin_library/listado_articulos_portada/'.(int)$idtipo);
+    }
+
+    function listado_colecciones_en_meta(){
+      $this->data['colecciones'] = $this->db->select("coleccion_id, coleccion_name, cat_name, col_img, col_ambimg", FALSE)
+        ->from('demo_coleccion')
+        ->join('demo_categories', 'coleccion_cat_id = cat_id')
+        ->where('demo_coleccion.xml_META_be', 1)
+        ->order_by('cat_name ASC, coleccion_name ASC')
+        ->get()->result();
+      $this->load->view('demo/admin_examples/articulos/listado-colecciones-meta', $this->data);
+    }
+
+    function quitar_meta($idcoleccion=0){
+      $this->load->model('demo_cart_admin_model');
+      $this->demo_cart_admin_model->quita_meta((int)$idcoleccion);
+      redirect('admin_library/listado_colecciones_en_meta');
+    }
+
+    function precios_santos_monteiro($opcion='m_cuadrado'){
+      $acabados_raw = $this->db->select("idsantos_monteiro_acabado, nombre_acabado, agrupar_en_id", FALSE)
+        ->from('santos_monteiro_acabado')
+        ->where('activo_be', 1)
+        ->order_by('orden ASC')
+        ->get()->result();
+      $a_acabados = array();
+      $a_agrupados = array();
+      foreach ($acabados_raw as $a) {
+        if ($a->agrupar_en_id == 0) {
+          $a_acabados[$a->idsantos_monteiro_acabado] = $a->nombre_acabado;
+        } else {
+          $a_agrupados[$a->agrupar_en_id][] = $a->idsantos_monteiro_acabado;
+        }
+      }
+      $colecciones_raw = $this->db->select("coleccion_id, coleccion_name", FALSE)
+        ->from('demo_coleccion')
+        ->where('coleccion_cat_id', 268)
+        ->where('activo', 1)
+        ->order_by('coleccion_name ASC')
+        ->get()->result();
+      $a_colecciones = array();
+      foreach ($colecciones_raw as $c) {
+        $a_colecciones[$c->coleccion_id] = $c->coleccion_name;
+      }
+      $precios_raw = $this->db->select("*", FALSE)->from('santos_monteiro_acabado_precio')->get()->result();
+      $a_precios = array();
+      foreach ($precios_raw as $p) {
+        $a_precios[$p->idcoleccion][$p->idsantos_monteiro_acabado][$p->idsantos_monteiro_acabado_precio] = (array)$p;
+      }
+      $this->data['a_acabados'] = $a_acabados;
+      $this->data['a_agrupados'] = $a_agrupados;
+      $this->data['a_colecciones'] = $a_colecciones;
+      $this->data['a_precios'] = $a_precios;
+      $this->data['opcion'] = $opcion;
+      $this->load->view('demo/admin_examples/articulos/precios_santos_monteiro', $this->data);
+    }
+
+    function update_precios_santos_monteiro(){
+      $data = $this->input->post(NULL, TRUE);
+      $campo = $data['campo_precio'];
+      $opcion = isset($data['opcion']) ? $data['opcion'] : 'm_cuadrado';
+      if (!in_array($campo, array('precio_m_cuadrado', 'precio_m_cuadrado_exacto'))) {
+        redirect('admin_library/precios_santos_monteiro/'.$opcion);
+        return;
+      }
+      if (!empty($data['a_precios'])) {
+        foreach ($data['a_precios'] as $idcol => $acabados) {
+          foreach ($acabados as $idacabado => $precios) {
+            foreach ($precios as $idprecio => $valores) {
+              $precio = (float)$valores[$campo];
+              if ((int)$idprecio === 0) {
+                $this->db->insert('santos_monteiro_acabado_precio', array(
+                  'idcoleccion' => (int)$idcol,
+                  'idsantos_monteiro_acabado' => (int)$idacabado,
+                  $campo => $precio,
+                ));
+              } else {
+                $this->db->where('idsantos_monteiro_acabado_precio', (int)$idprecio)
+                  ->update('santos_monteiro_acabado_precio', array($campo => $precio));
+              }
+            }
+          }
+        }
+      }
+      if (!empty($data['a_agrupado'])) {
+        foreach ($data['a_agrupado'] as $idacabado_primario => $colecciones) {
+          foreach ($colecciones as $idcol => $acabados_aux) {
+            foreach ($acabados_aux as $id_acabado_aux => $precios) {
+              foreach ($precios as $idprecio => $valores) {
+                $precio = (float)$valores[$campo];
+                if ((int)$idprecio === 0) {
+                  $this->db->insert('santos_monteiro_acabado_precio', array(
+                    'idcoleccion' => (int)$idcol,
+                    'idsantos_monteiro_acabado' => (int)$id_acabado_aux,
+                    $campo => $precio,
+                  ));
+                } else {
+                  $this->db->where('idsantos_monteiro_acabado_precio', (int)$idprecio)
+                    ->update('santos_monteiro_acabado_precio', array($campo => $precio));
+                }
+              }
+            }
+          }
+        }
+      }
+      redirect('admin_library/precios_santos_monteiro/'.$opcion);
+    }
+
+    function tarifas_acabados(){
+      $marcas = $this->db->select("DISTINCT(marca_id) as cat_id, cat_name", FALSE)
+        ->from('alfombra_acabados_tarifas')
+        ->join('demo_categories', 'marca_id = cat_id')
+        ->order_by('cat_name ASC')
+        ->get()->result();
+      $marca_seleccionada = (int)$this->input->get('marca');
+      if (!$marca_seleccionada && !empty($marcas)) $marca_seleccionada = $marcas[0]->cat_id;
+      $acabados = array();
+      if ($marca_seleccionada) {
+        $acabados = $this->db->where('marca_id', $marca_seleccionada)
+          ->order_by('orden ASC, id ASC')
+          ->get('alfombra_acabados_tarifas')->result();
+      }
+      $this->data['marcas_alfombras'] = $marcas;
+      $this->data['marca_seleccionada'] = $marca_seleccionada;
+      $this->data['acabados'] = $acabados;
+      $this->load->view('demo/admin_examples/articulos/tarifas_acabados', $this->data);
+    }
+
+    function update_tarifas_acabados(){
+      $data = $this->input->post(NULL, TRUE);
+      $marca_id = (int)$data['marca_id'];
+      if (!empty($data['eliminar'])) {
+        foreach ($data['eliminar'] as $id => $v) {
+          $this->db->where('id', (int)$id)->delete('alfombra_acabados_tarifas');
+          break;
+        }
+      } elseif (!empty($data['acabados'])) {
+        foreach ($data['acabados'] as $id => $valores) {
+          $this->db->where('id', (int)$id)->update('alfombra_acabados_tarifas', array(
+            'nombre_acabado' => $valores['nombre_acabado'],
+            'precio_m_lineal' => (float)$valores['precio_m_lineal'],
+            'precio_m_lineal_largo' => (float)$valores['precio_m_lineal_largo'],
+            'precio_m2' => (float)$valores['precio_m2'],
+            'opciones' => $valores['opciones'],
+            'txt_opciones' => $valores['txt_opciones'],
+            'imagen' => $valores['imagen'],
+            'orden' => (int)$valores['orden'],
+            'activo' => isset($valores['activo']) ? 1 : 0,
+          ));
+        }
+      }
+      redirect('admin_library/tarifas_acabados?marca='.$marca_id);
+    }
+
+    function add_tarifa_acabado(){
+      $data = $this->input->post(NULL, TRUE);
+      $this->db->insert('alfombra_acabados_tarifas', array(
+        'marca_id' => (int)$data['marca_id'],
+        'nombre_acabado' => $data['nombre_acabado'],
+        'precio_m_lineal' => (float)$data['precio_m_lineal'],
+        'precio_m_lineal_largo' => 0,
+        'precio_m2' => (float)$data['precio_m2'],
+        'imagen' => $data['imagen'],
+        'activo' => 1,
+        'orden' => 0,
+        'opciones' => '',
+        'txt_opciones' => '',
+      ));
+      redirect('admin_library/tarifas_acabados?marca='.(int)$data['marca_id']);
+    }
+
+    function orden_colecciones(){
+      $marcas = $this->db->select("cat_id, cat_name, COUNT(coleccion_id) as total_colecciones", FALSE)
+        ->from('demo_categories')
+        ->join('demo_coleccion', 'coleccion_cat_id = cat_id')
+        ->where('demo_coleccion.activo', 1)
+        ->group_by('cat_id')
+        ->order_by('cat_name ASC')
+        ->get()->result();
+      $marca_seleccionada = (int)$this->input->get('marca');
+      if (!$marca_seleccionada && !empty($marcas)) $marca_seleccionada = $marcas[0]->cat_id;
+      $colecciones = array();
+      $nombre_marca = '';
+      if ($marca_seleccionada) {
+        $colecciones = $this->db->select("coleccion_id, coleccion_name, col_img, COUNT(demo_items.item_id) as total_items", FALSE)
+          ->from('demo_coleccion')
+          ->join('demo_items', 'item_coleccion_id = coleccion_id AND demo_items.activo = 1', 'left')
+          ->where('coleccion_cat_id', $marca_seleccionada)
+          ->where('demo_coleccion.activo', 1)
+          ->group_by('coleccion_id')
+          ->order_by('demo_coleccion.orden ASC, coleccion_name ASC')
+          ->get()->result();
+        $cat = $this->db->where('cat_id', $marca_seleccionada)->get('demo_categories')->row();
+        if ($cat) $nombre_marca = $cat->cat_name;
+      }
+      if ($this->input->get('saved')) $this->data['mensaje'] = 'Orden guardado correctamente.';
+      $this->data['marcas'] = $marcas;
+      $this->data['colecciones'] = $colecciones;
+      $this->data['marca_seleccionada'] = $marca_seleccionada;
+      $this->data['nombre_marca'] = $nombre_marca;
+      $this->load->view('demo/admin_examples/articulos/orden_colecciones', $this->data);
+    }
+
+    function update_orden_colecciones(){
+      $data = $this->input->post(NULL, TRUE);
+      $marca_id = (int)$data['marca_id'];
+      if (!empty($data['orden'])) {
+        foreach ($data['orden'] as $coleccion_id => $orden) {
+          $this->db->where('coleccion_id', (int)$coleccion_id)
+            ->update('demo_coleccion', array('orden' => (int)$orden));
+        }
+      }
+      redirect('admin_library/orden_colecciones?marca='.$marca_id.'&saved=1');
+    }
+
     function modelos(){
       $this->load->model('demo_cart_admin_model');
       $this->data['fab']=$this->demo_cart_admin_model->get_cat_array("ASC");
