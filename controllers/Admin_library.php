@@ -705,6 +705,8 @@ class Admin_library extends CI_Controller {
     }
 
     function editar_articulo($id=0){
+      $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+      $this->output->set_header('Pragma: no-cache');
       $this->load->model('demo_cart_admin_model');
 
       $datos_item_aux=$this->demo_cart_admin_model->get_full_item_data_new($id);
@@ -783,7 +785,7 @@ class Admin_library extends CI_Controller {
   function update_art_test(){
     $this->load->model('demo_cart_admin_model');
     $this->demo_cart_admin_model->demo_update_item();
-    redirect('admin_library/editar_articulo/'.(int)$_POST['item_id'].'?saved=1');
+    redirect('admin_library/editar_articulo/'.(int)$_POST['item_id'].'?saved=1&_='.time());
 
   }
 	function update_art_masivo(){
