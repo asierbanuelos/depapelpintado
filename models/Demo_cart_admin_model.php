@@ -296,7 +296,7 @@ class Demo_cart_admin_model extends CI_Model {
 			->result_array();
     }
     function get_full_item_data_new($itemid){
-      $resultado= $this->db->select("*",FALSE)
+      $resultado= $this->db->select("*, demo_items.orden AS orden, demo_items.activo AS activo, demo_items.portada AS portada",FALSE)
 			->from('demo_items')
             ->join($this->flexi_cart_admin->db_table('item_stock'), 'demo_items.item_id = '.$this->flexi_cart_admin->db_column('item_stock', 'item'))
 						->join('demo_categories', 'item_cat_fk = cat_id')
