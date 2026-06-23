@@ -803,6 +803,29 @@ class Admin_library extends CI_Controller {
 
       redirect('admin_library/fabricantes_seo');
     }
+    function editar_fabricante_seo($id=0){
+      $this->load->model('demo_cart_admin_model');
+      $datos = $this->demo_cart_admin_model->get_categories_seo((int)$id);
+      $this->data['categoria'] = $datos['principal'];
+      if (isset($datos['ekam'])){
+        $this->data['categoria_ekam'] = $datos['ekam'];
+      } else {
+        $ekam = new stdClass();
+        $ekam->cat_id = 0;
+        $ekam->cat_text = '';
+        $ekam->meta_titlef = '';
+        $ekam->meta_descriptionf = '';
+        $ekam->meta_keywordsf = '';
+        $this->data['categoria_ekam'] = $ekam;
+      }
+      $this->data['volver_ekam'] = 0;
+      $this->load->view('demo/admin_examples/articulos/fabricantes_editar', $this->data);
+    }
+    function update_fabricante_seo(){
+      $this->load->model('demo_cart_admin_model');
+      $this->demo_cart_admin_model->demo_save_fabricante_seo();
+      redirect('admin_library/fabricantes_seo#registro_'.$this->input->post('cat_id'));
+    }
     function publica_fab(){
       //$this->db->cache_delete_all();
       $this->load->model('demo_cart_admin_model');
