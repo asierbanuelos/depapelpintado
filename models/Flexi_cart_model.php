@@ -4848,7 +4848,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		if($order==""){
 			$temp->order_by('portada','desc');
 			$temp->order_by('demo_items.orden','asc');
-			$temp->order_by('item_id','desc');
+			$temp->order_by('RAND()');
 		}
 		else{
 			$temp->order_by($order);
