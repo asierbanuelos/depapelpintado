@@ -3377,12 +3377,80 @@ class Admin_library extends CI_Controller {
 	}
 
 	###++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++###
-	
+
+	function item_discounts_ekam(){
+		if ($this->input->post('update_discounts')){
+			$this->load->model('demo_cart_admin_model');
+			$this->demo_cart_admin_model->demo_update_discounts_generica('discounts_ekam');
+		}
+		$sql_where = array($this->flexi_cart_admin->db_column('discounts_ekam', 'type') => 1);
+		$this->data['discount_data'] = $this->flexi_cart_admin->get_db_discount_generic_array($sql_where, 'discounts_ekam');
+		$this->data['discount_type'] = 'item';
+		$this->data['message'] = $this->session->flashdata('message');
+		$this->load->view('demo/admin_examples/discounts/ekam/discounts_view', $this->data);
+	}
+
+	function summary_discounts_ekam(){
+		if ($this->input->post('update_discounts')){
+			$this->load->model('demo_cart_admin_model');
+			$this->demo_cart_admin_model->demo_update_discounts_generica('discounts_ekam');
+		}
+		$sql_where = array($this->flexi_cart_admin->db_column('discounts_ekam', 'type') => 2);
+		$this->data['discount_data'] = $this->flexi_cart_admin->get_db_discount_generic_array($sql_where, 'discounts_ekam');
+		$this->data['discount_type'] = 'summary';
+		$this->data['message'] = $this->session->flashdata('message');
+		$this->load->view('demo/admin_examples/discounts/ekam/discounts_view', $this->data);
+	}
+
+	function insert_discount_ekam(){
+		if ($this->input->post('insert_discount')){
+			$this->load->model('demo_cart_admin_model');
+			$this->demo_cart_admin_model->demo_insert_discount_generica('discounts_ekam');
+		}
+		$this->data['locations_inline'] = $this->flexi_cart_admin->locations_inline();
+		$this->data['zones'] = $this->flexi_cart_admin->location_zones();
+		$this->data['discount_types'] = $this->flexi_cart_admin->get_db_discount_type_array();
+		$this->data['discount_methods'] = $this->flexi_cart_admin->get_db_discount_method_array();
+		$this->data['discount_tax_methods'] = $this->flexi_cart_admin->get_db_discount_tax_method_array();
+		$this->data['discount_groups'] = $this->flexi_cart_admin->get_db_discount_group_array();
+		$this->load->view('demo/admin_examples/discounts/ekam/discount_insert_view', $this->data);
+	}
+
+	function update_discount_ekam($discount_id){
+		if ($this->input->post('update_discount')){
+			$this->load->model('demo_cart_admin_model');
+			$this->demo_cart_admin_model->demo_update_discount_generica($discount_id, 'discounts_ekam');
+		}
+		$this->data['locations_inline'] = $this->flexi_cart_admin->locations_inline();
+		$this->data['zones'] = $this->flexi_cart_admin->location_zones();
+		$this->data['discount_types'] = $this->flexi_cart_admin->get_db_discount_type_array();
+		$this->data['discount_methods'] = $this->flexi_cart_admin->get_db_discount_method_array();
+		$this->data['discount_tax_methods'] = $this->flexi_cart_admin->get_db_discount_tax_method_array();
+		$this->data['discount_groups'] = $this->flexi_cart_admin->get_db_discount_group_array();
+		$sql_where = array($this->flexi_cart_admin->db_column('discounts_ekam', 'id') => $discount_id);
+		$all = $this->flexi_cart_admin->get_db_discount_generic_array($sql_where, 'discounts_ekam');
+		$this->data['discount_data'] = !empty($all) ? $all[0] : array();
+		$this->data['message'] = (!isset($this->data['message'])) ? $this->session->flashdata('message') : $this->data['message'];
+		$this->load->view('demo/admin_examples/discounts/ekam/discount_update_view', $this->data);
+	}
+
+	function discount_groups_ekam(){
+		if (isset($_POST['update'])){
+			$this->load->model('demo_cart_admin_model');
+			$this->demo_cart_admin_model->demo_update_discount_groups();
+		}
+		$this->data['discount_group_data'] = $this->flexi_cart_admin->get_db_discount_group_array();
+		$this->data['message'] = (!isset($this->data['message'])) ? $this->session->flashdata('message') : $this->data['message'];
+		$this->load->view('demo/admin_examples/discounts/ekam/discount_groups_view', $this->data);
+	}
+
+	###++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++###
+
 	/**
 	 * update_discount_group
-	 * Updates data for an existing discount group and its related discount group items in the database. 
+	 * Updates data for an existing discount group and its related discount group items in the database.
 	 * This page is accessed via the 'Discount Groups' page via a link titled 'Manage Items in Group'.
-	 */ 
+	 */
 	function update_discount_group($group_id) {
 		//~ if ($group_id==233 || $group_id==334){
 			//~ echo "<br />".count($_POST['delete_item']);
