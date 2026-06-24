@@ -62,7 +62,7 @@
 						<tr>
 							<td align="center" class="logo" style="border-bottom:4px solid #333333;padding:7px 0">
 								<a title="depapelpintado.com" href="http://www.depapelpintado.com" style="color:#337ff1">
-									<img src="http://www.depapelpintado.es/includes/logomail.jpg" alt="depapelpintado.com" />
+									<img src="https://www.depapelpintado.es/includes/logomail.jpg" alt="depapelpintado.com" />
 								</a>
 							</td>
 						</tr>
