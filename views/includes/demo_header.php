@@ -135,3 +135,9 @@ $flexi_cart_library = (isset($current_url['admin_library'])) ? 'flexi_cart_admin
 			</ul>
 		</div>
 	</div>
+<?php if ($this->session->flashdata('admin_saved')): ?>
+<div id="admin-toast" style="position:fixed;bottom:24px;right:24px;background:#2e7d32;color:#fff;padding:12px 22px;border-radius:6px;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.25);z-index:99999;opacity:1;transition:opacity 0.5s">
+  ✓ Cambios guardados correctamente
+</div>
+<script>setTimeout(function(){ var t=document.getElementById('admin-toast'); if(t){t.style.opacity='0';setTimeout(function(){t.remove()},500);} }, 3000);</script>
+<?php endif; ?>

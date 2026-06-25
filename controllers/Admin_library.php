@@ -788,6 +788,7 @@ class Admin_library extends CI_Controller {
   function update_art_test(){
     $this->load->model('demo_cart_admin_model');
     $this->demo_cart_admin_model->demo_update_item();
+    $this->session->set_flashdata('admin_saved', '1');
     $return = $this->session->userdata('admin_edit_return');
     if ($return)
       redirect($return);
