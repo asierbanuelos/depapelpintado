@@ -804,16 +804,16 @@ class Admin_library extends CI_Controller {
 		//~ exit;
 		//$this->db->cache_delete_all();
 		//~ $this->load->view('demo/admin_examples/articulos/noimgitem', $this->ret);
-		if(isset($_POST['fab']))$fab=$_POST['fab'];
-		if(isset($_POST['col']))$col=$_POST['col'];
-		if(isset($_POST['gama']))$gama=$_POST['gama'];
-		if(isset($_POST['categ']))$categ=$_POST['categ'];
-		if(isset($_POST['estilo']))$estilo=$_POST['estilo'];
+		$fab=isset($_POST['fab_filtro'])?$_POST['fab_filtro']:(isset($_POST['fab'])?$_POST['fab']:0);
+		$col=isset($_POST['col_filtro'])?$_POST['col_filtro']:(isset($_POST['col'])?$_POST['col']:0);
+		$gama=isset($_POST['gama_filtro'])?$_POST['gama_filtro']:(isset($_POST['gama'])?$_POST['gama']:0);
+		$categ=isset($_POST['categ_filtro'])?$_POST['categ_filtro']:(isset($_POST['categ'])?$_POST['categ']:-1);
+		$estilo=isset($_POST['estilo_filtro'])?$_POST['estilo_filtro']:(isset($_POST['estilo'])?$_POST['estilo']:0);
 		$page=0;
 		$todos=0;
-		if(isset($_POST['order']))$order=$_POST['order'];
-		if(isset($_POST['precio']))$precio=$_POST['precio'];
-		if(isset($_POST['referencia']))$referencia=$_POST['referencia'];
+		$order=isset($_POST['order_filtro'])?$_POST['order_filtro']:(isset($_POST['order'])?$_POST['order']:'item_id');
+		$precio=isset($_POST['precio_filtro'])?$_POST['precio_filtro']:(isset($_POST['precio'])?$_POST['precio']:'');
+		$referencia=isset($_POST['referencia_filtro'])?$_POST['referencia_filtro']:(isset($_POST['referencia'])?$_POST['referencia']:'');
 		
 		//~ $this-> noimg($fab,$col,$gama,$estilo,$page,$todos,$order,$categ,$precio, $referencia);
 		
