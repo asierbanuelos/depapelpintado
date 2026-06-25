@@ -1020,39 +1020,93 @@ class Demo_cart_admin_model extends CI_Model {
 			return true;
 
 		$itemarray=array();
-		if (isset($data['precio_masivo']) && trim($data['precio_masivo'])!='' && is_numeric($data['precio_masivo']))
-			$itemarray['item_price']=$data['precio_masivo'];
-		if (isset($data['precio_aux']) && trim($data['precio_aux'])!='' && is_numeric($data['precio_aux']))
-			$itemarray['item_price_aux']=$data['precio_aux'];
-		if (isset($data['ancho']) && trim($data['ancho'])!='' && is_numeric($data['ancho']))
-			$itemarray['item_ancho']=$data['ancho'];
-		if (isset($data['col_masivo']) && $data['col_masivo'] != '' && $data['col_masivo'] != '0')
-			$itemarray['item_coleccion_id']=$data['col_masivo'];
-		if (isset($data['fab_masivo']) && $data['fab_masivo'] != '' && $data['fab_masivo'] != '0')
-			$itemarray['item_cat_fk']=$data['fab_masivo'];
-		if (isset($data['portada_masivo_be']))
-			$itemarray['portada']=1;
+		$nonempty = function($v){ return isset($v) && trim($v) !== ''; };
+		$numeric  = function($v){ return isset($v) && trim($v) !== '' && is_numeric($v); };
+
+		if ($nonempty($data['fab_masivo'] ?? '') && ($data['fab_masivo'] ?? '') !== '0')
+			$itemarray['item_cat_fk'] = $data['fab_masivo'];
+		if ($nonempty($data['col_masivo'] ?? '') && ($data['col_masivo'] ?? '') !== '0')
+			$itemarray['item_coleccion_id'] = $data['col_masivo'];
+		if ($nonempty($data['cats'] ?? ''))
+			$itemarray['item_tipo'] = $data['cats'];
+		if ($nonempty($data['mod'] ?? '') && ($data['mod'] ?? '') !== '0')
+			$itemarray['item_model_id'] = $data['mod'];
+		if ($nonempty($data['lavable'] ?? ''))
+			$itemarray['item_lavable'] = $data['lavable'];
+		if ($nonempty($data['cola'] ?? ''))
+			$itemarray['item_cola'] = $data['cola'];
+		if ($nonempty($data['unidad'] ?? ''))
+			$itemarray['item_unidad'] = $data['unidad'];
+		if ($numeric($data['precio'] ?? ''))
+			$itemarray['item_price'] = $data['precio'];
+		if ($numeric($data['precio_aux'] ?? ''))
+			$itemarray['item_price_aux'] = $data['precio_aux'];
+		if ($numeric($data['ancho'] ?? ''))
+			$itemarray['item_ancho'] = $data['ancho'];
+		if ($numeric($data['largo'] ?? ''))
+			$itemarray['item_largo'] = $data['largo'];
+		if ($numeric($data['weight'] ?? '') && $data['weight'] > 1)
+			$itemarray['item_weight'] = $data['weight'];
+		if ($numeric($data['orden'] ?? ''))
+			$itemarray['orden'] = $data['orden'];
+		if ($numeric($data['stock'] ?? ''))
+			$itemarray['stock_quantity_aux'] = $data['stock'];
+		if ($nonempty($data['extra'] ?? ''))
+			$itemarray['extra'] = $data['extra'];
+		if ($nonempty($data['composicion'] ?? ''))
+			$itemarray['composicion'] = $data['composicion'];
+		if ($nonempty($data['meta_title'] ?? ''))
+			$itemarray['meta_title'] = $data['meta_title'];
+		if ($nonempty($data['meta_description'] ?? ''))
+			$itemarray['meta_description'] = $data['meta_description'];
+		if ($nonempty($data['meta_keywords'] ?? ''))
+			$itemarray['meta_keywords'] = $data['meta_keywords'];
+		if (isset($data['economico']))    $itemarray['item_economico'] = 1;
+		if (isset($data['topventas']))    $itemarray['item_top'] = 1;
+		if (isset($data['portada']))      $itemarray['portada'] = 1;
+		if (isset($data['sol']))          $itemarray['item_sol'] = 1;
+		if (isset($data['vinilo']))       $itemarray['item_vinilo'] = 1;
+		if (isset($data['usar_alt']))     $itemarray['usar_alt'] = 1;
+		if (isset($data['google_market_be'])) $itemarray['google_market_be'] = 1;
 
 		if (count($itemarray) > 0)
 			$this->db->where_in('item_id', $id_seleccionados)->update('demo_items', $itemarray);
 
-		if (isset($data['gama_masivo']) && is_array($data['gama_masivo']) && count($data['gama_masivo']) > 0) {
+		// Stock en tabla separada
+		if ($numeric($data['stock'] ?? ''))
+			$this->db->where_in('item_id', $id_seleccionados)->update($this->flexi_cart_admin->db_table('item_stock'), array('stock_quantity' => $data['stock']));
+
+		// Gama (reemplaza si se seleccionó alguna)
+		if (!empty($data['gama']) && is_array($data['gama'])) {
 			$this->db->where_in('gama_item_item', $id_seleccionados)->delete('demo_gama_item');
-			foreach ($id_seleccionados as $item_id) {
-				foreach ($data['gama_masivo'] as $gama_id) {
+			foreach ($id_seleccionados as $item_id)
+				foreach ($data['gama'] as $gama_id)
 					$this->db->insert('demo_gama_item', array('gama_item_item'=>$item_id, 'gama_item_gama'=>$gama_id));
-				}
-			}
 		}
 
-		if (isset($data['nuevas_categorias_masivo']) && is_array($data['nuevas_categorias_masivo']) && count($data['nuevas_categorias_masivo']) > 0) {
-			$this->db->where_in('nuevacategoria_item_id', $id_seleccionados)->delete('nueva_categoria_item');
-			foreach ($id_seleccionados as $item_id) {
-				foreach ($data['nuevas_categorias_masivo'] as $cat_id) {
-					$this->db->insert('nueva_categoria_item', array('nuevacategoria_item_id'=>$item_id, 'nueva_categoria_id'=>$cat_id));
-				}
-			}
+		// Estilo (reemplaza si se seleccionó alguno)
+		if (!empty($data['estilo']) && is_array($data['estilo'])) {
+			$this->db->where_in('estilo_item_item', $id_seleccionados)->delete('demo_estilo_item');
+			foreach ($id_seleccionados as $item_id)
+				foreach ($data['estilo'] as $estilo_id)
+					$this->db->insert('demo_estilo_item', array('estilo_item_item'=>$item_id, 'estilo_item_estilo'=>$estilo_id));
 		}
+
+		// Categorías SEO (reemplaza si se seleccionó alguna)
+		if (!empty($data['nuevas_categorias']) && is_array($data['nuevas_categorias'])) {
+			$this->db->where_in('nuevacategoria_item_id', $id_seleccionados)->delete('nueva_categoria_item');
+			foreach ($id_seleccionados as $item_id)
+				foreach ($data['nuevas_categorias'] as $cat_id)
+					$this->db->insert('nueva_categoria_item', array('nuevacategoria_item_id'=>$item_id, 'nueva_categoria_id'=>$cat_id));
+		}
+
+		// Limpieza
+		if (!empty($data['limpieza']) && is_array($data['limpieza']))
+			$this->db->where_in('item_id', $id_seleccionados)->update('demo_items', array('limpieza'=>implode(' ', $data['limpieza'])));
+
+		// Uso recomendado
+		if (!empty($data['uso']) && is_array($data['uso']))
+			$this->db->where_in('item_id', $id_seleccionados)->update('demo_items', array('uso'=>implode(' ', $data['uso'])));
 
 		return true;
 	}
