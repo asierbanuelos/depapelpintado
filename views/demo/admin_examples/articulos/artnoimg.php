@@ -176,7 +176,7 @@
   
 <div id="edit_masivo_form" style="position:fixed;top:0;width:100%;height:100%;z-index:100;background-color:rgba(0,0,0,0.6);padding:20px;display:none;overflow-y:auto;">
 	<div class="container" style="background-color:#eee;padding:20px;border-radius:10px;">
-		<h3 style="margin-top:0;color:#B05380;">Edición masiva — solo se aplican los campos que rellenes. Los checkboxes solo activan (no desactivan).</h3>
+		<h3 style="margin-top:0;color:#B05380;">Edición masiva — solo se aplican los campos que cambies</h3>
 		<?= form_open('admin_library/update_art_masivo', 'id="masivo_form"') ?>
 			<?= form_hidden('fab_filtro', $curfab) ?>
 			<?= form_hidden('col_filtro', $curcol) ?>
@@ -195,7 +195,6 @@
 					</div>
 					<div class="sec row"><div class="col twelve">CATEGORÍAS SEO:</div></div>
 					<div class="sec row"><?= form_multiselect('nuevas_categorias[]', $nuevas_categorias, '', 'class="col twelve" style="height:200px"') ?></div>
-					<div class="sec row">Extra:<?= form_textarea('extra', '', 'class="col twelve" style="height:100px"') ?></div>
 					<?$limpieza=array("Limpieza Seco","Lavadora","A mano","No centrifugar","No Secadora","Sin Lejia","Planchar temperatura baja","Planchar temperatura media","Planchar temperatura alta","Lavar máximo 30º","Lavar máximo 40º","Lavar máximo 60º")?>
 					<div class="sec row"><div class="col six">Limpieza:</div><?= form_multiselect("limpieza[]", $limpieza, '', 'class="six"') ?></div>
 					<?$uso=array('Cortinas','Tapicerias','Stores','Cojines','Cabeceros','Visillos');?>
@@ -215,22 +214,15 @@
 					<div class="sec row"><div class="col six">Resistente al Sol:</div><?= form_checkbox("sol", "1") ?></div>
 					<div class="sec row"><div class="col six">Vinilo:</div><?= form_checkbox("vinilo", "1") ?></div>
 					<div class="sec row"><div class="col six">Encolar a:</div><?= form_dropdown('cola', array_merge([""=>"— sin cambio —"], $cola), '', 'class="six"') ?></div>
+					<div class="sec row"><div class="col six">Unidades:</div><?= form_dropdown('unidad', array(""=>"— sin cambio —","Rollo"=>"Rollo","m lineal"=>"Metro Lineal","m2"=>"Metro Cuadrado","Unidad"=>"Unidad"), '', 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Ancho metros:</div><?= form_input("ancho", "", 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Largo metros:</div><?= form_input("largo", "", 'class="six"') ?></div>
-					<div class="sec row"><div class="col six">Peso:</div><?= form_input("weight", "", 'class="six"') ?></div>
-					<div class="sec row"><div class="col six">Unidades:</div><?= form_dropdown('unidad', array(""=>"— sin cambio —","Rollo"=>"Rollo","m lineal"=>"Metro Lineal","m2"=>"Metro Cuadrado","Unidad"=>"Unidad"), '', 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Precio:</div><?= form_input("precio", "", 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Precio auxiliar:</div><?= form_input("precio_aux", "", 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Orden:</div><?= form_input("orden", "", 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Stock:</div><?= form_input("stock", "", 'class="six"') ?></div>
-					<div class="sec row"><div class="col six">Composicion:</div><?= form_input("composicion", "", 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Portada ambiente:</div><?= form_checkbox("usar_alt", "1") ?></div>
 					<div class="sec row"><div class="col six">Google Market:</div><?= form_checkbox("google_market_be", "1") ?></div>
-				</div>
-				<div class="col twelve">
-					<div class="sec row"><div class="col two">Meta-Title:</div><?= form_input("meta_title", "", 'class="ten"') ?></div>
-					<div class="sec row"><div class="col two">Meta-Description:</div><?= form_textarea("meta_description", "", 'class="ten" style="height:80px"') ?></div>
-					<div class="sec row"><div class="col two">Meta-Keywords:</div><?= form_input("meta_keywords", "", 'class="ten"') ?></div>
 				</div>
 			</div>
 			<?= form_button("test", "Guardar selección", 'class="button orange-button six m-full sendupdate_masivo"') ?>
