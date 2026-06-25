@@ -1014,45 +1014,47 @@ class Demo_cart_admin_model extends CI_Model {
     
 	function demo_update_item_masivo(){
 		$data=$this->input->post(NULL, TRUE);
-		
+
+		$id_seleccionados = isset($data['id_seleccionados']) ? array_map('intval', (array)$data['id_seleccionados']) : array();
+		if (count($id_seleccionados) === 0 || count($id_seleccionados) >= 1000)
+			return true;
+
 		$itemarray=array();
-		if (isset($data['precio']) && trim($data['precio'])!='' && is_numeric($data['precio']))
-			$itemarray['item_price']=$data['precio'];
+		if (isset($data['precio_masivo']) && trim($data['precio_masivo'])!='' && is_numeric($data['precio_masivo']))
+			$itemarray['item_price']=$data['precio_masivo'];
 		if (isset($data['precio_aux']) && trim($data['precio_aux'])!='' && is_numeric($data['precio_aux']))
 			$itemarray['item_price_aux']=$data['precio_aux'];
 		if (isset($data['ancho']) && trim($data['ancho'])!='' && is_numeric($data['ancho']))
 			$itemarray['item_ancho']=$data['ancho'];
-		if (isset($data['largo']) && trim($data['largo'])!='' && is_numeric($data['largo']))
-			$itemarray['item_largo']=$data['largo'];
-		/*
-		echo "<br />demo_update_item_masivo<br />";
-		print '<pre><xmp>';
-		print_r($data);
-		print '</xmp></pre>';
+		if (isset($data['col_masivo']) && $data['col_masivo'] != '' && $data['col_masivo'] != '0')
+			$itemarray['item_coleccion_id']=$data['col_masivo'];
+		if (isset($data['fab_masivo']) && $data['fab_masivo'] != '' && $data['fab_masivo'] != '0')
+			$itemarray['item_cat_fk']=$data['fab_masivo'];
+		if (isset($data['portada_masivo_be']))
+			$itemarray['portada']=1;
 
-		print '<pre><xmp>';
-		print_r($itemarray);
-		print '</xmp></pre>';
-		exit;
-		*/
-		if (count($itemarray)>0){
-			$id_seleccionados=$data['id_seleccionados'];
-			/*
-			echo "<br />update";
-			print '<pre><xmp>';
-			print_r($itemarray);
-			print '</xmp></pre>';
-			print '<pre><xmp>';
-			print_r($id_seleccionados);
-			print '</xmp></pre>';
-			exit;
-			*/
-			if (count($id_seleccionados)>0 && count($id_seleccionados)<1000){
-				$this->db->where_in('item_id',$id_seleccionados)->update('demo_items',$itemarray);
-			}		
-		}		
+		if (count($itemarray) > 0)
+			$this->db->where_in('item_id', $id_seleccionados)->update('demo_items', $itemarray);
 
-		return true; 
+		if (isset($data['gama_masivo']) && is_array($data['gama_masivo']) && count($data['gama_masivo']) > 0) {
+			$this->db->where_in('gama_item_item', $id_seleccionados)->delete('demo_gama_item');
+			foreach ($id_seleccionados as $item_id) {
+				foreach ($data['gama_masivo'] as $gama_id) {
+					$this->db->insert('demo_gama_item', array('gama_item_item'=>$item_id, 'gama_item_gama'=>$gama_id));
+				}
+			}
+		}
+
+		if (isset($data['nuevas_categorias_masivo']) && is_array($data['nuevas_categorias_masivo']) && count($data['nuevas_categorias_masivo']) > 0) {
+			$this->db->where_in('nuevacategoria_item_id', $id_seleccionados)->delete('nueva_categoria_item');
+			foreach ($id_seleccionados as $item_id) {
+				foreach ($data['nuevas_categorias_masivo'] as $cat_id) {
+					$this->db->insert('nueva_categoria_item', array('nuevacategoria_item_id'=>$item_id, 'nueva_categoria_id'=>$cat_id));
+				}
+			}
+		}
+
+		return true;
 	}
 
 	function update_elementos_masivo($tabla, $idtabla, $a_registros){

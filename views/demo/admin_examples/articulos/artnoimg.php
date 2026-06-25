@@ -174,33 +174,35 @@
     </div>
   </div>
   
-<div id="edit_masivo_form" style="position:fixed;top:0;width:100%;height:100%;z-index: 100;background-color:rgba(0,0,0,0.6);padding:20px;display:none;">
-	<div class="container" style="background-color:#eee;padding-bottom: 10px;border-radius: 10px;padding:20px;">
-		<?
-    if (isset($_GET['test'])){
-      echo  form_open('admin_library/update_art_masivo_test');
-    }
-    else{
-      echo  form_open('admin_library/update_art_masivo');
-    }
-    ?>
-			<?= form_hidden('fab', $curfab) ?>
-			<?= form_hidden('col', $curcol) ?>
-			<?= form_hidden('gama', $curgama) ?>
-			<?= form_hidden('estilo', $curestilo) ?>
-			<?= form_hidden('categ', $curcateg) ?>
-			<?= form_hidden('referencia', $curreferencia) ?>
-			<?= form_hidden('precio', $curprecio) ?>
-			<?= form_hidden('order', $curorder) ?>
-			<div class="sec row"><div class="col six">Ancho metros:</div><?= form_input("ancho", "", 'class="six"') ?></div>
-			<?php
-			/*
-			<div class="sec row"><div class="col six">Largo metros:</div><?= form_input("largo", "", 'class="six"') ?></div>
-			*/
-			?>
-			<div class="sec row"><div class="col six">Precio:</div><?= form_input("precio", "", 'class="six"') ?></div>
-      <div class="sec row"><div class="col six">Precio auxiliar:</div><?= form_input("precio_aux","", 'class="six"') ?></div>
-			<?= form_button("test", "Guardar", 'class="button orange-button six m-full sendupdate_masivo"') ?>
+<div id="edit_masivo_form" style="position:fixed;top:0;width:100%;height:100%;z-index:100;background-color:rgba(0,0,0,0.6);padding:20px;display:none;overflow-y:auto;">
+	<div class="container" style="background-color:#eee;padding:20px;border-radius:10px;">
+		<h3 style="margin-top:0;color:#B05380;">Edición masiva — solo se aplican los campos que rellenes</h3>
+		<?= form_open('admin_library/update_art_masivo', 'id="masivo_form"') ?>
+			<?= form_hidden('fab_filtro', $curfab) ?>
+			<?= form_hidden('col_filtro', $curcol) ?>
+			<?= form_hidden('gama_filtro', $curgama) ?>
+			<?= form_hidden('estilo_filtro', $curestilo) ?>
+			<?= form_hidden('categ_filtro', $curcateg) ?>
+			<?= form_hidden('referencia_filtro', $curreferencia) ?>
+			<?= form_hidden('precio_filtro', $curprecio) ?>
+			<?= form_hidden('order_filtro', $curorder) ?>
+			<div class="sec row">
+				<div class="col six">
+					<div class="sec row"><div class="col six">Fabricante:</div><?= form_dropdown('fab_masivo', $fab, '', 'class="six fabr_masivo"') ?></div>
+					<div class="sec row"><div class="col six">Colección:</div><?= form_dropdown('col_masivo', $col, '', 'class="six cole_masivo"') ?></div>
+					<div class="sec row"><div class="col six">Ancho metros:</div><?= form_input("ancho", "", 'class="six"') ?></div>
+					<div class="sec row"><div class="col six">Precio:</div><?= form_input("precio_masivo", "", 'class="six"') ?></div>
+					<div class="sec row"><div class="col six">Precio auxiliar:</div><?= form_input("precio_aux", "", 'class="six"') ?></div>
+					<div class="sec row"><div class="col six">Portada: <?= form_checkbox("portada_masivo_be", "1") ?></div></div>
+				</div>
+				<div class="col six">
+					<div class="sec row"><div class="col twelve">Gama/Colores (reemplaza):</div></div>
+					<div class="sec row"><?= form_multiselect('gama_masivo[]', $gama, '', 'class="col twelve" style="height:180px"') ?></div>
+					<div class="sec row"><div class="col twelve">Categorías SEO (reemplaza):</div></div>
+					<div class="sec row"><?= form_multiselect('nuevas_categorias_masivo[]', $nuevas_categorias, '', 'class="col twelve" style="height:180px"') ?></div>
+				</div>
+			</div>
+			<?= form_button("test", "Guardar selección", 'class="button orange-button six m-full sendupdate_masivo"') ?>
 			<?= form_button("test", "Cerrar", 'class="button orange-button six m-full closeform_masivo"') ?>
 		<?= form_close(); ?>
 	</div>
@@ -521,36 +523,39 @@
 		$("#seleccionar_todos").show();
 	});
 	$("#editar_seleccionados").on('click', function(e) {
-    //alert($('#editform .cole').val());
+		var n = $(".seleccion_items:checked").length;
+		if (n === 0) { alert('Selecciona al menos un producto'); return; }
 		$("#edit_masivo_form").show();
+	});
+	$(".fabr_masivo").change(function() {
+		$.ajax({
+			url: "<?= site_url('admin_library/get_col_select') ?>",
+			type: 'POST',
+			data: { fab: $(this).val() },
+			success: function(data) { $('.cole_masivo').html(data); }
+		});
 	});
 	$(".sendupdate_masivo").on('click', function(e) {
 		e.preventDefault();
 		var parent_form = $(this).closest('form');
 		var submit_url = parent_form.attr('action');
-		var $form_inputs = parent_form.find(':input');
-		var form_data = {};
-		$form_inputs.each(function(){
-			form_data[this.name] = $(this).val();
-		});
-		
-		var a_seleccionados = new Array();
-		$(".seleccion_items:checked").each(function (){
-			//~ valores inteiros usa-se parseInt
-			a_seleccionados.push(parseInt($(this).val()));
-			//~ string
-			//~ checkeds.push( $(this).val());
-		});
-		form_data['id_seleccionados'] =a_seleccionados;
-
+		var a_seleccionados = [];
+		$(".seleccion_items:checked").each(function(){ a_seleccionados.push(parseInt($(this).val())); });
+		if (a_seleccionados.length === 0) { alert('No hay productos seleccionados'); return; }
+		var form_data = parent_form.serializeArray();
+		form_data.push({ name: 'id_seleccionados[]', value: '' });
+		form_data = form_data.filter(function(x){ return x.name !== 'id_seleccionados[]'; });
+		$.each(a_seleccionados, function(i, v){ form_data.push({ name: 'id_seleccionados[]', value: v }); });
 		$.ajax({
 			url: submit_url,
 			type: 'POST',
 			data: form_data,
 			success: function(data){
-				p = $('.cuadro_resultados');
-				p.html(data);
+				$('.cuadro_resultados').html(data);
 				$(".closeform_masivo").click();
+				$('#admin-toast-masivo').remove();
+				$('body').append('<div id="admin-toast-masivo" style="position:fixed;bottom:24px;right:24px;background:#2e7d32;color:#fff;padding:12px 22px;border-radius:6px;font-size:14px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,0.25);z-index:99999">✓ Cambios guardados en ' + a_seleccionados.length + ' producto(s)</div>');
+				setTimeout(function(){ $('#admin-toast-masivo').fadeOut(500, function(){ $(this).remove(); }); }, 3000);
 			}
 		});
 	});
