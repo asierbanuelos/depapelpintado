@@ -207,8 +207,8 @@
 						<div class="col four">Portada: <?= form_checkbox("portada", "1") ?></div>
 					</div>
 					<div class="sec row"><div class="col six">Categoría:</div><?= form_dropdown('cats', array(""=>"— sin cambio —","0"=>"Papel Pintado","1"=>"Foto Murales","2"=>"Revestimientos","3"=>"Telas","4"=>"Alfombras","5"=>"Herramientas","6"=>"Complementos"), '', 'class="six"') ?></div>
-					<div class="sec row"><div class="col six">Fabricante:</div><?= form_dropdown('fab_masivo', $fab, '', 'class="six fabr_masivo"') ?></div>
-					<div class="sec row"><div class="col six">Colección:</div><?= form_dropdown('col_masivo', $col, '', 'class="six cole_masivo"') ?></div>
+					<div class="sec row"><div class="col six">Fabricante:</div><?= form_dropdown('fab_masivo', [""=>"— sin cambio —"] + $fab, '', 'class="six fabr_masivo"') ?></div>
+					<div class="sec row"><div class="col six">Colección:</div><?= form_dropdown('col_masivo', [""=>"— sin cambio —"] + $col, '', 'class="six cole_masivo"') ?></div>
 					<div class="sec row"><div class="col six">Modelo:</div><?= form_dropdown('mod', array_merge([""=>"— sin cambio —"], $mod), '', 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Lavable:</div><?= form_dropdown("lavable", array(""=>"— sin cambio —","0"=>"No Lavable","1"=>"Lavable","2"=>"Esponjable","3"=>"SuperLavable"), '', 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Resistente al Sol:</div><?= form_checkbox("sol", "1") ?></div>
