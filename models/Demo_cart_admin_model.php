@@ -952,7 +952,13 @@ class Demo_cart_admin_model extends CI_Model {
 			if($data['col']!=0)
 				$itemarray['item_coleccion_id']=$data['col'];
       $lastid=$data['item_id'];
-      
+
+      $new_orden = intval($data['orden']);
+      if ($new_orden > 0) {
+          $this->db->where('orden >=', $new_orden)->where('item_id !=', $lastid)
+                   ->set('orden', 'orden + 1', FALSE)->update('demo_items');
+      }
+
       $this->db->where('item_id',$lastid)->update('demo_items',$itemarray);
 			//echo "<br />".$this->db->last_query();
 			//exit;
