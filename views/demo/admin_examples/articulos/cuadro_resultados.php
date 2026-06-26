@@ -1,3 +1,10 @@
+<?php if (!function_exists('urlenc')):
+function urlenc($str){
+  $search  = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u,Á,É,Í,Ó,Ú,Ñ,%,!,(,)");
+  $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,n,,,,");
+  return str_replace($search,$replace,strtolower(str_replace(',','',str_replace('+','-plus-',str_replace('#','number-',str_replace('&','and',str_replace(' ','-',rawurldecode($str))))))));
+}
+endif; ?>
 <?
 $bg = false;
 foreach ($all as $key => $value) {
@@ -63,6 +70,7 @@ foreach ($all as $key => $value) {
 			*/
 			?>
 			<a style='background-color: #277BF1;' class="btn" href='/admin_library/editar_articulo/<?= $value['item_id']; ?>'>Editar</a>
+			<a style='background-color: #5cb85c;' class="btn" href='/tienda/articulo/<?= urlenc($value['cat_name']) ?>/<?= urlenc($value['coleccion_name']) ?>/id/<?= $value['item_id'] ?>' target='_blank'>Ver</a>
 		</div>
 	</div>
 <?
