@@ -201,18 +201,19 @@
 					<div class="sec row"><div class="col six">Uso Recomendado:</div><?= form_multiselect("uso[]", $uso, '', 'class="six"') ?></div>
 				</div>
 				<div class="col six t-six m-full">
-					<div class="sec row">
-						<div class="col four">Economico: <?= form_checkbox("economico", "1") ?></div>
-						<div class="col four">Más Vendido: <?= form_checkbox("topventas", "1") ?></div>
-						<div class="col four">Portada: <?= form_checkbox("portada", "1") ?></div>
-					</div>
+					<?php $yn = array(""=>"— sin cambio —","1"=>"Sí","0"=>"No"); ?>
+					<div class="sec row"><div class="col six">Económico:</div><?= form_dropdown("economico", $yn, '', 'class="six"') ?></div>
+					<div class="sec row"><div class="col six">Más Vendido:</div><?= form_dropdown("topventas", $yn, '', 'class="six"') ?></div>
+					<div class="sec row"><div class="col six">Portada:</div><?= form_dropdown("portada", $yn, '', 'class="six"') ?></div>
+					<div class="sec row"><div class="col six">Resistente al Sol:</div><?= form_dropdown("sol", $yn, '', 'class="six"') ?></div>
+					<div class="sec row"><div class="col six">Vinilo:</div><?= form_dropdown("vinilo", $yn, '', 'class="six"') ?></div>
+					<div class="sec row"><div class="col six">Portada ambiente:</div><?= form_dropdown("usar_alt", $yn, '', 'class="six"') ?></div>
+					<div class="sec row"><div class="col six">Google Market:</div><?= form_dropdown("google_market_be", $yn, '', 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Categoría:</div><?= form_dropdown('cats', array(""=>"— sin cambio —","0"=>"Papel Pintado","1"=>"Foto Murales","2"=>"Revestimientos","3"=>"Telas","4"=>"Alfombras","5"=>"Herramientas","6"=>"Complementos"), '', 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Fabricante:</div><?= form_dropdown('fab_masivo', [""=>"— sin cambio —"] + $fab, '', 'class="six fabr_masivo"') ?></div>
 					<div class="sec row"><div class="col six">Colección:</div><?= form_dropdown('col_masivo', [""=>"— sin cambio —"] + $col, '', 'class="six cole_masivo"') ?></div>
 					<div class="sec row"><div class="col six">Modelo:</div><?= form_dropdown('mod', array_merge([""=>"— sin cambio —"], $mod), '', 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Lavable:</div><?= form_dropdown("lavable", array(""=>"— sin cambio —","0"=>"No Lavable","1"=>"Lavable","2"=>"Esponjable","3"=>"SuperLavable"), '', 'class="six"') ?></div>
-					<div class="sec row"><div class="col six">Resistente al Sol:</div><?= form_checkbox("sol", "1") ?></div>
-					<div class="sec row"><div class="col six">Vinilo:</div><?= form_checkbox("vinilo", "1") ?></div>
 					<div class="sec row"><div class="col six">Encolar a:</div><?= form_dropdown('cola', array_merge([""=>"— sin cambio —"], $cola), '', 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Unidades:</div><?= form_dropdown('unidad', array(""=>"— sin cambio —","Rollo"=>"Rollo","m lineal"=>"Metro Lineal","m2"=>"Metro Cuadrado","Unidad"=>"Unidad"), '', 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Ancho metros:</div><?= form_input("ancho", "", 'class="six"') ?></div>
@@ -221,8 +222,6 @@
 					<div class="sec row"><div class="col six">Precio auxiliar:</div><?= form_input("precio_aux", "", 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Orden:</div><?= form_input("orden", "", 'class="six"') ?></div>
 					<div class="sec row"><div class="col six">Stock:</div><?= form_input("stock", "", 'class="six"') ?></div>
-					<div class="sec row"><div class="col six">Portada ambiente:</div><?= form_checkbox("usar_alt", "1") ?></div>
-					<div class="sec row"><div class="col six">Google Market:</div><?= form_checkbox("google_market_be", "1") ?></div>
 				</div>
 			</div>
 			<?= form_button("test", "Guardar selección", 'class="button orange-button six m-full sendupdate_masivo"') ?>

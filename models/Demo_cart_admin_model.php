@@ -1071,13 +1071,18 @@ class Demo_cart_admin_model extends CI_Model {
 			$itemarray['meta_description'] = $data['meta_description'];
 		if ($nonempty($data['meta_keywords'] ?? ''))
 			$itemarray['meta_keywords'] = $data['meta_keywords'];
-		if (isset($data['economico']))    $itemarray['item_economico'] = 1;
-		if (isset($data['topventas']))    $itemarray['item_top'] = 1;
-		if (isset($data['portada']))      $itemarray['portada'] = 1;
-		if (isset($data['sol']))          $itemarray['item_sol'] = 1;
-		if (isset($data['vinilo']))       $itemarray['item_vinilo'] = 1;
-		if (isset($data['usar_alt']))     $itemarray['usar_alt'] = 1;
-		if (isset($data['google_market_be'])) $itemarray['google_market_be'] = 1;
+		foreach ([
+			'economico'       => 'item_economico',
+			'topventas'       => 'item_top',
+			'portada'         => 'portada',
+			'sol'             => 'item_sol',
+			'vinilo'          => 'item_vinilo',
+			'usar_alt'        => 'usar_alt',
+			'google_market_be'=> 'google_market_be',
+		] as $field => $col) {
+			if (isset($data[$field]) && $data[$field] !== '')
+				$itemarray[$col] = intval($data[$field]);
+		}
 
 		if (count($itemarray) > 0)
 			$this->db->where_in('item_id', $id_seleccionados)->update('demo_items', $itemarray);
