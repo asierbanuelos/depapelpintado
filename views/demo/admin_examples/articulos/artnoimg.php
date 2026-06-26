@@ -177,7 +177,7 @@
 <div id="edit_masivo_form" style="position:fixed;top:0;width:100%;height:100%;z-index:100;background-color:rgba(0,0,0,0.6);padding:20px;display:none;overflow-y:auto;">
 	<div class="container" style="background-color:#eee;padding:20px;border-radius:10px;">
 		<h3 style="margin-top:0;color:#B05380;">Edición masiva — solo se aplican los campos que cambies</h3>
-		<?= form_open('admin_library/update_art_masivo', 'id="masivo_form"') ?>
+		<?= form_open('admin_library/update_art_masivo', 'id="masivo_form" autocomplete="off"') ?>
 			<?= form_hidden('fab_filtro', $curfab) ?>
 			<?= form_hidden('col_filtro', $curcol) ?>
 			<?= form_hidden('gama_filtro', $curgama) ?>

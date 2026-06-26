@@ -1041,9 +1041,9 @@ class Demo_cart_admin_model extends CI_Model {
 			$itemarray['item_price'] = $data['precio'];
 		if ($numeric($data['precio_aux'] ?? ''))
 			$itemarray['item_price_aux'] = $data['precio_aux'];
-		if ($numeric($data['ancho'] ?? ''))
+		if ($numeric($data['ancho'] ?? '') && $data['ancho'] > 0)
 			$itemarray['item_ancho'] = $data['ancho'];
-		if ($numeric($data['largo'] ?? ''))
+		if ($numeric($data['largo'] ?? '') && $data['largo'] > 0)
 			$itemarray['item_largo'] = $data['largo'];
 		if ($numeric($data['weight'] ?? '') && $data['weight'] > 1)
 			$itemarray['item_weight'] = $data['weight'];
