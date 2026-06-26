@@ -1057,8 +1057,7 @@ class Demo_cart_admin_model extends CI_Model {
 			$itemarray['item_largo'] = $data['largo'];
 		if ($numeric($data['weight'] ?? '') && $data['weight'] > 1)
 			$itemarray['item_weight'] = $data['weight'];
-		if ($numeric($data['orden'] ?? ''))
-			$itemarray['orden'] = $data['orden'];
+		// orden se gestiona por separado (ver bloque al final)
 		if ($numeric($data['stock'] ?? ''))
 			$itemarray['stock_quantity_aux'] = $data['stock'];
 		if ($nonempty($data['extra'] ?? ''))
@@ -1086,6 +1085,24 @@ class Demo_cart_admin_model extends CI_Model {
 
 		if (count($itemarray) > 0)
 			$this->db->where_in('item_id', $id_seleccionados)->update('demo_items', $itemarray);
+
+		// Orden: asignación secuencial para evitar duplicados
+		if ($numeric($data['orden'] ?? '')) {
+			$n = intval($data['orden']);
+			if ($n === 0) {
+				// Volver al pool aleatorio
+				$this->db->where_in('item_id', $id_seleccionados)->update('demo_items', ['orden' => 0]);
+			} else {
+				$count = count($id_seleccionados);
+				// Hacer hueco: desplazar los que ya tienen posición fija >= n
+				$this->db->where('orden >=', $n)->where('orden >', 0)
+						 ->where_not_in('item_id', $id_seleccionados)
+						 ->set('orden', 'orden + ' . $count, FALSE)->update('demo_items');
+				// Asignar posiciones consecutivas en el orden en que aparecen en la lista
+				foreach ($id_seleccionados as $i => $item_id)
+					$this->db->where('item_id', $item_id)->update('demo_items', ['orden' => $n + $i]);
+			}
+		}
 
 		// Stock en tabla separada
 		if ($numeric($data['stock'] ?? ''))
