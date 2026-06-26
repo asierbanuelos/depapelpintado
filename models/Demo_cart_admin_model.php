@@ -955,8 +955,12 @@ class Demo_cart_admin_model extends CI_Model {
 
       $new_orden = intval($data['orden']);
       if ($new_orden > 0) {
-          $this->db->where('orden >=', $new_orden)->where('item_id !=', $lastid)
-                   ->set('orden', 'orden + 1', FALSE)->update('demo_items');
+          $row = $this->db->select('orden')->where('item_id', $lastid)->get('demo_items')->row();
+          $old_orden = $row ? intval($row->orden) : 0;
+          if ($new_orden !== $old_orden) {
+              $this->db->where('orden >=', $new_orden)->where('item_id !=', $lastid)
+                       ->set('orden', 'orden + 1', FALSE)->update('demo_items');
+          }
       }
 
       $this->db->where('item_id',$lastid)->update('demo_items',$itemarray);
