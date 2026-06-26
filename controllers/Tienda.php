@@ -2022,7 +2022,9 @@ class Tienda extends CI_Controller {
         $this->data['categ'] = 0;
         if (isset($array["Herramientas"]) || isset($array["herramientas"]))
             $this->data['categ'] = 5;
-        
+
+        if (empty($array['id'])) show_404();
+
         $datos_item = $this->flexi_cart_model->get_item_siempre($array['id'], $this->data['categ']);
         /*
         if (isset($_GET['test'])){
