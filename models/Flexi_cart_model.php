@@ -4847,7 +4847,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 
 		if($order==""){
 			$temp->order_by('portada','desc');
-			$temp->order_by('demo_items.orden','asc');
+			$temp->order_by('IF(demo_items.orden > 0, demo_items.orden, 999999)', 'asc', FALSE);
 			$temp->order_by('RAND(FLOOR(TO_DAYS(NOW())/3))');
 		}
 		else{
@@ -5534,10 +5534,10 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			}
 		}
 		$select_inner='demo_items.*';
-		$order_by=" ORDER BY portada desc, orden asc, RAND(FLOOR(TO_DAYS(NOW())/3))";
+		$order_by=" ORDER BY portada desc, IF(orden > 0, orden, 999999) asc, RAND(FLOOR(TO_DAYS(NOW())/3))";
 		if ($cat_seo_ambiente!=0){
 			$select_inner.=', demo_item_cat_ambiente.idcategoria AS amb_orden';
-			$order_by=" ORDER BY amb_orden desc, portada desc, orden asc, RAND(FLOOR(TO_DAYS(NOW())/3))";
+			$order_by=" ORDER BY amb_orden desc, portada desc, IF(orden > 0, orden, 999999) asc, RAND(FLOOR(TO_DAYS(NOW())/3))";
 		}
 		if ($order!='')
 			$order_by=" ORDER BY $order ";
