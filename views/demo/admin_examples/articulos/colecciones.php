@@ -259,13 +259,9 @@ tinymce.init({
       var catName = $.trim(row.find('.ccatname').clone().children().remove().end().text());
       var cats    = String($(this).data('cats') || '0').split(',');
 
-      var catPaths = {'0':'papel-pintado','1':'murales','2':'revestimientos','3':'telas','4':'alfombras'};
       var fromLines = [];
-      cats.forEach(function(c){
-        c = $.trim(c);
-        if (catPaths[c])
-          fromLines.push('/tienda/'+catPaths[c]+'/marca/'+catId+'/'+urlenc(catName)+'/'+colId+'/'+urlenc(colName));
-      });
+      if (catId && colId)
+        fromLines.push('/tienda/marcas/marca/'+catId+'/'+urlenc(catName)+'/'+colId+'/'+urlenc(colName));
 
       $('#del-col-modal-name').text(colName + ' (' + catName + ')');
       $('#del-col-modal-from').val(fromLines.join("\n"));
