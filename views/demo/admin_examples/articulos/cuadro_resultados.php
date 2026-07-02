@@ -72,7 +72,7 @@ foreach ($all as $key => $value) {
 			*/
 			?>
 			<a style='background-color: #277BF1;' class="btn" href='/admin_library/editar_articulo/<?= $value['item_id']; ?>'>Editar</a>
-			<a style='background-color: #5cb85c;' class="btn" href='/tienda/articulo/<?= urlenc($value['cat_name']) ?>/<?= urlenc($value['coleccion_name']) ?>/id/<?= $value['item_id'] ?>' target='_blank'>Ver</a>
+			<a style='background-color: #5cb85c;' class="btn" href='/tienda/articulo/<?= urlenc($value['cat_name']) ?>/<?= urlenc($value['coleccion_name']) ?>/id/<?= $value['item_id'] ?>?test' target='_blank'>Ver</a>
 		</div>
 	</div>
 <?

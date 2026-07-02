@@ -2058,7 +2058,7 @@ class Tienda extends CI_Controller {
             }
         }
 
-        if ($this->data['categ']!=5 && (empty($marca) || $marca->activo==0 || $marca->publico==0)){
+        if (!isset($_GET['test']) && $this->data['categ']!=5 && (empty($marca) || $marca->activo==0 || $marca->publico==0)){
             // Marca inexistente, desactivada o no publicada
             //echo "<br />Marca inexistente, desactivada o no publicada.";
             $this->data['articulo_no_encontrado'] = true;
@@ -2066,7 +2066,7 @@ class Tienda extends CI_Controller {
             $this->load->view('frontend/noencontrado_nuevo', $this->data);
             $this->load->view('frontend/footer', $this->data);
         }
-        elseif ($this->data['categ']!=5 && (empty($coleccion) || $coleccion[0]->activo==0 || $coleccion[0]->publico2==0)){
+        elseif (!isset($_GET['test']) && $this->data['categ']!=5 && (empty($coleccion) || $coleccion[0]->activo==0 || $coleccion[0]->publico2==0)){
             // Colección inexistente, desactivada o no publicada
             //echo "<br />Colección inexistente, desactivada o no publicada";
             $this->data['articulo_no_encontrado'] = true;
