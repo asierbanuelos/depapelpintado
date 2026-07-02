@@ -134,11 +134,7 @@ foreach ($col as $value) {
        </div>
        <div class="col two t-two m-three">
         
-          <span class="del btn" id="<?=$value->coleccion_id ?>"
-            data-colname="<?= htmlspecialchars($value->coleccion_name) ?>"
-            data-catname="<?= htmlspecialchars($value->cat_name) ?>"
-            data-catid="<?= $value->cat_id ?>"
-            data-cats="<?= $value->ccats ?>">Del</span>
+          <span class="del btn" id="<?=$value->coleccion_id ?>" data-cats="<?= $value->ccats ?>">Del</span>
           <span class="edit btn" data-disc="<?=$value->cdisc?>" data-novedad="<?=$value->novedad_bool?>" data-cats="<?= $value->ccats ?>" id="<?=$value->coleccion_id?>">Edit</span>
           <span data-publico="<?if($value->publico2==1)echo "0";else echo "1";?>" class="publicar btn" id="<?= $value->coleccion_id ?>">
             <?if($value->publico2==1)echo "Ocultar";else echo "Publicar";?>
@@ -257,11 +253,11 @@ tinymce.init({
     });
     $('.row').on('click','.del',function(e){
       var colId   = $(this).attr('id');
-      var colName = $(this).data('colname') || colId;
-      var catName = $(this).data('catname') || '';
-      var catId   = $(this).data('catid') || '';
-      var cats    = String($(this).data('cats') || '0').split(',');
       var row     = $(this).parent().parent();
+      var colName = $.trim(row.find('.cname').text());
+      var catId   = $.trim(row.find('.ccatid').text());
+      var catName = $.trim(row.find('.ccatname').clone().children().remove().end().text());
+      var cats    = String($(this).data('cats') || '0').split(',');
 
       var catPaths = {'0':'papel-pintado','1':'murales','2':'revestimientos','3':'telas','4':'alfombras'};
       var fromLines = [];
