@@ -9,6 +9,11 @@ class RedirectHook {
         // No aplicar redirecciones en el panel de administración
         if (strpos($CI->uri->uri_string(), 'admin_library') !== false) return;
 
+        // Cargar la BD si el controlador actual no la ha cargado
+        if (!isset($CI->db) || !$CI->db) {
+            $CI->load->database();
+        }
+
         $uri = '/' . ltrim($CI->uri->uri_string(), '/');
         // Quitar query string si lo hubiera (CI normalmente ya lo hace)
         if (($q = strpos($uri, '?')) !== false) $uri = substr($uri, 0, $q);
