@@ -4134,6 +4134,50 @@ public function mkt_usr()
         echo "</urlset>\n";
         */
     }
+    function redirects() {
+        $this->data['redirects'] = $this->db->order_by('id', 'DESC')->get('demo_redirects')->result_array();
+        $this->load->view('demo/admin_examples/redirects', $this->data);
+    }
+
+    function add_redirect() {
+        $from  = trim($this->input->post('url_from', TRUE));
+        $to    = trim($this->input->post('url_to', TRUE));
+        $notas = trim($this->input->post('notas', TRUE));
+        if ($from && $to) {
+            if ($from[0] !== '/') $from = '/' . $from;
+            $this->db->replace('demo_redirects', ['url_from' => $from, 'url_to' => $to, 'notas' => $notas]);
+            $this->session->set_flashdata('msg', 'Redirección añadida correctamente.');
+        }
+        redirect('admin_library/redirects');
+    }
+
+    function import_redirects() {
+        $lines = explode("\n", $this->input->post('bulk_redirects', TRUE));
+        $count = 0;
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if (!$line) continue;
+            $parts = preg_split('/\s+/', $line, 2);
+            if (count($parts) !== 2) continue;
+            list($from, $to) = $parts;
+            if ($from[0] !== '/') $from = '/' . $from;
+            $this->db->replace('demo_redirects', ['url_from' => $from, 'url_to' => $to, 'notas' => '']);
+            $count++;
+        }
+        $this->session->set_flashdata('msg', "Importadas {$count} redirecciones.");
+        redirect('admin_library/redirects');
+    }
+
+    function del_redirect() {
+        $id = intval($this->input->post('id'));
+        if ($id > 0) {
+            $this->db->where('id', $id)->delete('demo_redirects');
+            echo '1';
+        } else {
+            echo '0';
+        }
+    }
+
     private function urlenc_aux($str){
         //$search =  explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u,Á,É,Í,Ó,Ú,Ñ,!,(,)");
         //$replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,ñ,,,");

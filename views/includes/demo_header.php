@@ -27,6 +27,7 @@ $flexi_cart_library = (isset($current_url['admin_library'])) ? 'flexi_cart_admin
                       <li><a href="<?php echo $base_url; ?>admin_library/categorias_noticias">Categorías Noticias</a></li>
                       <li><a href="<?php echo $base_url; ?>admin_library/noticias">Noticias</a></li>
                       <li><a href="<?php echo $base_url; ?>admin_library/faqs">FAQs (Preguntas frecuentes)</a></li>
+                      <li><a href="<?php echo $base_url; ?>admin_library/redirects">Redirecciones 301</a></li>
                     </ul>
 				</li>
 				<li class="css_nav_dropmenu">
