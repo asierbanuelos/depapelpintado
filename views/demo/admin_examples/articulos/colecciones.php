@@ -134,7 +134,11 @@ foreach ($col as $value) {
        </div>
        <div class="col two t-two m-three">
         
-          <span class="del btn" id="<?=$value->coleccion_id ?>">Del</span>
+          <span class="del btn" id="<?=$value->coleccion_id ?>"
+            data-colname="<?= htmlspecialchars($value->coleccion_name) ?>"
+            data-catname="<?= htmlspecialchars($value->cat_name) ?>"
+            data-catid="<?= $value->cat_id ?>"
+            data-cats="<?= $value->ccats ?>">Del</span>
           <span class="edit btn" data-disc="<?=$value->cdisc?>" data-novedad="<?=$value->novedad_bool?>" data-cats="<?= $value->ccats ?>" id="<?=$value->coleccion_id?>">Edit</span>
           <span data-publico="<?if($value->publico2==1)echo "0";else echo "1";?>" class="publicar btn" id="<?= $value->coleccion_id ?>">
             <?if($value->publico2==1)echo "Ocultar";else echo "Publicar";?>
@@ -252,17 +256,25 @@ tinymce.init({
       })}
     });
     $('.row').on('click','.del',function(e){
-      if(confirm("¿Estas seguro de querer borrar el registro?")){
-        var t=$(this).attr('id');
-        var p=$(this).parent().parent();
-       
-        $.ajax({
-          url:"<?=site_url('admin_library/del_col')?>",
-          type:'POST',
-          data:'&t=coleccion&n=coleccion&i='+t,
-          success:function(data){p.slideUp();}
-        });
-      }
+      var colId   = $(this).attr('id');
+      var colName = $(this).data('colname') || colId;
+      var catName = $(this).data('catname') || '';
+      var catId   = $(this).data('catid') || '';
+      var cats    = String($(this).data('cats') || '0').split(',');
+      var row     = $(this).parent().parent();
+
+      var catPaths = {'0':'papel-pintado','1':'murales','2':'revestimientos','3':'telas','4':'alfombras'};
+      var fromLines = [];
+      cats.forEach(function(c){
+        c = $.trim(c);
+        if (catPaths[c])
+          fromLines.push('/tienda/'+catPaths[c]+'/marca/'+catId+'/'+urlenc(catName)+'/'+colId+'/'+urlenc(colName));
+      });
+
+      $('#del-col-modal-name').text(colName + ' (' + catName + ')');
+      $('#del-col-modal-from').val(fromLines.join("\n"));
+      $('#del-col-modal-to').val('');
+      $('#del-col-modal').data('col-id', colId).data('row', row).show();
     });
     $('.row').on('click','.publicar',function(e){
     var t=$(this).attr('id');
@@ -510,6 +522,47 @@ tinymce.init({
         sP(e);
       });
     });
+  </script>
+
+  <!-- Modal borrar colección con redirección -->
+  <div id="del-col-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:200;background:rgba(0,0,0,0.6);padding:20px;box-sizing:border-box">
+    <div style="background:#fff;max-width:600px;margin:60px auto;border-radius:8px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,0.3)">
+      <div style="font-size:18px;font-weight:bold;margin-bottom:4px;color:#c0392b">Eliminar colección</div>
+      <div style="color:#555;margin-bottom:16px" id="del-col-modal-name"></div>
+      <div style="margin-bottom:6px;font-weight:bold">URLs a redirigir <span style="font-weight:normal;color:#888">(una por línea — edita si no son correctas)</span>:</div>
+      <textarea id="del-col-modal-from" rows="3" style="width:100%;box-sizing:border-box;padding:8px;font-size:12px;font-family:monospace;border:1px solid #ccc;border-radius:4px;margin-bottom:14px"></textarea>
+      <div style="margin-bottom:8px;font-weight:bold">Redirigir a <span style="font-weight:normal;color:#888">(deja vacío para borrar sin redirección)</span>:</div>
+      <input id="del-col-modal-to" type="text" placeholder="/tienda/papel-pintado o URL de otra colección similar" style="width:100%;box-sizing:border-box;padding:8px;font-size:13px;border:1px solid #ccc;border-radius:4px;margin-bottom:20px"/>
+      <div style="display:flex;gap:10px">
+        <button id="del-col-modal-confirm" style="flex:1;background:#c0392b;color:#fff;border:none;padding:10px;border-radius:4px;cursor:pointer;font-size:14px;font-weight:bold">Eliminar colección</button>
+        <button id="del-col-modal-cancel" style="flex:1;background:#aaa;color:#fff;border:none;padding:10px;border-radius:4px;cursor:pointer;font-size:14px">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  <script>
+  function urlenc(str) {
+    var s = ['ç','æ','œ','á','é','í','ó','ú','à','è','ì','ò','ù','ä','ë','ï','ö','ü','ÿ','â','ê','î','ô','û','å','e','i','ø','u','Á','É','Í','Ó','Ú','Ñ','%','!','(',')'];
+    var r = ['c','ae','oe','a','e','i','o','u','a','e','i','o','u','a','e','i','o','u','y','a','e','i','o','u','a','e','i','o','u','a','e','i','o','u','n','','','',''];
+    str = str.toLowerCase().replace(/ /g,'-').replace(/,/g,'').replace(/\+/g,'-plus-').replace(/#/g,'number-').replace(/&/g,'and');
+    for (var i=0;i<s.length;i++) str = str.split(s[i]).join(r[i]);
+    return str;
+  }
+  $('#del-col-modal-cancel').click(function(){ $('#del-col-modal').hide(); });
+  $('#del-col-modal').click(function(e){ if($(e.target).is('#del-col-modal')) $(this).hide(); });
+  $('#del-col-modal-confirm').click(function(){
+    var modal  = $('#del-col-modal');
+    var colId  = modal.data('col-id');
+    var row    = modal.data('row');
+    var urlTo  = $.trim($('#del-col-modal-to').val());
+    var urlsFrom = $('#del-col-modal-from').val().split("\n").map(function(s){ return $.trim(s); }).filter(function(s){ return s!=''; });
+    modal.hide();
+    $.ajax({
+      url: "<?= site_url('admin_library/del_col_redirect') ?>",
+      type: 'POST',
+      data: { col_id: colId, urls_from: urlsFrom, url_to: urlTo },
+      success: function(){ row.slideUp(300); }
+    });
+  });
   </script>
 </body>
 </html>

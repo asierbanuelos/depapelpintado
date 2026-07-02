@@ -949,6 +949,29 @@ class Admin_library extends CI_Controller {
       $this->load->model('demo_cart_admin_model');
       $this->demo_cart_admin_model->demo_del_col();
     }
+
+    function del_col_redirect() {
+        $col_id    = intval($this->input->post('col_id'));
+        $urls_from = $this->input->post('urls_from', TRUE) ?: [];
+        $url_to    = trim($this->input->post('url_to', TRUE));
+        if ($col_id <= 0) return;
+        // Guardar redirecciones si se especificó destino
+        if ($url_to !== '' && is_array($urls_from)) {
+            foreach ($urls_from as $url_from) {
+                $url_from = trim($url_from);
+                if (!$url_from) continue;
+                if ($url_from[0] !== '/') $url_from = '/' . $url_from;
+                $this->db->replace('demo_redirects', [
+                    'url_from' => $url_from,
+                    'url_to'   => $url_to,
+                    'notas'    => 'colección borrada id:' . $col_id,
+                ]);
+            }
+        }
+        // Desactivar productos y borrar colección
+        $this->db->where('item_coleccion_id', $col_id)->update('demo_items', ['activo' => 0]);
+        $this->db->delete('demo_coleccion', ['coleccion_id' => $col_id]);
+    }
     function get_col_select(){
        $this->load->model('demo_cart_admin_model');
       $arr = $this->demo_cart_admin_model->get_col_array($this->input->post('fab'),"ASC");
