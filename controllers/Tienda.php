@@ -2045,7 +2045,13 @@ class Tienda extends CI_Controller {
         if (empty($marca))
             $marca = (object)['activo'=>0,'publico'=>0,'cat_name'=>'','cat_id'=>0,'fabmargen'=>0,'disc'=>0,'cats'=>''];
         if (empty($coleccion))
-            $coleccion = [(object)['coleccion_id'=>0,'coleccion_name'=>'','activo'=>0,'publico2'=>0,'col_text'=>'','coleccion_ref'=>'']];
+            $coleccion = [(object)[
+                'coleccion_id'=>0,'coleccion_cat_id'=>0,'coleccion_name'=>'','col_text'=>'',
+                'activo'=>0,'col_img'=>'','col_ambimg'=>'','plazo'=>'','ccats'=>'0','cdisc'=>0,
+                'publico2'=>0,'col-desc'=>'','meta_titlec'=>'','meta_descriptionc'=>'',
+                'meta_keywordsc'=>'','novedad_bool'=>0,'col_text_publico'=>0,
+                'greca_misma_coleccion_be'=>0,'xml_META_be'=>0,'orden'=>0,
+            ]];
 
         // Si el artículo ya no existe (fue eliminado por estar oculto), redirigir a su categoría principal
         if (!isset($datos_item['item_id'])){
