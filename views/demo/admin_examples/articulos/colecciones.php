@@ -155,7 +155,7 @@ foreach ($col as $value) {
 tinymce.init({
   relative_urls : false,
           remove_script_host : true,
-   selector: "textarea",
+   selector: "textarea:not(#del-col-modal-from)",
     
     language: "es",
       plugins: [
