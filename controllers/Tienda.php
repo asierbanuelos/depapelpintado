@@ -2041,6 +2041,12 @@ class Tienda extends CI_Controller {
         $marca = $this->flexi_cart_model->get_fab((int)$datos_item['item_cat_fk']);
         $coleccion = $this->flexi_cart_model->get_coleccion((int)$datos_item['item_coleccion_id']);
 
+        // Fallbacks para previsualización admin (?test) cuando marca/colección no existen o están ocultas
+        if (empty($marca))
+            $marca = (object)['activo'=>0,'publico'=>0,'cat_name'=>'','cat_id'=>0,'fabmargen'=>0,'disc'=>0,'cats'=>''];
+        if (empty($coleccion))
+            $coleccion = [(object)['coleccion_id'=>0,'coleccion_name'=>'','activo'=>0,'publico2'=>0,'col_text'=>'','coleccion_ref'=>'']];
+
         // Si el artículo ya no existe (fue eliminado por estar oculto), redirigir a su categoría principal
         if (!isset($datos_item['item_id'])){
             $a_categorias_principales = array(
