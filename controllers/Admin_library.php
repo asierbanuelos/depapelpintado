@@ -2213,6 +2213,25 @@ class Admin_library extends CI_Controller {
       $this->load->model('demo_cart_admin_model');
       $this->demo_cart_admin_model->demo_del("demo_".$this->input->post('t'),$this->input->post('n')."_id",$this->input->post('i'));
     }
+
+    function del_item_redirect() {
+        $item_id  = intval($this->input->post('item_id'));
+        $url_from = trim($this->input->post('url_from', TRUE));
+        $url_to   = trim($this->input->post('url_to', TRUE));
+        if ($item_id <= 0) return;
+        // Guardar redirección si se especificó destino
+        if ($url_to !== '') {
+            if ($url_from && $url_from[0] !== '/') $url_from = '/' . $url_from;
+            $this->db->replace('demo_redirects', [
+                'url_from' => $url_from,
+                'url_to'   => $url_to,
+                'notas'    => 'producto borrado id:' . $item_id,
+            ]);
+        }
+        // Borrar el producto
+        $this->load->model('demo_cart_admin_model');
+        $this->demo_cart_admin_model->demo_del('demo_items', 'item_id', $item_id);
+    }
     function estilos(){
       $this->load->model('demo_cart_admin_model');
       //$this->data['estilos']=$this->demo_cart_admin_model->get_estilos("DESC");

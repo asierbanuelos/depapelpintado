@@ -320,18 +320,14 @@
         }
       });
       $('.row').on('click','.del', function(e) {
-        if(confirm("¿Estas seguro de querer borrar el registro?")){
-          var t = $(this).attr('id');
-          var p = $(this).parent().parent();
-          $.ajax({
-            url: "<?= site_url('admin_library/del') ?>",
-            type: 'POST',
-            data: '&t=items&n=item&i=' + t,
-            success: function(data) {
-              p.slideUp();
-            }
-          });
-        }
+        var itemId   = $(this).attr('id');
+        var itemName = $(this).data('name') || itemId;
+        var itemUrl  = $(this).data('url') || '';
+        var row      = $(this).parent().parent();
+        $('#del-modal-name').text(itemName);
+        $('#del-modal-from').text(itemUrl);
+        $('#del-modal-to').val('');
+        $('#del-modal').data('item-id', itemId).data('row', row).show();
       });
       var p;
       $('.row').on('click','.publicar',function(e){
@@ -826,6 +822,39 @@
         $(this).val('');
       });
     });
+  </script>
+
+  <!-- Modal borrar producto con redirección -->
+  <div id="del-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:200;background:rgba(0,0,0,0.6);padding:20px;box-sizing:border-box">
+    <div style="background:#fff;max-width:560px;margin:60px auto;border-radius:8px;padding:24px;box-shadow:0 8px 32px rgba(0,0,0,0.3)">
+      <div style="font-size:18px;font-weight:bold;margin-bottom:4px;color:#c0392b">Eliminar producto</div>
+      <div style="color:#555;margin-bottom:16px" id="del-modal-name"></div>
+      <div style="background:#f5f5f5;border-radius:4px;padding:10px;font-family:monospace;font-size:12px;margin-bottom:16px;word-break:break-all" id="del-modal-from"></div>
+      <div style="margin-bottom:8px;font-weight:bold">Redirigir a <span style="font-weight:normal;color:#888">(deja vacío para borrar sin redirección)</span>:</div>
+      <input id="del-modal-to" type="text" placeholder="/papel-pintado/fabricante/coleccion o URL completa" style="width:100%;box-sizing:border-box;padding:8px;font-size:13px;border:1px solid #ccc;border-radius:4px;margin-bottom:20px"/>
+      <div style="display:flex;gap:10px">
+        <button id="del-modal-confirm" style="flex:1;background:#c0392b;color:#fff;border:none;padding:10px;border-radius:4px;cursor:pointer;font-size:14px;font-weight:bold">Eliminar</button>
+        <button id="del-modal-cancel" style="flex:1;background:#aaa;color:#fff;border:none;padding:10px;border-radius:4px;cursor:pointer;font-size:14px">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  <script>
+  $('#del-modal-cancel').click(function(){ $('#del-modal').hide(); });
+  $('#del-modal').click(function(e){ if($(e.target).is('#del-modal')) $(this).hide(); });
+  $('#del-modal-confirm').click(function(){
+    var modal  = $('#del-modal');
+    var itemId = modal.data('item-id');
+    var row    = modal.data('row');
+    var urlTo  = $.trim($('#del-modal-to').val());
+    var urlFrom= $.trim($('#del-modal-from').text());
+    modal.hide();
+    $.ajax({
+      url: "<?= site_url('admin_library/del_item_redirect') ?>",
+      type: 'POST',
+      data: { item_id: itemId, url_from: urlFrom, url_to: urlTo },
+      success: function(){ row.slideUp(300); }
+    });
+  });
   </script>
 </body>
 </html>

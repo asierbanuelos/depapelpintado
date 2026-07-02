@@ -60,7 +60,9 @@ foreach ($all as $key => $value) {
 		</div>
 
 		<div class="col two t-two m-three">
-			<span class="del btn" id="<?= $value['item_id'] ?>">Del</span>
+			<span class="del btn" id="<?= $value['item_id'] ?>"
+				data-name="<?= htmlspecialchars($value['item_name'] ?: $value['item_ref']) ?>"
+				data-url="/tienda/articulo/<?= urlenc($value['cat_name']) ?>/<?= urlenc($value['coleccion_name']) ?>/id/<?= $value['item_id'] ?>">Del</span>
 			<span data-publico="<?if($value['publico3']==1)echo "0";else echo "1";?>" class="publicar btn" id="<?= $value['item_id'] ?>">
 				<?if($value['publico3']==1)echo "Ocultar";else echo "Publicar";?>
 			</span>
