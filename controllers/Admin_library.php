@@ -955,19 +955,43 @@ class Admin_library extends CI_Controller {
         $urls_from = $this->input->post('urls_from', TRUE) ?: [];
         $url_to    = trim($this->input->post('url_to', TRUE));
         if ($col_id <= 0) return;
-        // Guardar redirecciones si se especificó destino
-        if ($url_to !== '' && is_array($urls_from)) {
-            foreach ($urls_from as $url_from) {
-                $url_from = trim($url_from);
-                if (!$url_from) continue;
-                if ($url_from[0] !== '/') $url_from = '/' . $url_from;
+
+        if ($url_to !== '') {
+            // Redirecciones de la página de colección
+            if (is_array($urls_from)) {
+                foreach ($urls_from as $url_from) {
+                    $url_from = trim($url_from);
+                    if (!$url_from) continue;
+                    if ($url_from[0] !== '/') $url_from = '/' . $url_from;
+                    $this->db->replace('demo_redirects', [
+                        'url_from' => $url_from,
+                        'url_to'   => $url_to,
+                        'notas'    => 'colección borrada id:' . $col_id,
+                    ]);
+                }
+            }
+
+            // Redirecciones de cada producto dentro de la colección
+            $col = $this->db->select('coleccion_name')->where('coleccion_id', $col_id)->get('demo_coleccion')->row();
+            $col_name = $col ? $col->coleccion_name : '';
+
+            $productos = $this->db
+                ->select('i.item_id, c.cat_name')
+                ->from('demo_items i')
+                ->join('demo_categories c', 'c.cat_id = i.item_cat_fk', 'left')
+                ->where('i.item_coleccion_id', $col_id)
+                ->get()->result();
+
+            foreach ($productos as $p) {
+                $url_from = '/tienda/articulo/' . $this->urlenc_aux($p->cat_name) . '/' . $this->urlenc_aux($col_name) . '/id/' . $p->item_id;
                 $this->db->replace('demo_redirects', [
                     'url_from' => $url_from,
                     'url_to'   => $url_to,
-                    'notas'    => 'colección borrada id:' . $col_id,
+                    'notas'    => 'producto de colección borrada id:' . $col_id,
                 ]);
             }
         }
+
         // Desactivar productos y borrar colección
         $this->db->where('item_coleccion_id', $col_id)->update('demo_items', ['activo' => 0]);
         $this->db->delete('demo_coleccion', ['coleccion_id' => $col_id]);
