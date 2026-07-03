@@ -262,59 +262,56 @@
       $(".fabr").change(function(e) {
         if ($(this).val() > -1) {
           var t=$(this);
+          var tForm = t.closest('form');
           $.ajax({
             url: "<?= site_url('admin_library/get_col_select') ?>",
             type: 'POST',
-            data: t.closest('form').serialize(),
+            data: tForm.serialize(),
             success: function(data) {
-              $('#editform .cole').html(data);
-              $('#editform .mod').html("");
-              $.ajax({
-                url: "<?= site_url('admin_library/con_variantes') ?>",
-                type: 'POST',
-                data: t.closest('form').serialize(),
-                success: function(data) {
-                  $('.variante_de').html(data);
-                }
-              });
-              $.ajax({
-                url: "<?= site_url('admin_library/con_relacionados') ?>",
-                type: 'POST',
-                data: t.closest('form').serialize(),
-                success: function(data) {
-                  $('.relacionado_con').html(data);
-                }
-              });
+              tForm.find('.cole').html(data);
+              tForm.find('.mod').html("");
+              if (tForm.is('#editform')) {
+                $.ajax({
+                  url: "<?= site_url('admin_library/con_variantes') ?>",
+                  type: 'POST',
+                  data: tForm.serialize(),
+                  success: function(data) { $('.variante_de').html(data); }
+                });
+                $.ajax({
+                  url: "<?= site_url('admin_library/con_relacionados') ?>",
+                  type: 'POST',
+                  data: tForm.serialize(),
+                  success: function(data) { $('.relacionado_con').html(data); }
+                });
+              }
             }
           })
-          
         }
       });
       $(".cole").change(function(e) {
         if ($(this).val() > 0) {
           var t=$(this);
+          var tForm = t.closest('form');
           $.ajax({
             url: "<?= site_url('admin_library/get_mod_select') ?>",
             type: 'POST',
-            data: t.closest('form').serialize(),
+            data: tForm.serialize(),
             success: function(data) {
-              $('#editform .mod').html(data);
-              $.ajax({
-                url: "<?= site_url('admin_library/con_variantes') ?>",
-                type: 'POST',
-                data: t.closest('form').serialize(),
-                success: function(data) {
-                  $('.variante_de').html(data);
-                }
-              });
-              $.ajax({
-                url: "<?= site_url('admin_library/con_relacionados') ?>",
-                type: 'POST',
-                data: t.closest('form').serialize(),
-                success: function(data) {
-                  $('.relacionado_con').html(data);
-                }
-              });
+              tForm.find('.mod').html(data);
+              if (tForm.is('#editform')) {
+                $.ajax({
+                  url: "<?= site_url('admin_library/con_variantes') ?>",
+                  type: 'POST',
+                  data: tForm.serialize(),
+                  success: function(data) { $('.variante_de').html(data); }
+                });
+                $.ajax({
+                  url: "<?= site_url('admin_library/con_relacionados') ?>",
+                  type: 'POST',
+                  data: tForm.serialize(),
+                  success: function(data) { $('.relacionado_con').html(data); }
+                });
+              }
             }
           })
         }
