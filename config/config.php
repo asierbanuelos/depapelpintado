@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 //$config['base_url'] = 'https://nueva.depapelpintado.es/';
-$config['base_url'] = 'https://www.depapelpintado.es/';
+$config['base_url'] = 'https://depapelpintado.es/';
 
 /*
 |--------------------------------------------------------------------------
