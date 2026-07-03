@@ -52,43 +52,27 @@ Este sitio web utiliza cookies para que usted tenga la mejor experiencia de usua
 
 </div> 
     <script>
-    if(typeof(Storage) !== "undefined") {
-        if (localStorage.controlcookie==0){
-         document.getElementById('cookie1').style.display = 'block';
-    	} 
-        else if(typeof(localStorage.controlcookie) === "undefined" && getCookie("controlcookie")==""){
-            document.getElementById('cookie1').style.display = 'block';
-        }
-    
-    }
-    function controlcookies() {
-        
-// si variable no existe se crea (al clicar en Aceptar)
-        if(typeof(Storage) !== "undefined") {
-            localStorage.controlcookie = (localStorage.controlcookie || 0);
-            localStorage.controlcookie++; // incrementamos cuenta de la cookie
-            cookie1.style.display='none'; // Esconde la política de cookies
-        } else {
-            setCookie("controlcookie",1,3650);
-            cookie1.style.display='none';
-        }
-    }
     function setCookie(cname, cvalue, exdays) {
-	    var d = new Date();
-	    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-	    var expires = "expires="+d.toUTCString();
-	    document.cookie = cname + "=" + cvalue + "; " + expires;
-    } 
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        document.cookie = cname + "=" + cvalue + "; expires=" + d.toUTCString() + "; path=/; SameSite=Lax";
+    }
     function getCookie(cname) {
         var name = cname + "=";
         var ca = document.cookie.split(';');
-        for(var i=0; i<ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0)==' ') c = c.substring(1);
-            if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i].trim();
+            if (c.indexOf(name) === 0) return c.substring(name.length, c.length);
         }
         return "";
-    } 
+    }
+    function controlcookies() {
+        setCookie("controlcookie", "1", 3650);
+        document.getElementById('cookie1').style.display = 'none';
+    }
+    if (getCookie("controlcookie") === "") {
+        document.getElementById('cookie1').style.display = 'block';
+    }
 </script>
 
 <script src="<?php echo $includes_dir; ?>js/jquery_ui/jquery-ui.min.js"></script> <?php // quitar carpeta jquery_ui/ para coger el script original ; ?>
