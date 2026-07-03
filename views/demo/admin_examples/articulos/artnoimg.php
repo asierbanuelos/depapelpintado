@@ -238,6 +238,11 @@
 	<span class="edit btn" id="seleccionar_todos">Seleccionar<br />todos</span>
 	<span class="edit btn" id="desmarcar_todos" style='display:none'>Quitar<br />todos</span>
 	<span class="edit btn" id="editar_seleccionados">Editar<br />Selección</span>
+	<?php if(isset($debug_filter)): ?>
+	<div style="background:#fffbe6;border:1px solid #f0c040;padding:8px 12px;margin-bottom:10px;font-size:12px;font-family:monospace">
+		<b>DEBUG filtro:</b> fab=<?=$debug_filter['fab']?> col=<?=$debug_filter['col']?> gama=<?=$debug_filter['gama']?> estilo=<?=$debug_filter['estilo']?> categ=<?=$debug_filter['categ']?> precio=<?=$debug_filter['precio']?> ref=<?=$debug_filter['referencia']?> todos=<?=$debug_filter['todos']?>
+	</div>
+	<?php endif; ?>
 	<div class="cuadro_resultados">
 		<?
 		$this->load->view('demo/admin_examples/articulos/cuadro_resultados');
