@@ -241,7 +241,8 @@
 	<?php if(isset($debug_filter)): ?>
 	<div style="background:#fffbe6;border:1px solid #f0c040;padding:8px 12px;margin-bottom:10px;font-size:12px;font-family:monospace">
 		<b>DEBUG filtro:</b> fab=<?=$debug_filter['fab']?> col=<?=$debug_filter['col']?> gama=<?=$debug_filter['gama']?> estilo=<?=$debug_filter['estilo']?> categ=<?=$debug_filter['categ']?> precio=<?=$debug_filter['precio']?> ref=<?=$debug_filter['referencia']?> todos=<?=$debug_filter['todos']?><br>
-		<b>DEBUG POST:</b> <?= htmlspecialchars(json_encode($debug_post)) ?>
+		<b>DEBUG POST:</b> <?= htmlspecialchars(json_encode($debug_post)) ?><br>
+		<b>DEBUG METHOD:</b> <?= $debug_method ?> | <b>URL:</b> <?= htmlspecialchars($debug_host) ?>
 	</div>
 	<?php endif; ?>
 	<div class="cuadro_resultados">
