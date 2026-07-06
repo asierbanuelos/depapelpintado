@@ -423,7 +423,8 @@ class Demo_cart_admin_model extends CI_Model {
     }
 
 		if($gama!=0){
-			$temp->where('gama_id',$gama);
+			$temp->join('demo_gama_item', 'item_id = gama_item_item')
+			->join('demo_gama', 'gama_id = gama_item_gama')->where('gama_id',$gama);
 		}
 		if($estilo!=0){
 			$temp->join('demo_estilo_item', 'item_id = estilo_item_item')
