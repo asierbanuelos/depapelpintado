@@ -35,9 +35,9 @@
         <div class="sec row"><div class="col six">Fabricante:</div><?= form_dropdown('fab', $fab, $curfab, 'class="six fabr"') ?></div>
         <div class="sec row"><div class="col six">Colección:</div><?= form_dropdown('col', $col, $curcol, 'class="six cole"') ?></div>
         <div class="sec row"><div class="col six">Categoria SEO:</div><?= form_dropdown('categoria_seo', $nuevas_categorias_buscador, $cur_cat_seo, 'class="six cat_seo"') ?></div>
-        <div class="sec row"><div class="col six">Gama:</div><?= form_dropdown('gama', $gama, $curgama, 'class="six cole"') ?></div>
-        <div class="sec row"><div class="col six">Estilo:</div><?= form_dropdown('estilo', $estilo, $curestilo, 'class="six cole"') ?></div>
-        <div class="sec row"><div class="col six">Categoria:</div><?= form_dropdown('categ', $categ, $curcateg, 'class="six cole"') ?></div>
+        <div class="sec row"><div class="col six">Gama:</div><?= form_dropdown('gama', $gama, $curgama, 'class="six"') ?></div>
+        <div class="sec row"><div class="col six">Estilo:</div><?= form_dropdown('estilo', $estilo, $curestilo, 'class="six"') ?></div>
+        <div class="sec row"><div class="col six">Categoria:</div><?= form_dropdown('categ', $categ, $curcateg, 'class="six"') ?></div>
         <div class="sec row"><div class="col six">Referencia:</div><?= form_input("referencia", $curreferencia, 'class="six"') ?></div>
         <div class="sec row"><div class="col six">Precio:</div><?= form_input("precio", $curprecio, 'class="six"') ?></div>
         <div class="sec row">
