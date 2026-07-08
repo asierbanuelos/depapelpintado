@@ -4089,6 +4089,9 @@ public function mkt_usr()
 		$this->load->library('flexi_cart_admin');
 		$this->load->model('demo_cart_model');
 		$this->load->model('demo_cart_admin_model');
+		// Cargar settings de moneda/impuestos si faltan (evita Notices al ver la factura sin carrito en sesion)
+		$this->load->model('flexi_cart_model');
+		if (! isset($this->flexi->cart_contents['settings'])) $this->flexi_cart_model->set_cart_defaults();
 		$this->data['pedido']=$this->getFactura($pedido);
 		$this->load->view("frontend/cuentas/plantillamailfra",$this->data);
 		//$this->demo_cart_admin_model->demo_facturar($pedido);   
@@ -4097,6 +4100,9 @@ public function mkt_usr()
 		$this->load->library('flexi_cart_admin');
 		$this->load->model('demo_cart_model');
 		$this->load->model('demo_cart_admin_model');
+		// Cargar settings de moneda/impuestos si faltan (evita Notices al ver la factura sin carrito en sesion)
+		$this->load->model('flexi_cart_model');
+		if (! isset($this->flexi->cart_contents['settings'])) $this->flexi_cart_model->set_cart_defaults();
 		$this->data['pedido']=$this->getFacturaRect($pedido);
 		$this->load->view("frontend/cuentas/plantillamailfra",$this->data);
 		//$this->demo_cart_admin_model->demo_facturar($pedido);   
@@ -4105,6 +4111,9 @@ public function mkt_usr()
             $this->load->library('flexi_cart_admin');
             $this->load->model('demo_cart_model');
             $this->load->model('demo_cart_admin_model');
+            // Cargar settings de moneda/impuestos si faltan (evita Notices al ver la factura sin carrito en sesion)
+            $this->load->model('flexi_cart_model');
+            if (! isset($this->flexi->cart_contents['settings'])) $this->flexi_cart_model->set_cart_defaults();
             $this->data['pedido']=$this->getTicket($pedido);
             $this->load->view("frontend/cuentas/plantillamailfra",$this->data);
             //$this->demo_cart_admin_model->demo_facturar($pedido);   
