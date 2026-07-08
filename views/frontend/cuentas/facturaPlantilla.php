@@ -25,10 +25,10 @@ if (isset($rectificativa) && $rectificativa){
 <td class="contenido">
 
 <?php 
-$logo_factura='<td class="logo1"><img src="http://www.depapelpintado.es/includes/images/depapelpintado-logo.jpg"/></td>';
+$logo_factura='<td class="logo1"><img src="https://depapelpintado.es/includes/images/depapelpintado-logo.jpg"/></td>';
 $url_factura='<a href="http://www.depapelpintado.es" title="depapelpintado.es">www.depapelpintado.es</a>';
 if ($summary_data['ord_user_ekam_fk']!=0){
-  $logo_factura='<td class="logo2"><img src="http://www.depapelpintado.es/includes/images/ekam-logo.jpg"/></td>';
+  $logo_factura='<td class="logo2"><img src="https://depapelpintado.es/includes/images/ekam-logo.jpg"/></td>';
   $url_factura='<a href="http://www.www.ekamdecoracion.com" title="ekamdecoracion">www.ekamdecoracion.com</a>';
 }
 ?>
@@ -44,7 +44,7 @@ if ($summary_data['ord_user_ekam_fk']!=0){
   echo $logo_factura;
   /*
   <td class="logo1">
-    <img src="http://www.depapelpintado.es/includes/images/depapelpintado-logo.jpg"/>
+    <img src="https://depapelpintado.es/includes/images/depapelpintado-logo.jpg"/>
   </td>
   */
   ?>
@@ -66,7 +66,7 @@ if ($summary_data['ord_user_ekam_fk']!=0){
   <?php 
   /*
   <td class="logo2">
-    <img src="http://www.depapelpintado.es/includes/images/ekam-logo.jpg"/>
+    <img src="https://depapelpintado.es/includes/images/ekam-logo.jpg"/>
   </td>
   */
   ?>
