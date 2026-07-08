@@ -5253,6 +5253,13 @@ $this->db->cache_off();
         $this->email->bcc('pagos@depapelpintado.es');
 
         $this->email->subject($subject);
+
+        // Logo incrustado (cid) para que se vea aunque Cloudflare bloquee al proxy de imagenes del cliente de correo
+        $logo_path = FCPATH.'images/logo-depapelpintado-nuevo2.png';
+        if (is_array($body) && $this->email->attach($logo_path, 'inline') !== FALSE) {
+            $body['logo_cid'] = $this->email->attachment_cid($logo_path);
+        }
+
         $this->email->message($this->load->view('frontend/cuentas/plantillamail', $body, TRUE));
 
         $this->email->send();

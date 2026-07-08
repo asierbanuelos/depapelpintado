@@ -170,7 +170,7 @@
 						<tr>
 							<td align="center" class="logo" style="border-bottom:4px solid #333333;padding:7px 0">
 								<a title="depapelpintado.com" href="http://www.depapelpintado.com" style="color:#337ff1">
-									<img src="https://depapelpintado.es/images/logo-depapelpintado-nuevo2.png" alt="depapelpintado.com" />
+									<img src="<?= (isset($logo_cid) && $logo_cid) ? 'cid:'.$logo_cid : 'https://depapelpintado.es/images/logo-depapelpintado-nuevo2.png' ?>" alt="depapelpintado.com" />
 								</a>
 							</td>
 						</tr>
