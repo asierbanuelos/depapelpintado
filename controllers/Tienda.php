@@ -97,7 +97,7 @@ class Tienda extends CI_Controller {
                             $this->nuevo_usuario=true;
                             
                             //$this->send_info_email($this->input->post("email"), "Gracias por registrarte en depapelpintado.es", $this->load->view('frontend/cuentas/emailregistro', array(), TRUE));
-                            $this->send_info_email_copia_oculta($this->input->post("email"), "Gracias por registrarte en depapelpintado.es", $this->load->view('frontend/cuentas/emailregistro_bono', array(), TRUE));
+                            $this->send_registro_email($this->input->post("email"), "Gracias por registrarte en depapelpintado.es", 'emailregistro_bono', TRUE);
                         }
                     }
                 } 
@@ -147,7 +147,7 @@ class Tienda extends CI_Controller {
                     // Asignamos los pedidos al idusuario del mail creado
                     $this->db->where("ord_demo_email", $this->input->post('email'))->update('order_summary', array('ord_user_fk' => $id_usuario));
 
-                    $this->send_info_email($this->input->post("email"), "Gracias por registrarte en depapelpintado.es", $this->load->view('frontend/cuentas/emailregistro', array(), TRUE));
+                    $this->send_registro_email($this->input->post("email"), "Gracias por registrarte en depapelpintado.es", 'emailregistro');
                     //$this->send_info_email_copia_oculta($this->input->post("email"), "Gracias por registrarte en depapelpintado.es", $this->load->view('frontend/cuentas/emailregistro_bono'));
                 
                     // Como estamos haciendo el registro desde el formulario de checkout, le logueamos de forma automática
@@ -5299,6 +5299,27 @@ $this->db->cache_off();
         $result=$this->email->send(FALSE);
     }
 
+    // Envia un email de plantilla (registro) con el logo incrustado (cid), inmune al bloqueo de Cloudflare al proxy de imagenes
+    private function send_registro_email($email, $subject, $template, $bcc_self = FALSE) {
+        $this->load->library('email');
+        $config['wordwrap'] = FALSE;
+        $config['mailtype'] = 'html';
+        $this->email->initialize($config);
+        $this->email->from('info@depapelpintado.es', 'dePapelPintado');
+        $this->email->to($email);
+        if ($bcc_self) $this->email->bcc('info@depapelpintado.es');
+        $this->email->subject($subject);
+
+        $data = array();
+        $logo_path = FCPATH.'images/logo-depapelpintado-nuevo2.png';
+        if ($this->email->attach($logo_path, 'inline') !== FALSE) {
+            $data['logo_cid'] = $this->email->attachment_cid($logo_path);
+        }
+        $this->email->message($this->load->view('frontend/cuentas/'.$template, $data, TRUE));
+
+        return $this->email->send();
+    }
+
     function checkout_compra_ya($order_number = FALSE, $pasarela = FALSE, $prueba=FALSE) {
         // Note: This example uses the 'get_db_order_summary_row_array()' and 'update_db_order_summary()' function which are located in the flexi cart ADMIN library.
         $this->load->library('flexi_cart_admin');
@@ -6231,7 +6252,7 @@ $this->db->cache_off();
     }
 
     function newsletter_test(){ 
-        $this->send_info_email_copia_oculta("info@depapelpintado.es", "Gracias por registrarte en depapelpintado.es", $this->load->view('frontend/cuentas/emailregistro_bono', array(), TRUE));
+        $this->send_registro_email("info@depapelpintado.es", "Gracias por registrarte en depapelpintado.es", 'emailregistro_bono', TRUE);
     }
     // Funcion que se usaba para registrar en mail en mailchimp y enviar el bono descuento
     function newsletter($desde, $a_post){ 
