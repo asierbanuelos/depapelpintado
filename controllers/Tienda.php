@@ -1145,6 +1145,15 @@ class Tienda extends CI_Controller {
         $this->data['enlace_marcas']='tienda/'.$categoria_principal.'/marcas';
         $this->data['enlace_estilos']='estilos-'.$categoria_principal;
         $categ = "";
+        // Fase 2 SEO: el canonical debe apuntar a la URL amigable, no a /tienda/...
+        $mapa_url_amigable = array(
+            'papel-pintado' => 'papel-pintado', 'papel-pintado-economico' => 'outlet',
+            'murales' => 'murales', 'fotomurales' => 'murales',
+            'revestimientos' => 'revestimientos', 'telas' => 'telas',
+            'alfombras' => 'alfombras', 'herramientas' => 'herramientas',
+            'complementos' => 'complementos',
+        );
+        $slug_canonico = isset($mapa_url_amigable[$categoria_principal]) ? $mapa_url_amigable[$categoria_principal] : $categoria_principal;
         switch ($categoria_principal) {
             case 'papel-pintado': 
                 $categ = "Papel Pintado";
@@ -1157,7 +1166,7 @@ class Tienda extends CI_Controller {
                 $this->data['texto__intro_seo']= $this->load->view('textos_seo/papel-pintado-seo', $this->data, true); 
                 //$this->data['alt_slider']='papel-pintado';
                 //$this->data['images'] = $this->contenido_model->get_imagenes(true, "papelpintado");
-                $this->data['url_canonica']=base_url().$categoria_principal;
+                $this->data['url_canonica']=base_url().$slug_canonico;
                 break;
             case 'papel-pintado-economico': 
                 $categ = "Outlet";
@@ -1170,7 +1179,7 @@ class Tienda extends CI_Controller {
                 $this->data['texto_h1_seccion']='Papeles Pintados Outlet'; 
                 $this->data['texto__intro_seo']= $this->load->view('textos_seo/outlet-seo', $this->data, true); 
                 //$this->data['images'] = $this->contenido_model->get_imagenes(true, "economicos");
-                $this->data['url_canonica']=base_url().$categoria_principal;
+                $this->data['url_canonica']=base_url().$slug_canonico;
                 $this->data['productos_outlet']=true;
                 $this->data['mostrar_categorias_seo']=false;
                 $this->data['ocultar_marcas']=true;
@@ -1186,7 +1195,7 @@ class Tienda extends CI_Controller {
                 $this->data['texto__intro_seo']= $this->load->view('textos_seo/fotomurales-seo', $this->data, true);
                 //$this->data['alt_slider']='fotomurales';
                 //$this->data['images'] = $this->contenido_model->get_imagenes(true, "papelpintado");
-                $this->data['url_canonica']=base_url().$categoria_principal;
+                $this->data['url_canonica']=base_url().$slug_canonico;
                 break;
             case 'revestimientos': 
                 $categ = "Revestimientos";
@@ -1198,7 +1207,7 @@ class Tienda extends CI_Controller {
                 $this->data['texto__intro_seo']= $this->load->view('textos_seo/revestimientos-seo', $this->data, true); 
                 //$this->data['alt_slider']='fotomurales';
                 //$this->data['images'] = $this->contenido_model->get_imagenes(true, "papelpintado");
-                $this->data['url_canonica']=base_url().$categoria_principal;
+                $this->data['url_canonica']=base_url().$slug_canonico;
                 break;
             case 'telas': 
                 $categ = "Telas";
@@ -1210,7 +1219,7 @@ class Tienda extends CI_Controller {
                 $this->data['texto__intro_seo']= $this->load->view('textos_seo/telas-seo', $this->data, true); 
                 //$this->data['alt_slider']='fotomurales';
                 //$this->data['images'] = $this->contenido_model->get_imagenes(true, "papelpintado");
-                $this->data['url_canonica']=base_url().$categoria_principal;
+                $this->data['url_canonica']=base_url().$slug_canonico;
                 break;
             case 'alfombras': 
                 $categ = "Alfombras";
@@ -1222,7 +1231,7 @@ class Tienda extends CI_Controller {
                 $this->data['texto__intro_seo']= $this->load->view('textos_seo/alfombras-seo', $this->data, true); 
                 //$this->data['alt_slider']='fotomurales';
                 //$this->data['images'] = $this->contenido_model->get_imagenes(true, "papelpintado");
-                $this->data['url_canonica']=base_url().$categoria_principal;
+                $this->data['url_canonica']=base_url().$slug_canonico;
                 break;
             case 'herramientas': 
                 $categ = "Herramientas";
@@ -1236,7 +1245,7 @@ class Tienda extends CI_Controller {
                 $this->data['texto__intro_seo']= $this->load->view('textos_seo/herramientas-para-empapelar-seo', $this->data, true); 
                 //$this->data['alt_slider']='fotomurales';
                 //$this->data['images'] = $this->contenido_model->get_imagenes(true, "papelpintado");
-                $this->data['url_canonica']=base_url().$categoria_principal;
+                $this->data['url_canonica']=base_url().$slug_canonico;
                 break;
             case 'complementos':
                 $categ = "Complementos";
@@ -1248,7 +1257,7 @@ class Tienda extends CI_Controller {
                 $this->data['meta_description']='Complementos de decoración para el hogar. Encuentra todo lo que necesitas en nuestra tienda online.';
                 $this->data['texto_h1_seccion']='Complementos';
                 $this->data['texto__intro_seo']='';
-                $this->data['url_canonica']=base_url().$categoria_principal;
+                $this->data['url_canonica']=base_url().$slug_canonico;
                 break;
             default: break;
         }
