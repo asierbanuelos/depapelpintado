@@ -108,7 +108,7 @@ foreach($all as $key){
   }
 	else{
 	  $txt_fabricante=$key['item_name'];
-	  $url_producto='/tienda/articulo/herramientas/'.urlenc(strtolower(preg_replace('/[^A-Za-z0-9\-]/', ' ', $key['item_name']))).'/id/'.$key['item_id'];
+	  $url_producto='/herramientas/'.urlenc((trim($key['item_name'])!='')?$key['item_name']:$key['item_ref']).'-'.$key['item_id'];
     $nombre_completo="Herramientas ".$key['item_name'];
 	}
 

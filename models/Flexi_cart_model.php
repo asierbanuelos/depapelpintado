@@ -4417,7 +4417,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
         $nombre_slug = (trim($row['item_name'])!='') ? $row['item_name'] : ((isset($row['item_ref']) && trim($row['item_ref'])!='') ? $row['item_ref'] : 'producto');
         $url = '/' . $slug($row['cat_name']) . '/' . $slug($row['coleccion_name']) . '/' . $slug($nombre_slug) . '-' . $row['item_id'];
         if ($row['item_tipo'] == 5) {
-          $url = '/tienda/articulo/herramientas/' . $slug(strtolower(preg_replace('/[^A-Za-z0-9\-]/', ' ', $row['item_name']))) . '/id/' . $row['item_id'];
+          $url = '/herramientas/' . $slug((trim($row['item_name'])!='') ? $row['item_name'] : ((isset($row['item_ref']) && trim($row['item_ref'])!='') ? $row['item_ref'] : 'producto')) . '-' . $row['item_id'];
         }
         $results[] = array(
           'label' => $row['cat_name'] . ' - ' . $row['coleccion_name'] . ' - ' . $row['item_ref'],

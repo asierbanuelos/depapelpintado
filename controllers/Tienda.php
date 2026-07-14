@@ -2035,7 +2035,7 @@ class Tienda extends CI_Controller {
                 $array['id'] = $m_seo_id[1];
         }
         $this->data['categ'] = 0;
-        if (isset($array["Herramientas"]) || isset($array["herramientas"]))
+        if (isset($array["Herramientas"]) || isset($array["herramientas"]) || $this->uri->segment(1)=='herramientas')
             $this->data['categ'] = 5;
 
         if (empty($array['id'])) show_404();
@@ -2096,6 +2096,18 @@ class Tienda extends CI_Controller {
             $this->data['url_canonica'] = base_url().$url_seo_producto;
             if (strpos($this->uri->uri_string(), 'tienda/articulo') === 0) {
                 redirect($url_seo_producto, 'location', 301);
+                return;
+            }
+        }
+
+        // SEO herramientas (sin marca/coleccion): /herramientas/{nombre}-{id}
+        if (!isset($_GET['test']) && isset($datos_item['item_id']) && $this->data['categ']==5
+            && !empty($datos_item['activo']) && !empty($datos_item['publico3'])) {
+            $nombre_slug_herr = (trim($datos_item['item_name'])!='') ? $datos_item['item_name'] : (trim($datos_item['item_ref'])!='' ? $datos_item['item_ref'] : 'producto');
+            $url_seo_herr = 'herramientas/'.$this->urlenc_aux($nombre_slug_herr).'-'.$datos_item['item_id'];
+            $this->data['url_canonica'] = base_url().$url_seo_herr;
+            if (strpos($this->uri->uri_string(), 'tienda/articulo') === 0) {
+                redirect($url_seo_herr, 'location', 301);
                 return;
             }
         }
@@ -3997,7 +4009,7 @@ $this->db->cache_off();
         echo "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'> \n";
         foreach ($a_productos as $idproducto=>$nombre_producto) {
             echo "<url>\n";
-            echo "       <loc>https://depapelpintado.es/tienda/articulo/Herramientas/".$this->urlenc_aux($nombre_producto)."/id/{$idproducto}</loc>\n";
+            echo "       <loc>https://depapelpintado.es/herramientas/".$this->urlenc_aux((trim($nombre_producto)!='')?$nombre_producto:'producto')."-{$idproducto}</loc>\n";
             echo "</url>\n";
         }
         echo "</urlset>\n";
