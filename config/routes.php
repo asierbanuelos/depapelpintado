@@ -111,6 +111,21 @@ $route['tienda/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'tien
 $route['tienda/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'tienda/$1/$2/$3/$4/$5/$6/$7/$8/$9';
 $route['tienda/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'tienda/$1/$2/$3/$4/$5/$6/$7/$8/$9/$10';
 
+// ============================================================
+// URLs SEO amigables de categoria (Fase 1) - sirven el contenido real
+// Colocadas ANTES del catch-all comprobar_url para que no caigan en soft-404.
+// Solo el slug exacto de cada categoria; las URLs viejas /tienda/* siguen igual.
+// ============================================================
+$route['papel-pintado'] = 'tienda/papel_pintado';
+$route['murales'] = 'tienda/murales';
+$route['revestimientos'] = 'tienda/revestimientos';
+$route['telas'] = 'tienda/telas';
+$route['alfombras'] = 'tienda/alfombras';
+$route['herramientas'] = 'tienda/herramientas';
+$route['complementos'] = 'tienda/complementos';
+$route['outlet'] = 'tienda/papel_pintado/economicos';
+$route['marcas'] = 'tienda/marcas';
+
 $route['(:any)'] = 'tienda/comprobar_url/$1';
 $route['(:any)/(:any)'] = 'tienda/comprobar_url/$1/$2';
 $route['(:any)/(:any)/(:any)'] = 'tienda/comprobar_url/$1/$2/$3';
