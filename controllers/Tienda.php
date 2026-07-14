@@ -3428,6 +3428,11 @@ $this->db->cache_off();
     }
 
     function marcas($param1 = "",$param2 = "",$param3 = "",$param4 = "",$param5 = "") {
+        // SEO marcas: 301 de /tienda/marcas/... -> /marcas/... (conservando query)
+        if (strpos($this->uri->uri_string(), 'tienda/marcas') === 0) {
+            redirect(substr($this->uri->uri_string(), 7).(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']), 'location', 301);
+            return;
+        }
         if ($param1=='marca'){
             if ($param4=='')
                 $this->listado_marcas(-1, $param2);

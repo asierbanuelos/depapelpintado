@@ -132,6 +132,24 @@ $route['([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
 // Producto de herramientas (sin marca/coleccion): /herramientas/{nombre}-{id}
 $route['herramientas/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
 
+// MARCAS (Opcion B: quitar /tienda/, mantener IDs). Seccion de marcas:
+$route['marcas/marca/(:any)'] = 'tienda/marcas/marca/$1';
+$route['marcas/marca/(:any)/(:any)'] = 'tienda/marcas/marca/$1/$2';
+$route['marcas/marca/(:any)/(:any)/(:any)'] = 'tienda/marcas/marca/$1/$2/$3';
+$route['marcas/marca/(:any)/(:any)/(:any)/(:any)'] = 'tienda/marcas/marca/$1/$2/$3/$4';
+$route['marcas/marca/(:any)/(:any)/(:any)/(:any)/(:any)'] = 'tienda/marcas/marca/$1/$2/$3/$4/$5';
+// Coleccion de una marca dentro de una categoria: /{cat}/marca/{id}/{name}[/{colid}/{colname}]
+$route['papel-pintado/marca/(:any)/(:any)'] = 'tienda/papel_pintado/marca/$1/$2';
+$route['papel-pintado/marca/(:any)/(:any)/(:any)/(:any)'] = 'tienda/papel_pintado/marca/$1/$2/$3/$4';
+$route['murales/marca/(:any)/(:any)'] = 'tienda/murales/marca/$1/$2';
+$route['murales/marca/(:any)/(:any)/(:any)/(:any)'] = 'tienda/murales/marca/$1/$2/$3/$4';
+$route['revestimientos/marca/(:any)/(:any)'] = 'tienda/revestimientos/marca/$1/$2';
+$route['revestimientos/marca/(:any)/(:any)/(:any)/(:any)'] = 'tienda/revestimientos/marca/$1/$2/$3/$4';
+$route['telas/marca/(:any)/(:any)'] = 'tienda/telas/marca/$1/$2';
+$route['telas/marca/(:any)/(:any)/(:any)/(:any)'] = 'tienda/telas/marca/$1/$2/$3/$4';
+$route['alfombras/marca/(:any)/(:any)'] = 'tienda/alfombras/marca/$1/$2';
+$route['alfombras/marca/(:any)/(:any)/(:any)/(:any)'] = 'tienda/alfombras/marca/$1/$2/$3/$4';
+
 $route['(:any)'] = 'tienda/comprobar_url/$1';
 $route['(:any)/(:any)'] = 'tienda/comprobar_url/$1/$2';
 $route['(:any)/(:any)/(:any)'] = 'tienda/comprobar_url/$1/$2/$3';
