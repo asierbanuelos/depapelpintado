@@ -2554,6 +2554,11 @@ class Tienda extends CI_Controller {
             $this->listado_productos_nuevo('revestimientos');
     }
     function telas($param1 = "", $param2 = "", $param3 = "", $param4 = "", $param5 = "") {
+        // SEO Fase 3: 301 de la URL vieja /tienda/telas -> /telas (solo el listado; las de marca van en la fase de marcas)
+        if ($param1==='' && strpos($this->uri->uri_string(), 'tienda/telas') === 0) {
+            redirect('telas', 'location', 301);
+            return;
+        }
         if ($param1=='marcas' || $param1=='marca'){
             $id_marca=$param2;
             $txt_marca=$param3;
