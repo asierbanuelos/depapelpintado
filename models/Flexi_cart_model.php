@@ -4414,7 +4414,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 
       foreach ($query->result_array() as $row) {
         $img_path = str_replace("../", "", $row['img']) . 'th.jpg';
-        $url = '/tienda/articulo/' . $slug($row['cat_name']) . '/' . $slug($row['coleccion_name']) . '/id/' . $row['item_id'];
+        $url = '/' . $slug($row['cat_name']) . '/' . $slug($row['coleccion_name']) . '/' . $slug($row['item_name']) . '-' . $row['item_id'];
         if ($row['item_tipo'] == 5) {
           $url = '/tienda/articulo/herramientas/' . $slug(strtolower(preg_replace('/[^A-Za-z0-9\-]/', ' ', $row['item_name']))) . '/id/' . $row['item_id'];
         }
