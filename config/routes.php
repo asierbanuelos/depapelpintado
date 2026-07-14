@@ -126,6 +126,10 @@ $route['complementos'] = 'tienda/complementos';
 $route['outlet'] = 'tienda/papel_pintado/economicos';
 $route['marcas'] = 'tienda/marcas';
 
+// URL SEO de producto (Opcion A): /{marca}/{coleccion}/{nombre}-{id}  (ultimo segmento acaba en -numero)
+// Va ANTES del catch-all; articulo() extrae el id del final. Las viejas /tienda/articulo/... siguen igual.
+$route['([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
+
 $route['(:any)'] = 'tienda/comprobar_url/$1';
 $route['(:any)/(:any)'] = 'tienda/comprobar_url/$1/$2';
 $route['(:any)/(:any)/(:any)'] = 'tienda/comprobar_url/$1/$2/$3';

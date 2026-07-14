@@ -2028,6 +2028,12 @@ class Tienda extends CI_Controller {
         $keywords = "";
         $this->data['keywords'] = "";
         $array = $this->uri->uri_to_assoc(3);
+        // Nuevo formato SEO /{marca}/{coleccion}/{nombre}-{id}: el id va al final del ultimo segmento
+        if (empty($array['id'])) {
+            $ultimo_segmento = $this->uri->segment($this->uri->total_segments());
+            if (preg_match('/-(\d+)$/', $ultimo_segmento, $m_seo_id))
+                $array['id'] = $m_seo_id[1];
+        }
         $this->data['categ'] = 0;
         if (isset($array["Herramientas"]) || isset($array["herramientas"]))
             $this->data['categ'] = 5;
