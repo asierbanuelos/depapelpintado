@@ -2342,7 +2342,7 @@ class Tienda extends CI_Controller {
             $this->load->view('frontend/articulo_completo_santos_monteiro', $this->data);
 
             // URL a tratar para el no encontrado post cambio:
-            // https://www.depapelpintado.es/tienda/articulo/santos-monteiro/creek/id/86771
+            // https://depapelpintado.es/tienda/articulo/santos-monteiro/creek/id/86771
             */
 
             $this->load->view('frontend/footer', $this->data);
@@ -3619,7 +3619,7 @@ $this->db->cache_off();
         echo '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">';
         echo '<channel>';
         echo '<title>dePapelPintado.es</title>';
-        echo '<link>www.depapelpintado.es</link>';
+        echo '<link>depapelpintado.es</link>';
         // 2025-04-03 Vamos a preparar para todos los productos, no solo los que estén marcados para market
         if ($mostrar_todos=='all'){
             $productos=$this->flexi_cart_model->get_erregistroak_eremu_guztiak_where_in('demo_items', 'item_id', array('publico3'=>1, 'activo'=>1), $a_colecciones_aux);
@@ -3717,10 +3717,10 @@ $this->db->cache_off();
         }
         $url.='id/'.$row["item_id"];
 
-        $item.= "<g:link>https://www.depapelpintado.es".$url."</g:link>\n";
+        $item.= "<g:link>https://depapelpintado.es".$url."</g:link>\n";
         
         //$item.= "<g:image_link>https://depapelpintado.es/".str_replace('../', 'includes/', $row["img"])."th.jpg</g:image_link>\n";
-        $item.= "<g:image_link>https://www.depapelpintado.es/".str_replace('../', 'includes/', $row["img"])."med.jpg</g:image_link>\n";
+        $item.= "<g:image_link>https://depapelpintado.es/".str_replace('../', 'includes/', $row["img"])."med.jpg</g:image_link>\n";
         
         $item.= "<g:availability>in_stock</g:availability>\n";
         $item.= "<g:price>".number_format($row["item_price"],2)." EUR</g:price>\n";
@@ -3841,7 +3841,7 @@ $this->db->cache_off();
         echo '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">';
         echo '<channel>';
         echo '<title>dePapelPintado.es</title>';
-        echo '<link>www.depapelpintado.es</link>';
+        echo '<link>depapelpintado.es</link>';
 
         if ($mostrar_todos=='test'){
             $a_colecciones_aux=array();
@@ -3907,37 +3907,37 @@ $this->db->cache_off();
            }
         }
         header('Content-Type: text/xml');
-        echo '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="https://www.depapelpintado.es/sitemaps/main-sitemap.xsl"?>';
+        echo '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="https://depapelpintado.es/sitemaps/main-sitemap.xsl"?>';
         echo "\n<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'> \n";
         echo "<url>\n";
-        echo "       <loc>https://www.depapelpintado.es/tienda/marcas</loc>\n";
+        echo "       <loc>https://depapelpintado.es/tienda/marcas</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://www.depapelpintado.es/tienda/papel_pintado/marcas</loc>\n";
+        echo "       <loc>https://depapelpintado.es/tienda/papel_pintado/marcas</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://www.depapelpintado.es/tienda/fotomurales/marcas</loc>\n";
+        echo "       <loc>https://depapelpintado.es/tienda/fotomurales/marcas</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://www.depapelpintado.es/tienda/revestimientos/marcas</loc>\n";
+        echo "       <loc>https://depapelpintado.es/tienda/revestimientos/marcas</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://www.depapelpintado.es/tienda/telas/marcas</loc>\n";
+        echo "       <loc>https://depapelpintado.es/tienda/telas/marcas</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://www.depapelpintado.es/tienda/alfombras/marcas</loc>\n";
+        echo "       <loc>https://depapelpintado.es/tienda/alfombras/marcas</loc>\n";
         echo "</url>\n";
         asort($a_marcas);
         foreach ($a_marcas as $idmarca => $nombre_marca) {
             echo "<url>\n";
-            echo "       <loc>https://www.depapelpintado.es/tienda/marcas/marca/$idmarca/".$this->urlenc_aux($nombre_marca)."</loc>\n";
+            echo "       <loc>https://depapelpintado.es/tienda/marcas/marca/$idmarca/".$this->urlenc_aux($nombre_marca)."</loc>\n";
             echo "</url>\n";
             if (isset($a_colecciones[$idmarca])){
                 $colecciones_tratar=$a_colecciones[$idmarca];
                 asort($colecciones);
                 foreach ($colecciones_tratar as $idcoleccion => $nombre_coleccion) {
                     echo "<url>\n";
-                    echo "       <loc>https://www.depapelpintado.es/tienda/marcas/marca/$idmarca/".$this->urlenc_aux($nombre_marca)."/$idcoleccion/".$this->urlenc_aux($nombre_coleccion)."</loc>\n";
+                    echo "       <loc>https://depapelpintado.es/tienda/marcas/marca/$idmarca/".$this->urlenc_aux($nombre_marca)."/$idcoleccion/".$this->urlenc_aux($nombre_coleccion)."</loc>\n";
                     echo "</url>\n";
                 }
             }
@@ -3970,11 +3970,11 @@ $this->db->cache_off();
         }
 
         header('Content-Type: text/xml');
-        echo "<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://www.depapelpintado.es/sitemaps/main-sitemap.xsl'?>\n";
+        echo "<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://depapelpintado.es/sitemaps/main-sitemap.xsl'?>\n";
         echo "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'> \n";
         foreach ($a_productos as $idproducto=>$nombre_producto) {
             echo "<url>\n";
-            echo "       <loc>https://www.depapelpintado.es/tienda/articulo/Herramientas/".$this->urlenc_aux($nombre_producto)."/id/{$idproducto}</loc>\n";
+            echo "       <loc>https://depapelpintado.es/tienda/articulo/Herramientas/".$this->urlenc_aux($nombre_producto)."/id/{$idproducto}</loc>\n";
             echo "</url>\n";
         }
         echo "</urlset>\n";
@@ -4012,7 +4012,7 @@ $this->db->cache_off();
         
 
         header('Content-Type: text/xml');
-        echo "<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://www.depapelpintado.es/sitemaps/main-sitemap.xsl'?>\n";
+        echo "<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://depapelpintado.es/sitemaps/main-sitemap.xsl'?>\n";
         echo "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'> \n";
         asort($a_marcas);
         foreach ($a_marcas as $idmarca => $nombre_marca) {
@@ -4023,7 +4023,7 @@ $this->db->cache_off();
                     if (isset($a_productos[$idmarca][$idcoleccion])){
                         foreach ($a_productos[$idmarca][$idcoleccion] as $idproducto) {
                             echo "<url>\n";
-                            echo "       <loc>https://www.depapelpintado.es/tienda/articulo/".$this->urlenc_aux($nombre_marca)."/".$this->urlenc_aux($nombre_coleccion)."/id/{$idproducto}</loc>\n";
+                            echo "       <loc>https://depapelpintado.es/tienda/articulo/".$this->urlenc_aux($nombre_marca)."/".$this->urlenc_aux($nombre_coleccion)."/id/{$idproducto}</loc>\n";
                             echo "</url>\n";
                         }
                     }
@@ -4075,7 +4075,7 @@ $this->db->cache_off();
         */
 
         header('Content-Type: text/xml');
-        echo "<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://www.depapelpintado.es/sitemaps/main-sitemap.xsl'?>\n";
+        echo "<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://depapelpintado.es/sitemaps/main-sitemap.xsl'?>\n";
         echo "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'> \n";
         asort($a_marcas);
         foreach ($a_marcas as $idmarca => $nombre_marca) {
@@ -4086,7 +4086,7 @@ $this->db->cache_off();
                     if (isset($a_productos[$idmarca][$idcoleccion])){
                         foreach ($a_productos[$idmarca][$idcoleccion] as $idproducto) {
                             echo "<url>\n";
-                            echo "       <loc>https://www.depapelpintado.es/tienda/articulo/".$this->urlenc_aux($nombre_marca)."/".$this->urlenc_aux($nombre_coleccion)."/id/{$idproducto}</loc>\n";
+                            echo "       <loc>https://depapelpintado.es/tienda/articulo/".$this->urlenc_aux($nombre_marca)."/".$this->urlenc_aux($nombre_coleccion)."/id/{$idproducto}</loc>\n";
                             echo "</url>\n";
                         }
                     }
@@ -4098,7 +4098,7 @@ $this->db->cache_off();
 
     function sitemap_nuevas_categorias() {
         header('Content-Type: text/xml');
-        echo "<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://www.depapelpintado.es/sitemaps/main-sitemap.xsl'?>\n";
+        echo "<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://depapelpintado.es/sitemaps/main-sitemap.xsl'?>\n";
         echo "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'> \n";
         /*
         print '<pre><xmp>';
@@ -4108,25 +4108,25 @@ $this->db->cache_off();
         */
         
         echo "<url>\n";
-        echo "       <loc>https://www.depapelpintado.es/estilos-papel-pintado</loc>\n";
+        echo "       <loc>https://depapelpintado.es/estilos-papel-pintado</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://www.depapelpintado.es/estilos-fotomurales</loc>\n";
+        echo "       <loc>https://depapelpintado.es/estilos-fotomurales</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://www.depapelpintado.es/estilos-revestimientos</loc>\n";
+        echo "       <loc>https://depapelpintado.es/estilos-revestimientos</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://www.depapelpintado.es/estilos-telas</loc>\n";
+        echo "       <loc>https://depapelpintado.es/estilos-telas</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://www.depapelpintado.es/estilos-alfombras</loc>\n";
+        echo "       <loc>https://depapelpintado.es/estilos-alfombras</loc>\n";
         echo "</url>\n";
         $papel_categorias_seo=$this->flexi_cart_model->get_categorias_seo_menu(0);
         foreach ($papel_categorias_seo as $txt_familia_categoria => $a_categorias_familia) {
           foreach ($a_categorias_familia as $id => $datos_categorias_familia) {
             echo "<url>\n";
-            echo "       <loc>https://www.depapelpintado.es/".$datos_categorias_familia['url']."</loc>\n";
+            echo "       <loc>https://depapelpintado.es/".$datos_categorias_familia['url']."</loc>\n";
             echo "</url>\n";
           }
         }
@@ -4134,7 +4134,7 @@ $this->db->cache_off();
         foreach ($fotomurales_categorias_seo as $txt_familia_categoria => $a_categorias_familia) {
           foreach ($a_categorias_familia as $id => $datos_categorias_familia) {
             echo "<url>\n";
-            echo "       <loc>https://www.depapelpintado.es/".$datos_categorias_familia['url']."</loc>\n";
+            echo "       <loc>https://depapelpintado.es/".$datos_categorias_familia['url']."</loc>\n";
             echo "</url>\n";
           }
         }
@@ -4142,7 +4142,7 @@ $this->db->cache_off();
         foreach ($revestimientos_categorias_seo as $txt_familia_categoria => $a_categorias_familia) {
           foreach ($a_categorias_familia as $id => $datos_categorias_familia) {
             echo "<url>\n";
-            echo "       <loc>https://www.depapelpintado.es/".$datos_categorias_familia['url']."</loc>\n";
+            echo "       <loc>https://depapelpintado.es/".$datos_categorias_familia['url']."</loc>\n";
             echo "</url>\n";
           }
         }
@@ -4150,7 +4150,7 @@ $this->db->cache_off();
         foreach ($telas_categorias_seo as $txt_familia_categoria => $a_categorias_familia) {
           foreach ($a_categorias_familia as $id => $datos_categorias_familia) {
             echo "<url>\n";
-            echo "       <loc>https://www.depapelpintado.es/".$datos_categorias_familia['url']."</loc>\n";
+            echo "       <loc>https://depapelpintado.es/".$datos_categorias_familia['url']."</loc>\n";
             echo "</url>\n";
           }
         }
@@ -4158,7 +4158,7 @@ $this->db->cache_off();
         foreach ($alfombras_categorias_seo as $txt_familia_categoria => $a_categorias_familia) {
           foreach ($a_categorias_familia as $id => $datos_categorias_familia) {
             echo "<url>\n";
-            echo "       <loc>https://www.depapelpintado.es/".$datos_categorias_familia['url']."</loc>\n";
+            echo "       <loc>https://depapelpintado.es/".$datos_categorias_familia['url']."</loc>\n";
             echo "</url>\n";
           }
         }
@@ -4169,7 +4169,7 @@ $this->db->cache_off();
 
     function sitemap_caracteristicas() {
         header('Content-Type: text/xml');
-        echo "<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://www.depapelpintado.es/sitemaps/main-sitemap.xsl'?>\n";
+        echo "<?xml version='1.0' encoding='UTF-8'?><?xml-stylesheet type='text/xsl' href='https://depapelpintado.es/sitemaps/main-sitemap.xsl'?>\n";
         echo "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'> \n";
 
         $this->sitemap_categoria("Papel pintado");
@@ -4190,25 +4190,25 @@ $this->db->cache_off();
 
         $categoria=str_replace(' ', '_', $categoria);
         echo "<url>\n";
-        echo "       <loc>https://www.depapelpintado.es/tienda/".$this->urlenc_aux($categoria)."</loc>\n";
+        echo "       <loc>https://depapelpintado.es/tienda/".$this->urlenc_aux($categoria)."</loc>\n";
         echo "</url>\n";
         if ($categoria=='Papel_pintado'){
             echo "<url>\n";
-            echo "       <loc>https://www.depapelpintado.es/tienda/".$this->urlenc_aux($categoria)."/economicos</loc>\n";
+            echo "       <loc>https://depapelpintado.es/tienda/".$this->urlenc_aux($categoria)."/economicos</loc>\n";
             echo "</url>\n";
         }
         echo "<url>\n";
-        echo "       <loc>https://www.depapelpintado.es/tienda/".$this->urlenc_aux($categoria)."/los_mas_vendidos</loc>\n";
+        echo "       <loc>https://depapelpintado.es/tienda/".$this->urlenc_aux($categoria)."/los_mas_vendidos</loc>\n";
         echo "</url>\n";
         foreach ($gamas as $gama) {
             echo "<url>\n";
-            echo "  <loc>https://www.depapelpintado.es/tienda/".$this->urlenc_aux($categoria)."/color/".$this->urlenc_aux($gama->gama_name)."</loc>\n";
+            echo "  <loc>https://depapelpintado.es/tienda/".$this->urlenc_aux($categoria)."/color/".$this->urlenc_aux($gama->gama_name)."</loc>\n";
             echo "</url>\n";
         }
 
         foreach ($estilos as $estilo) {
             echo "<url>\n";
-            echo "  <loc>https://www.depapelpintado.es/tienda/".$this->urlenc_aux($categoria)."/estilo/".$this->urlenc_aux($estilo->estilo_name)."</loc>\n";
+            echo "  <loc>https://depapelpintado.es/tienda/".$this->urlenc_aux($categoria)."/estilo/".$this->urlenc_aux($estilo->estilo_name)."</loc>\n";
             echo "</url>\n";
         }
     }
@@ -5447,7 +5447,7 @@ $this->db->cache_off();
                     '&PAYMENTREQUEST_0_AMT=' . urlencode($GrandTotal) .
                     '&PAYMENTREQUEST_0_CURRENCYCODE=' . urlencode($PayPalCurrencyCode) .
                     '&LOCALECODE=ES' . //PayPal pages to match the language on your website.
-                    '&LOGOIMG=http://www.depapelpintado.es/includes/images/img-depapelpintado.png' . //site logo
+                    '&LOGOIMG=https://depapelpintado.es/includes/images/img-depapelpintado.png' . //site logo
                     '&CARTBORDERCOLOR=FFFFFF' . //border color of cart
                     '&ALLOWNOTE=1';
 
@@ -5605,7 +5605,7 @@ $this->db->cache_off();
                     '&PAYMENTREQUEST_0_AMT=' . urlencode($GrandTotal) .
                     '&PAYMENTREQUEST_0_CURRENCYCODE=' . urlencode($PayPalCurrencyCode) .
                     '&LOCALECODE=ES' . //PayPal pages to match the language on your website.
-                    '&LOGOIMG=http://www.depapelpintado.es/includes/images/img-depapelpintado.png' . //site logo
+                    '&LOGOIMG=https://depapelpintado.es/includes/images/img-depapelpintado.png' . //site logo
                     '&CARTBORDERCOLOR=FFFFFF' . //border color of cart
                     '&ALLOWNOTE=1';
 
