@@ -2319,7 +2319,9 @@ class Tienda extends CI_Controller {
             exit;
             */
             
-            $this->data['a_migas'][$categoria_principal]=$categ;
+            $mapa_cat_migas = array('/tienda/papel_pintado'=>'/papel-pintado','/tienda/murales'=>'/murales','/tienda/revestimientos'=>'/revestimientos','/tienda/telas'=>'/telas','/tienda/alfombras'=>'/alfombras','/tienda/herramientas'=>'/herramientas','/tienda/complementos'=>'/complementos');
+            $cat_migas_amigable = isset($mapa_cat_migas[$categoria_principal]) ? $mapa_cat_migas[$categoria_principal] : $categoria_principal;
+            $this->data['a_migas'][$cat_migas_amigable]=$categ;
             if ($this->data['categ']!=5){
                 $this->data['url_marca']=$categoria_principal.'/marca/'.$marca->cat_id.'/'.$this->urlenc_aux($marca->cat_name);
                 $this->data['url_coleccion']=$this->data['url_marca'].'/'.$coleccion[0]->coleccion_id.'/'.$this->urlenc_aux($coleccion[0]->coleccion_name);
@@ -4026,7 +4028,7 @@ $this->db->cache_off();
             if (trim($datos['img'])!=''){
                 $idmarca=$datos['item_cat_fk'];
                 $idcoleccion=$datos['item_coleccion_id'];
-                $a_productos[$idmarca][$idcoleccion][$item_id]=$datos['item_id'];
+                $a_productos[$idmarca][$idcoleccion][$item_id]=$datos['item_name'];
             }
         }
         
@@ -4041,9 +4043,9 @@ $this->db->cache_off();
                 asort($colecciones);
                 foreach ($colecciones_tratar as $idcoleccion => $nombre_coleccion) {
                     if (isset($a_productos[$idmarca][$idcoleccion])){
-                        foreach ($a_productos[$idmarca][$idcoleccion] as $idproducto) {
+                        foreach ($a_productos[$idmarca][$idcoleccion] as $idproducto => $nombre_producto) {
                             echo "<url>\n";
-                            echo "       <loc>https://depapelpintado.es/tienda/articulo/".$this->urlenc_aux($nombre_marca)."/".$this->urlenc_aux($nombre_coleccion)."/id/{$idproducto}</loc>\n";
+                            echo "       <loc>https://depapelpintado.es/".$this->urlenc_aux($nombre_marca)."/".$this->urlenc_aux($nombre_coleccion)."/".$this->urlenc_aux($nombre_producto)."-{$idproducto}</loc>\n";
                             echo "</url>\n";
                         }
                     }
@@ -4078,7 +4080,7 @@ $this->db->cache_off();
             if (trim($datos['img'])!=''){
                 $idmarca=$datos['item_cat_fk'];
                 $idcoleccion=$datos['item_coleccion_id'];
-                $a_productos[$idmarca][$idcoleccion][$item_id]=$datos['item_id'];
+                $a_productos[$idmarca][$idcoleccion][$item_id]=$datos['item_name'];
             }
         }
         /*
@@ -4104,9 +4106,9 @@ $this->db->cache_off();
                 asort($colecciones);
                 foreach ($colecciones_tratar as $idcoleccion => $nombre_coleccion) {
                     if (isset($a_productos[$idmarca][$idcoleccion])){
-                        foreach ($a_productos[$idmarca][$idcoleccion] as $idproducto) {
+                        foreach ($a_productos[$idmarca][$idcoleccion] as $idproducto => $nombre_producto) {
                             echo "<url>\n";
-                            echo "       <loc>https://depapelpintado.es/tienda/articulo/".$this->urlenc_aux($nombre_marca)."/".$this->urlenc_aux($nombre_coleccion)."/id/{$idproducto}</loc>\n";
+                            echo "       <loc>https://depapelpintado.es/".$this->urlenc_aux($nombre_marca)."/".$this->urlenc_aux($nombre_coleccion)."/".$this->urlenc_aux($nombre_producto)."-{$idproducto}</loc>\n";
                             echo "</url>\n";
                         }
                     }
