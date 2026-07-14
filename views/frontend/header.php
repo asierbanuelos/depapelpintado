@@ -98,9 +98,13 @@ if (!isset($url_canonica))
   /*
   */
 
-  if (strpos(current_url(),'944056616') !== false){
+  // SEO Fase 6: noindex en URLs con parametros de filtro/orden/paginacion (contenido fino/duplicado)
+  $params_noindex_seo = array('color','estilo','calidad','precio','marca','page','pagina','orden');
+  $tiene_param_filtro = false;
+  foreach ($params_noindex_seo as $p_ni) { if (isset($_GET[$p_ni]) && $_GET[$p_ni] !== '') { $tiene_param_filtro = true; break; } }
+  if (strpos(current_url(),'944056616') !== false || $tiene_param_filtro){
   ?>
-    <meta name="robots" content="noindex">
+    <meta name="robots" content="noindex, follow">
   <?php
   }
   else{
