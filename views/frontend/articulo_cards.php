@@ -102,7 +102,7 @@ foreach($all as $key){
 	  	$enlace_coleccion='<a href="/'.$categoria_principal.'/marca/'.$key['cat_id'].'/'.urlenc($key['cat_name']).'/'.$key['coleccion_id'].'/'.urlenc($key['coleccion_name']).'" >'.$key['coleccion_name'].'</a>';
 		  //$txt_fabricante=$key['cat_name']." - ".$key['coleccion_name'];
 		  $txt_fabricante=$enlace_marca." - ".$enlace_coleccion;
-		  $url_producto='/'.urlenc($key['cat_name']).'/'.urlenc($key['coleccion_name']).'/'.urlenc($key['item_name']).'-'.$key['item_id'];
+		  $url_producto='/'.urlenc($key['cat_name']).'/'.urlenc($key['coleccion_name']).'/'.urlenc((trim($key['item_name'])!='')?$key['item_name']:$key['item_ref']).'-'.$key['item_id'];
 	  }
     $nombre_completo=$pre." - ".$key['coleccion_name']." - ".$key['item_ref'];
   }

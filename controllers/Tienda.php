@@ -2091,7 +2091,8 @@ class Tienda extends CI_Controller {
             && is_object($marca) && !empty($marca->cat_name) && $marca->activo==1 && $marca->publico==1
             && !empty($coleccion[0]) && !empty($coleccion[0]->coleccion_name) && $coleccion[0]->activo==1 && $coleccion[0]->publico2==1
             && !empty($datos_item['activo']) && !empty($datos_item['publico3'])) {
-            $url_seo_producto = $this->urlenc_aux($marca->cat_name).'/'.$this->urlenc_aux($coleccion[0]->coleccion_name).'/'.$this->urlenc_aux($datos_item['item_name']).'-'.$datos_item['item_id'];
+            $nombre_slug_prod = (trim($datos_item['item_name'])!='') ? $datos_item['item_name'] : (trim($datos_item['item_ref'])!='' ? $datos_item['item_ref'] : 'producto');
+            $url_seo_producto = $this->urlenc_aux($marca->cat_name).'/'.$this->urlenc_aux($coleccion[0]->coleccion_name).'/'.$this->urlenc_aux($nombre_slug_prod).'-'.$datos_item['item_id'];
             $this->data['url_canonica'] = base_url().$url_seo_producto;
             if (strpos($this->uri->uri_string(), 'tienda/articulo') === 0) {
                 redirect($url_seo_producto, 'location', 301);
