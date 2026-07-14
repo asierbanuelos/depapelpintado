@@ -2501,6 +2501,11 @@ class Tienda extends CI_Controller {
         }   
     }
     function papel_pintado($param1 = "", $param2 = "", $param3 = "", $param4 = "", $param5 = "") {
+        // SEO Fase 3: 301 de /tienda/papel_pintado -> /papel-pintado y /tienda/papel_pintado/economicos -> /outlet (las de marca van en su fase)
+        if (strpos($this->uri->uri_string(), 'tienda/papel_pintado') === 0) {
+            if ($param1==='') { redirect('papel-pintado', 'location', 301); return; }
+            if ($param1==='economicos') { redirect('outlet', 'location', 301); return; }
+        }
         if ($param1=='economicos')
             $this->listado_productos_nuevo('papel-pintado-economico');
         elseif ($param1=='marcas' || $param1=='marca'){
@@ -2519,6 +2524,7 @@ class Tienda extends CI_Controller {
             $this->listado_productos_nuevo('papel-pintado');
     }
     function murales($param1 = "", $param2 = "", $param3 = "", $param4 = "", $param5 = "") {
+        if ($param1==='' && strpos($this->uri->uri_string(), 'tienda/murales') === 0) { redirect('murales', 'location', 301); return; }
         if ($param1=='marcas' || $param1=='marca'){
             $id_marca=$param2;
             $txt_marca=$param3;
@@ -2538,6 +2544,7 @@ class Tienda extends CI_Controller {
         redirect('tienda/murales'.($param1 ? '/'.$param1 : '').($param2 ? '/'.$param2 : '').($param3 ? '/'.$param3 : '').($param4 ? '/'.$param4 : '').($param5 ? '/'.$param5 : ''), 'location', 301);
     }
     function revestimientos($param1 = "", $param2 = "", $param3 = "", $param4 = "", $param5 = "") {
+        if ($param1==='' && strpos($this->uri->uri_string(), 'tienda/revestimientos') === 0) { redirect('revestimientos', 'location', 301); return; }
         if ($param1=='marcas' || $param1=='marca'){
             $id_marca=$param2;
             $txt_marca=$param3;
@@ -2575,6 +2582,7 @@ class Tienda extends CI_Controller {
             $this->listado_productos_nuevo('telas');
     }
     function alfombras($param1 = "", $param2 = "", $param3 = "", $param4 = "", $param5 = "") {
+        if ($param1==='' && strpos($this->uri->uri_string(), 'tienda/alfombras') === 0) { redirect('alfombras', 'location', 301); return; }
         if ($param1=='marcas' || $param1=='marca'){
             $id_marca=$param2;
             $txt_marca=$param3;
@@ -2591,9 +2599,11 @@ class Tienda extends CI_Controller {
             $this->listado_productos_nuevo('alfombras');
     }
     function herramientas($param1 = "") {
+        if ($param1==='' && strpos($this->uri->uri_string(), 'tienda/herramientas') === 0) { redirect('herramientas', 'location', 301); return; }
         $this->listado_productos_nuevo('herramientas');
     }
     function complementos($param1 = "", $param2 = "", $param3 = "", $param4 = "", $param5 = "") {
+        if ($param1==='' && strpos($this->uri->uri_string(), 'tienda/complementos') === 0) { redirect('complementos', 'location', 301); return; }
         $this->listado_productos_nuevo('complementos');
     }
 
