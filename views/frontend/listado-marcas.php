@@ -164,7 +164,7 @@ ksort($por_letra);
             <div class="marcas-letra-head"><?= htmlspecialchars($letra) ?></div>
             <ul class="marcas-lista-letra">
               <?php foreach ($marcas_letra as $l): ?>
-                <li><a href="<?= $url_marca.'/'.$l->cat_id.'/'.urlenc($l->cat_name) ?>"><?= htmlspecialchars($l->cat_name) ?></a></li>
+                <li><a href="<?= '/marcas/'.urlenc($l->cat_name) ?>"><?= htmlspecialchars($l->cat_name) ?></a></li>
               <?php endforeach; ?>
             </ul>
           </div>
@@ -181,7 +181,7 @@ ksort($por_letra);
               : $includes_dir.'images/logos/'.$l->cat_id.'.jpg';
           ?>
             <div class="marca-logo-item">
-              <a href="<?= $url_marca.'/'.$l->cat_id.'/'.urlenc($l->cat_name) ?>" title="<?= htmlspecialchars($l->cat_name) ?>">
+              <a href="<?= '/marcas/'.urlenc($l->cat_name) ?>" title="<?= htmlspecialchars($l->cat_name) ?>">
                 <img src="<?= $src ?>" alt="<?= htmlspecialchars($l->cat_name) ?>" loading="lazy">
               </a>
             </div>
