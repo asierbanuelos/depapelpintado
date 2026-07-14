@@ -1963,7 +1963,7 @@ class Tienda extends CI_Controller {
                         $categoria_producto_txt=strtolower($marca->cats);
                         $categoria_producto_txt=str_replace('foto murales', 'fotomurales',$categoria_producto_txt);
                         $categoria_producto_txt=str_replace('papel pintado', 'papel_pintado',$categoria_producto_txt);
-                        $this->data['url_canonica']=base_url().'tienda/'.$categoria_producto_txt.'/marca/'.$id_marca.'/'.$this->urlenc_aux($marca->cat_name);
+                        if (empty($this->data['bloquear_canonica'])) $this->data['url_canonica']=base_url().'tienda/'.$categoria_producto_txt.'/marca/'.$id_marca.'/'.$this->urlenc_aux($marca->cat_name);
                     }
                 }
 
@@ -3458,6 +3458,7 @@ $this->db->cache_off();
             }
         }
         $this->data['url_canonica'] = base_url().'marcas/'.$marca_slug;
+        $this->data['bloquear_canonica'] = true;
         $this->listado_marcas(-1, $id_marca);
     }
     function marcas($param1 = "",$param2 = "",$param3 = "",$param4 = "",$param5 = "") {
