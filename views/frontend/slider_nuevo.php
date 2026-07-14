@@ -107,7 +107,7 @@ $_banner_alt  = 'De Papel Pintado';
 $_banner_badge = 'Bienvenidos a';
 $_banner_h1   = 'De Papel Pintado';
 $_banner_sub  = 'Tu tienda de papel pintado online';
-$_banner_url  = '/tienda/papel_pintado';
+$_banner_url  = '/papel-pintado';
 $_banner_btn  = 'Descubrir';
 $_root = $_SERVER['DOCUMENT_ROOT'];
 foreach (['webp','jpg','jpeg','png'] as $_bext) {
