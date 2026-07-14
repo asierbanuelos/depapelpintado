@@ -4041,7 +4041,7 @@ $this->db->cache_off();
             if (trim($datos['img'])!=''){
                 $idmarca=$datos['item_cat_fk'];
                 $idcoleccion=$datos['item_coleccion_id'];
-                $a_productos[$idmarca][$idcoleccion][$item_id]=$datos['item_name'];
+                $a_productos[$idmarca][$idcoleccion][$item_id]=(trim($datos['item_name'])!='') ? $datos['item_name'] : (trim($datos['item_ref'])!='' ? $datos['item_ref'] : 'producto');
             }
         }
         
@@ -4093,7 +4093,7 @@ $this->db->cache_off();
             if (trim($datos['img'])!=''){
                 $idmarca=$datos['item_cat_fk'];
                 $idcoleccion=$datos['item_coleccion_id'];
-                $a_productos[$idmarca][$idcoleccion][$item_id]=$datos['item_name'];
+                $a_productos[$idmarca][$idcoleccion][$item_id]=(trim($datos['item_name'])!='') ? $datos['item_name'] : (trim($datos['item_ref'])!='' ? $datos['item_ref'] : 'producto');
             }
         }
         /*

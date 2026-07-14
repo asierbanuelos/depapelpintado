@@ -4747,7 +4747,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		return $a_idak;
 	}
 	function get_erregistroak_sitemaperako($taula, $ideremua, $a_where){
-		$result= $this->db->select('item_id, img, item_cat_fk, item_coleccion_id, item_name')->from($taula)->where($a_where)->get()->result_array();
+		$result= $this->db->select('item_id, img, item_cat_fk, item_coleccion_id, item_name, item_ref')->from($taula)->where($a_where)->get()->result_array();
 		//~ return $result; 
 		$a_idak=array();
 		foreach($result as $row){
