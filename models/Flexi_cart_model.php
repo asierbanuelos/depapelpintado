@@ -4748,12 +4748,44 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 	}
 	function get_erregistroak_sitemaperako($taula, $ideremua, $a_where){
 		$result= $this->db->select('item_id, img, item_cat_fk, item_coleccion_id, item_name, item_ref')->from($taula)->where($a_where)->get()->result_array();
-		//~ return $result; 
+		//~ return $result;
 		$a_idak=array();
 		foreach($result as $row){
 			$a_idak[$row[$ideremua]]=$row;
 		}
 		return $a_idak;
+	}
+
+	// SEO Opcion A marcas: slug (igual que urlenc/urlenc_aux) + resolvers slug->id (elige el registro con mas productos)
+	private function slug_seo($str){
+		$search =  explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u,Á,É,Í,Ó,Ú,Ñ,%,!,(,)");
+		$replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,ñ,,,,");
+		return str_replace($search,$replace,strtolower(str_replace(',','', str_replace('+','-plus-',str_replace('#','number-',str_replace('&','and',str_replace(' ','-',rawurldecode($str))))))));
+	}
+	function get_id_marca_por_slug($slug){
+		$marcas = $this->db->select('c.cat_id, c.cat_name, COUNT(i.item_id) as prod', FALSE)
+			->from('demo_categories c')->join('demo_items i','i.item_cat_fk=c.cat_id AND i.activo=1','left')
+			->where('c.activo',1)->group_by('c.cat_id')->get()->result();
+		$mejor=0; $mejorprod=-1;
+		foreach($marcas as $m){
+			if ($this->slug_seo($m->cat_name)===$slug && (int)$m->prod > $mejorprod){ $mejor=(int)$m->cat_id; $mejorprod=(int)$m->prod; }
+		}
+		return $mejor;
+	}
+	function get_id_coleccion_por_slug($id_marca, $col_slug){
+		$cols = $this->db->select('col.coleccion_id, col.coleccion_name, COUNT(i.item_id) as prod', FALSE)
+			->from('demo_coleccion col')->join('demo_items i','i.item_coleccion_id=col.coleccion_id AND i.activo=1','left')
+			->where('col.coleccion_cat_id',$id_marca)->where('col.activo',1)->group_by('col.coleccion_id')->get()->result();
+		$mejor=0; $mejorprod=-1;
+		foreach($cols as $co){
+			if ($this->slug_seo($co->coleccion_name)===$col_slug && (int)$co->prod > $mejorprod){ $mejor=(int)$co->coleccion_id; $mejorprod=(int)$co->prod; }
+		}
+		return $mejor;
+	}
+	function get_tipo_slug_coleccion($id_coleccion){
+		$row = $this->db->select('item_tipo')->from('demo_items')->where('item_coleccion_id',$id_coleccion)->where('activo',1)->limit(1)->get()->row();
+		$mapa = array(0=>'papel-pintado',1=>'murales',2=>'revestimientos',3=>'telas',4=>'alfombras',5=>'herramientas',6=>'complementos');
+		return ($row && isset($mapa[(int)$row->item_tipo])) ? $mapa[(int)$row->item_tipo] : 'papel-pintado';
 	}
 
 	function get_erregistroak_eremu_guztiak_where_in($taula, $ideremua, $a_where, $a_colecciones=array()){

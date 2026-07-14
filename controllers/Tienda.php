@@ -2544,6 +2544,7 @@ class Tienda extends CI_Controller {
         if ($param1=='economicos')
             $this->listado_productos_nuevo('papel-pintado-economico');
         elseif ($param1=='marcas' || $param1=='marca'){
+            if ($param1=='marca' && $param3!==''){ redirect('marcas/'.$param3.($param5!==''?'/'.$param5:'').(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']), 'location', 301); return; }
             $uri_m = $this->uri->uri_string();
             if (strpos($uri_m, 'tienda/') === 0) { redirect(str_replace('papel_pintado','papel-pintado',substr($uri_m,7)).(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']), 'location', 301); return; }
             $id_marca=$param2;
@@ -2563,6 +2564,7 @@ class Tienda extends CI_Controller {
     function murales($param1 = "", $param2 = "", $param3 = "", $param4 = "", $param5 = "") {
         if ($param1==='' && strpos($this->uri->uri_string(), 'tienda/murales') === 0) { redirect('murales'.(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']).'', 'location', 301); return; }
         if ($param1=='marcas' || $param1=='marca'){
+            if ($param1=='marca' && $param3!==''){ redirect('marcas/'.$param3.($param5!==''?'/'.$param5:'').(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']), 'location', 301); return; }
             $uri_m = $this->uri->uri_string();
             if (strpos($uri_m, 'tienda/') === 0) { redirect(str_replace('papel_pintado','papel-pintado',substr($uri_m,7)).(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']), 'location', 301); return; }
             $id_marca=$param2;
@@ -2585,6 +2587,7 @@ class Tienda extends CI_Controller {
     function revestimientos($param1 = "", $param2 = "", $param3 = "", $param4 = "", $param5 = "") {
         if ($param1==='' && strpos($this->uri->uri_string(), 'tienda/revestimientos') === 0) { redirect('revestimientos'.(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']).'', 'location', 301); return; }
         if ($param1=='marcas' || $param1=='marca'){
+            if ($param1=='marca' && $param3!==''){ redirect('marcas/'.$param3.($param5!==''?'/'.$param5:'').(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']), 'location', 301); return; }
             $uri_m = $this->uri->uri_string();
             if (strpos($uri_m, 'tienda/') === 0) { redirect(str_replace('papel_pintado','papel-pintado',substr($uri_m,7)).(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']), 'location', 301); return; }
             $id_marca=$param2;
@@ -2608,6 +2611,7 @@ class Tienda extends CI_Controller {
             return;
         }
         if ($param1=='marcas' || $param1=='marca'){
+            if ($param1=='marca' && $param3!==''){ redirect('marcas/'.$param3.($param5!==''?'/'.$param5:'').(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']), 'location', 301); return; }
             $uri_m = $this->uri->uri_string();
             if (strpos($uri_m, 'tienda/') === 0) { redirect(str_replace('papel_pintado','papel-pintado',substr($uri_m,7)).(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']), 'location', 301); return; }
             $id_marca=$param2;
@@ -2627,6 +2631,7 @@ class Tienda extends CI_Controller {
     function alfombras($param1 = "", $param2 = "", $param3 = "", $param4 = "", $param5 = "") {
         if ($param1==='' && strpos($this->uri->uri_string(), 'tienda/alfombras') === 0) { redirect('alfombras'.(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']).'', 'location', 301); return; }
         if ($param1=='marcas' || $param1=='marca'){
+            if ($param1=='marca' && $param3!==''){ redirect('marcas/'.$param3.($param5!==''?'/'.$param5:'').(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']), 'location', 301); return; }
             $uri_m = $this->uri->uri_string();
             if (strpos($uri_m, 'tienda/') === 0) { redirect(str_replace('papel_pintado','papel-pintado',substr($uri_m,7)).(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']), 'location', 301); return; }
             $id_marca=$param2;
@@ -3437,7 +3442,30 @@ $this->db->cache_off();
         $this->load->view('frontend/fabricantes', $this->data);
     }
 
+    // SEO Opcion A: /marcas/{marca-slug}[/{coleccion-slug}] (slugs limpios, sin IDs)
+    function marca_seo($marca_slug='', $col_slug=''){
+        $this->load->library('flexi_cart_admin');
+        $this->load->model('demo_cart_model');
+        $this->load->model('demo_cart_admin_model');
+        $id_marca = $this->flexi_cart_model->get_id_marca_por_slug($marca_slug);
+        if (!$id_marca){ $this->comprobar_url($marca_slug); return; }
+        if ($col_slug!==''){
+            $id_col = $this->flexi_cart_model->get_id_coleccion_por_slug($id_marca, $col_slug);
+            if ($id_col){
+                $this->data['url_canonica'] = base_url().'marcas/'.$marca_slug.'/'.$col_slug;
+                $this->listado_productos_coleccion($this->flexi_cart_model->get_tipo_slug_coleccion($id_col), $id_col);
+                return;
+            }
+        }
+        $this->data['url_canonica'] = base_url().'marcas/'.$marca_slug;
+        $this->listado_marcas(-1, $id_marca);
+    }
     function marcas($param1 = "",$param2 = "",$param3 = "",$param4 = "",$param5 = "") {
+        // SEO Opcion A: /marcas/marca/{id}/{name}[/{colid}/{colname}] -> /marcas/{name}[/{colname}]
+        if ($param1=='marca' && $param3!==''){
+            redirect('marcas/'.$param3.($param5!==''?'/'.$param5:'').(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']), 'location', 301);
+            return;
+        }
         // SEO marcas: 301 de /tienda/marcas/... -> /marcas/... (conservando query)
         if (strpos($this->uri->uri_string(), 'tienda/marcas') === 0) {
             redirect(substr($this->uri->uri_string(), 7).(empty($_SERVER['QUERY_STRING'])?'':'?'.$_SERVER['QUERY_STRING']), 'location', 301);

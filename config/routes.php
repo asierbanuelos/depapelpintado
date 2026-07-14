@@ -155,6 +155,9 @@ $route['murales/marcas'] = 'tienda/murales/marcas';
 $route['revestimientos/marcas'] = 'tienda/revestimientos/marcas';
 $route['telas/marcas'] = 'tienda/telas/marcas';
 $route['alfombras/marcas'] = 'tienda/alfombras/marcas';
+// Marcas Opcion A (slugs limpios, sin ID): /marcas/{marca-slug}[/{coleccion-slug}]
+$route['marcas/(:any)'] = 'tienda/marca_seo/$1';
+$route['marcas/(:any)/(:any)'] = 'tienda/marca_seo/$1/$2';
 
 $route['(:any)'] = 'tienda/comprobar_url/$1';
 $route['(:any)/(:any)'] = 'tienda/comprobar_url/$1/$2';
