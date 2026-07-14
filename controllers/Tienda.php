@@ -2085,6 +2085,20 @@ class Tienda extends CI_Controller {
             }
         }
 
+        // SEO productos: canonical -> URL amigable, y 301 de la vieja /tienda/articulo/... -> nueva /{marca}/{coleccion}/{nombre}-{id}
+        // Solo para productos validos (no herramientas, no ?test, marca+coleccion+item activos y publicos)
+        if (!isset($_GET['test']) && isset($datos_item['item_id']) && $this->data['categ']!=5
+            && is_object($marca) && !empty($marca->cat_name) && $marca->activo==1 && $marca->publico==1
+            && !empty($coleccion[0]) && !empty($coleccion[0]->coleccion_name) && $coleccion[0]->activo==1 && $coleccion[0]->publico2==1
+            && !empty($datos_item['activo']) && !empty($datos_item['publico3'])) {
+            $url_seo_producto = $this->urlenc_aux($marca->cat_name).'/'.$this->urlenc_aux($coleccion[0]->coleccion_name).'/'.$this->urlenc_aux($datos_item['item_name']).'-'.$datos_item['item_id'];
+            $this->data['url_canonica'] = base_url().$url_seo_producto;
+            if (strpos($this->uri->uri_string(), 'tienda/articulo') === 0) {
+                redirect($url_seo_producto, 'location', 301);
+                return;
+            }
+        }
+
         if (!isset($_GET['test']) && $this->data['categ']!=5 && (empty($marca) || $marca->activo==0 || $marca->publico==0)){
             // Marca inexistente, desactivada o no publicada
             //echo "<br />Marca inexistente, desactivada o no publicada.";
