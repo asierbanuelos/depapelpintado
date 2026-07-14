@@ -149,6 +149,12 @@ $route['telas/marca/(:any)/(:any)'] = 'tienda/telas/marca/$1/$2';
 $route['telas/marca/(:any)/(:any)/(:any)/(:any)'] = 'tienda/telas/marca/$1/$2/$3/$4';
 $route['alfombras/marca/(:any)/(:any)'] = 'tienda/alfombras/marca/$1/$2';
 $route['alfombras/marca/(:any)/(:any)/(:any)/(:any)'] = 'tienda/alfombras/marca/$1/$2/$3/$4';
+// Listado de marcas por categoria: /{cat}/marcas
+$route['papel-pintado/marcas'] = 'tienda/papel_pintado/marcas';
+$route['murales/marcas'] = 'tienda/murales/marcas';
+$route['revestimientos/marcas'] = 'tienda/revestimientos/marcas';
+$route['telas/marcas'] = 'tienda/telas/marcas';
+$route['alfombras/marcas'] = 'tienda/alfombras/marcas';
 
 $route['(:any)'] = 'tienda/comprobar_url/$1';
 $route['(:any)/(:any)'] = 'tienda/comprobar_url/$1/$2';
