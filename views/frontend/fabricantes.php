@@ -12,7 +12,7 @@
       <h1 class="fuentecorporativa magenta-secundario">Listado de Marcas <?php echo $texto_post_h1; ?></h1>
     </div>
     <ul class="blocks-6">
-       <li><?=anchor("tienda/marcas","Todas las Marcas");?></li>
+       <li><?=anchor("marcas","Todas las Marcas");?></li>
        <li><?=anchor("tienda/papel_pintado/marcas","Papel Pintado");?></li>
        <li><?=anchor("tienda/murales/marcas","Murales");?></li>
        <li><?=anchor("tienda/revestimientos/marcas","Revestimientos");?></li>

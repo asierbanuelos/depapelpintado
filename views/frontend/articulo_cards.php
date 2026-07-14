@@ -38,23 +38,23 @@ foreach($all as $key){
 
   switch ($key['item_tipo']) {
       case 0: $pre = "Papel Pintado";
-              $categoria_principal='tienda/papel_pintado';
+              $categoria_principal='papel-pintado';
               $link_estilos='estilos-papel-pintado';
               break;
       case 1: $pre = "Mural";
-              $categoria_principal='tienda/murales';
+              $categoria_principal='murales';
               $link_estilos='estilos-murales';
               break;
       case 2: $pre = "Revestimiento";
-              $categoria_principal='tienda/revestimientos';
+              $categoria_principal='revestimientos';
               $link_estilos='estilos-revestimientos';
               break;
       case 3: $pre = "Tela";
-              $categoria_principal='tienda/telas';
+              $categoria_principal='telas';
               $link_estilos='estilos-telas';
               break;
       case 4: $pre = "Alfombra";
-              $categoria_principal='tienda/alfombras';
+              $categoria_principal='alfombras';
               $link_estilos='estilos-alfombras';
               break;
       case 5: $pre = "Herramientas";

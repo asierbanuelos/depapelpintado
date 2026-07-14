@@ -41,12 +41,12 @@
                 <div class="col-sm-6 col-lg-3 mb-4">
                     <div class='tit-seccion-footer'>Categorías</div>
                     <ul class="menu-footer2">
-                        <li><?=anchor("tienda/papel_pintado","Papel Pintado");?></li>
-                        <li><?=anchor("tienda/murales","Murales");?></li>
-                        <li><?=anchor("tienda/revestimientos","Revestimientos");?></li>
-                        <li><?=anchor("tienda/telas","Telas");?></li>
-                        <li><?=anchor("tienda/alfombras","Alfombras");?></li>
-                        <li><?=anchor("tienda/herramientas","Herramientas");?></li>
+                        <li><?=anchor("papel-pintado","Papel Pintado");?></li>
+                        <li><?=anchor("murales","Murales");?></li>
+                        <li><?=anchor("revestimientos","Revestimientos");?></li>
+                        <li><?=anchor("telas","Telas");?></li>
+                        <li><?=anchor("alfombras","Alfombras");?></li>
+                        <li><?=anchor("herramientas","Herramientas");?></li>
                     </ul>
                 </div>
                 <div class="col-sm-6 col-lg-3 mb-4">

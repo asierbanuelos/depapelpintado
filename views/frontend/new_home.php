@@ -17,7 +17,7 @@
    </div>
     <div class="units-row end">
  <div class="unit-40">
-    <?=anchor("tienda/papel_pintado/economicos",'<img src="'.$includes_dir.'images/outlet.png" alt="Outle" title="Outle" />');?>
+    <?=anchor("outlet",'<img src="'.$includes_dir.'images/outlet.png" alt="Outle" title="Outle" />');?>
  <ul class="listahome">
 
     <?php if(false){?>
@@ -37,9 +37,9 @@
 <hr>
 <ul class="blocks-3 bloqueshome text-centered">
   <li class="promos">
-    <h3><?=anchor("tienda/marcas",'Marcas');?></h3>
+    <h3><?=anchor("marcas",'Marcas');?></h3>
     <p>  
-      <?=anchor("tienda/marcas",'<img src="'.$includes_dir.'images/img-marcas-inicio.jpg"  alt="Marcas"  alt="Marcas" title="Todas las marcas" />');?>
+      <?=anchor("marcas",'<img src="'.$includes_dir.'images/img-marcas-inicio.jpg"  alt="Marcas"  alt="Marcas" title="Todas las marcas" />');?>
     </p>
   </li>
   <li class="promos"> 

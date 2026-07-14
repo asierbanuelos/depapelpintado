@@ -22,17 +22,17 @@ $categorias_resaltadas_menu=$this->flexi_cart_model->get_categorias_resaltadas_m
     </button>
     <ul class="navbar-nav ml-auto nav-fill d-flex justify-content-center mx-auto">
       <li class="nav-item px-2 dropdown <?php if($cat==0) echo ' menu-activo ';?>" >
-        <a class="nav-link ver-submenu" href="/tienda/papel_pintado" id="papelDropdown" role="button" aria-haspopup="true" aria-expanded="false">PAPEL PINTADO</a>
+        <a class="nav-link ver-submenu" href="/papel-pintado" id="papelDropdown" role="button" aria-haspopup="true" aria-expanded="false">PAPEL PINTADO</a>
         <ul class="dropdown-menu">
-          <li><?=anchor("tienda/papel_pintado","Ver todos",'class=""');?></li>
+          <li><?=anchor("papel-pintado","Ver todos",'class=""');?></li>
           <li><?=anchor("tienda/papel_pintado/marcas","Marcas",'class=""');?></li>
           <li><?=anchor("estilos-papel-pintado","Estilos",'class=""');?></li>
         </ul>
       </li>
       <li class="nav-item px-2 <?php if($cat==4) echo ' menu-activo ';?>" >
-        <a class="nav-link ver-submenu" href="/tienda/alfombras" id="alfombrasDropdown" role="button" aria-haspopup="true" aria-expanded="false">ALFOMBRAS</a>
+        <a class="nav-link ver-submenu" href="/alfombras" id="alfombrasDropdown" role="button" aria-haspopup="true" aria-expanded="false">ALFOMBRAS</a>
         <ul class="dropdown-menu">
-            <li><?=anchor("tienda/alfombras","Ver todas",'class="miclase"');?></li>
+            <li><?=anchor("alfombras","Ver todas",'class="miclase"');?></li>
             <li><?=anchor("tienda/alfombras/marcas","Marcas",'class="miclase"');?></li>
             <li><?=anchor("estilos-alfombras","Estilos",'class="miclase"');?></li>
             <?php
@@ -45,40 +45,40 @@ $categorias_resaltadas_menu=$this->flexi_cart_model->get_categorias_resaltadas_m
         </ul>
       </li>
       <li class="nav-item px-2 <?php if($cat==1) echo ' menu-activo ';?>" >
-        <a class="nav-link ver-submenu" href="/tienda/murales" id="muralesDropdown" role="button" aria-haspopup="true" aria-expanded="false">MURALES</a>
+        <a class="nav-link ver-submenu" href="/murales" id="muralesDropdown" role="button" aria-haspopup="true" aria-expanded="false">MURALES</a>
         <ul class="dropdown-menu">
-          <li><?=anchor("tienda/murales","Ver todos",'class="miclase"');?></li>
+          <li><?=anchor("murales","Ver todos",'class="miclase"');?></li>
           <li><?=anchor("tienda/murales/marcas","Marcas",'class="miclase"');?></li>
           <li><?=anchor("estilos-murales","Estilos",'class="miclase"');?></li>
         </ul>
       </li>
       <li class="nav-item px-2 <?php if($cat==2) echo ' menu-activo ';?>" >
-        <a class="nav-link ver-submenu" href="/tienda/revestimientos" id="revestimientosDropdown" role="button" aria-haspopup="true" aria-expanded="false">REVESTIMIENTOS</a>
+        <a class="nav-link ver-submenu" href="/revestimientos" id="revestimientosDropdown" role="button" aria-haspopup="true" aria-expanded="false">REVESTIMIENTOS</a>
         <ul class="dropdown-menu">
-          <li><?=anchor("tienda/revestimientos","Ver todos",'class="miclase"');?></li>
+          <li><?=anchor("revestimientos","Ver todos",'class="miclase"');?></li>
           <li><?=anchor("tienda/revestimientos/marcas","Marcas",'class="miclase"');?></li>
           <li><?=anchor("estilos-revestimientos","Estilos",'class="miclase"');?></li>
         </ul>
       </li>
       <li class="nav-item px-2 <?php if($cat==-3 && isset($productos_outlet) ) echo ' menu-activo ';?>" >
-          <a href="/tienda/papel_pintado/economicos" class="nav-link link-menu">OUTLET</a>
+          <a href="/outlet" class="nav-link link-menu">OUTLET</a>
       </li>
       <li class="nav-item px-2 <?php if($cat==3) echo ' menu-activo ';?>" >
-        <a class="nav-link ver-submenu" href="/tienda/telas" id="telasDropdown" role="button" aria-haspopup="true" aria-expanded="false">TELAS</a>
+        <a class="nav-link ver-submenu" href="/telas" id="telasDropdown" role="button" aria-haspopup="true" aria-expanded="false">TELAS</a>
         <ul class="dropdown-menu">
-          <li><?=anchor("tienda/telas","Ver todas",'class="miclase"');?></li>
+          <li><?=anchor("telas","Ver todas",'class="miclase"');?></li>
           <li><?=anchor("tienda/telas/marcas","Marcas",'class="miclase"');?></li>
           <li><?=anchor("estilos-telas","Estilos",'class="miclase"');?></li>
         </ul>
       </li>
       <li class="nav-item px-2 <?php if($cat==5) echo ' menu-activo ';?>" >
-          <a href="/tienda/herramientas" class="nav-link link-menu">HERRAMIENTAS</a>
+          <a href="/herramientas" class="nav-link link-menu">HERRAMIENTAS</a>
       </li>
       <li class="nav-item px-2">
-          <a href="/tienda/marcas" class="nav-link link-menu" style="font-weight:700;">MARCAS</a>
+          <a href="/marcas" class="nav-link link-menu" style="font-weight:700;">MARCAS</a>
       </li>
       <li class="nav-item px-2">
-          <a href="/tienda/complementos" class="nav-link link-menu">COMPLEMENTOS</a>
+          <a href="/complementos" class="nav-link link-menu">COMPLEMENTOS</a>
       </li>
     </ul>
   </div>

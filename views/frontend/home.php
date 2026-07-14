@@ -485,9 +485,9 @@ if ($gaur <= '2022-08-26')
     ?>
     <?php
     $cats_secundarias = [
-      ['titulo' => 'TELAS',              'enlace' => '/tienda/telas',        'slug' => 'telas'],
+      ['titulo' => 'TELAS',              'enlace' => '/telas',        'slug' => 'telas'],
       ['titulo' => 'ALFOMBRAS A MEDIDA', 'enlace' => '/alfombras-a-medida',  'slug' => 'alfombras-a-medida'],
-      ['titulo' => 'COMPLEMENTOS',       'enlace' => '/tienda/complementos', 'slug' => 'complementos'],
+      ['titulo' => 'COMPLEMENTOS',       'enlace' => '/complementos', 'slug' => 'complementos'],
     ];
     foreach ($cats_secundarias as &$cs) {
       foreach ($mosaico_resto as $el) {
@@ -663,7 +663,7 @@ if ($gaur <= '2022-08-26')
       8 => '#b8b0a8', // Metalizados
     ];
     $tipo_label = [0=>'Papel Pintado',1=>'Mural',2=>'Revestimiento',3=>'Tela',4=>'Alfombra',5=>'Herramienta'];
-    $tipo_url   = [0=>'tienda/papel_pintado',1=>'tienda/murales',2=>'tienda/revestimientos',3=>'tienda/telas',4=>'tienda/alfombras'];
+    $tipo_url   = [0=>'papel-pintado',1=>'murales',2=>'revestimientos',3=>'telas',4=>'alfombras'];
     ?>
 
     <div class="productos-home">
@@ -739,7 +739,7 @@ if ($gaur <= '2022-08-26')
           <?php endforeach; ?>
         </div>
         <div class="productos-home-ver-todos">
-          <a href="/tienda/papel_pintado">Ver todos los productos</a>
+          <a href="/papel-pintado">Ver todos los productos</a>
         </div>
       </div>
     </div>
@@ -1045,9 +1045,9 @@ if ($gaur <= '2022-08-26')
   <div class="units-row end">
     <div class="unit-40">
       <div class="bloqueshome text-centered">
-        <h3><?=anchor("tienda/papel_pintado/economicos",'Outlet');?></h3>
+        <h3><?=anchor("outlet",'Outlet');?></h3>
         <p>  
-          <?=anchor("tienda/papel_pintado/economicos",'<img src="'.$includes_dir.'images/outlet-papelpintado.png" alt="Outlet" title="Outlet" />');?>
+          <?=anchor("outlet",'<img src="'.$includes_dir.'images/outlet-papelpintado.png" alt="Outlet" title="Outlet" />');?>
         </p>
       </div>
       <ul class="listahome">
@@ -1064,9 +1064,9 @@ if ($gaur <= '2022-08-26')
 <hr>
 <ul class="blocks-3 bloqueshome text-centered">
   <li class="promos">
-    <h3><?=anchor("tienda/marcas",'Marcas');?></h3>
+    <h3><?=anchor("marcas",'Marcas');?></h3>
     <p>  
-      <?=anchor("tienda/marcas",'<img src="'.$includes_dir.'images/img-marcas-inicio.jpg"  alt="Marcas"  alt="Marcas" title="Todas las marcas" />');?>
+      <?=anchor("marcas",'<img src="'.$includes_dir.'images/img-marcas-inicio.jpg"  alt="Marcas"  alt="Marcas" title="Todas las marcas" />');?>
     </p>
   </li>
   <li class="promos"> 

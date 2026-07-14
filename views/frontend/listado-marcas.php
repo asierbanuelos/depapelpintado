@@ -131,7 +131,7 @@ ksort($por_letra);
           <ul class="pl-4 filtros-solo-estilos contenido-colapsable-filtro-movil">
             <?php
             $opciones = [
-              -1 => ['/tienda/marcas',                 'Todas las Marcas'],
+              -1 => ['/marcas',                 'Todas las Marcas'],
                0  => ['/tienda/papel_pintado/marcas',  'Papel Pintado'],
                1  => ['/tienda/murales/marcas',        'Murales'],
                2  => ['/tienda/revestimientos/marcas', 'Revestimientos'],

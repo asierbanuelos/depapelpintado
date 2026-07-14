@@ -196,12 +196,12 @@
 
     <p class="no-results-cats-label">Explorar categorías</p>
     <div class="no-results-cats">
-      <a href="/tienda/papel_pintado">Papel Pintado</a>
-      <a href="/tienda/murales">Murales</a>
-      <a href="/tienda/revestimientos">Revestimientos</a>
-      <a href="/tienda/telas">Telas</a>
-      <a href="/tienda/alfombras">Alfombras</a>
-      <a href="/tienda/marcas">Marcas</a>
+      <a href="/papel-pintado">Papel Pintado</a>
+      <a href="/murales">Murales</a>
+      <a href="/revestimientos">Revestimientos</a>
+      <a href="/telas">Telas</a>
+      <a href="/alfombras">Alfombras</a>
+      <a href="/marcas">Marcas</a>
     </div>
 
   </div>

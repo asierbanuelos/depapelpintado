@@ -4,13 +4,13 @@ $cat_nombre = isset($familia_producto) ? $familia_producto : '';
 $cat_url    = '';
 $cat_icono  = 'roll'; // roll | carpet | fabric | tool
 
-if ($cat_nombre == 'Papel Pintado')    { $cat_url = '/tienda/papel_pintado';   $cat_icono = 'roll'; }
-elseif ($cat_nombre == 'Murales')      { $cat_url = '/tienda/murales';         $cat_icono = 'roll'; }
-elseif ($cat_nombre == 'Revestimientos'){ $cat_url = '/tienda/revestimientos'; $cat_icono = 'roll'; }
-elseif ($cat_nombre == 'Telas')        { $cat_url = '/tienda/telas';           $cat_icono = 'fabric'; }
-elseif ($cat_nombre == 'Alfombras')    { $cat_url = '/tienda/alfombras';       $cat_icono = 'carpet'; }
-elseif ($cat_nombre == 'Herramientas') { $cat_url = '/tienda/herramientas';    $cat_icono = 'tool'; }
-elseif ($cat_nombre == 'Complementos') { $cat_url = '/tienda/complementos';    $cat_icono = 'tool'; }
+if ($cat_nombre == 'Papel Pintado')    { $cat_url = '/papel-pintado';   $cat_icono = 'roll'; }
+elseif ($cat_nombre == 'Murales')      { $cat_url = '/murales';         $cat_icono = 'roll'; }
+elseif ($cat_nombre == 'Revestimientos'){ $cat_url = '/revestimientos'; $cat_icono = 'roll'; }
+elseif ($cat_nombre == 'Telas')        { $cat_url = '/telas';           $cat_icono = 'fabric'; }
+elseif ($cat_nombre == 'Alfombras')    { $cat_url = '/alfombras';       $cat_icono = 'carpet'; }
+elseif ($cat_nombre == 'Herramientas') { $cat_url = '/herramientas';    $cat_icono = 'tool'; }
+elseif ($cat_nombre == 'Complementos') { $cat_url = '/complementos';    $cat_icono = 'tool'; }
 
 $es_busqueda = isset($_POST['search']) || isset($_GET['search']);
 
@@ -175,12 +175,12 @@ $subtitulo = $es_busqueda
 
   <p class="sinres-cats-label">Explorar categorías</p>
   <div class="sinres-cats">
-    <a href="/tienda/papel_pintado">Papel Pintado</a>
-    <a href="/tienda/murales">Murales</a>
-    <a href="/tienda/revestimientos">Revestimientos</a>
-    <a href="/tienda/telas">Telas</a>
-    <a href="/tienda/alfombras">Alfombras</a>
-    <a href="/tienda/marcas">Marcas</a>
+    <a href="/papel-pintado">Papel Pintado</a>
+    <a href="/murales">Murales</a>
+    <a href="/revestimientos">Revestimientos</a>
+    <a href="/telas">Telas</a>
+    <a href="/alfombras">Alfombras</a>
+    <a href="/marcas">Marcas</a>
   </div>
 
 </div>
