@@ -2360,17 +2360,19 @@ class Tienda extends CI_Controller {
             $cat_migas_amigable = isset($mapa_cat_migas[$categoria_principal]) ? $mapa_cat_migas[$categoria_principal] : $categoria_principal;
             $this->data['a_migas'][$cat_migas_amigable]=$categ;
             if ($this->data['categ']!=5){
-                $this->data['url_marca']=$categoria_principal.'/marca/'.$marca->cat_id.'/'.$this->urlenc_aux($marca->cat_name);
-                $this->data['url_coleccion']=$this->data['url_marca'].'/'.$coleccion[0]->coleccion_id.'/'.$this->urlenc_aux($coleccion[0]->coleccion_name);
+                // SEO amigable: marca y coleccion apuntan al flujo unificado /marcas/... (tambien "Ver coleccion completa")
+                $this->data['url_marca']='/marcas/'.$this->urlenc_aux($marca->cat_name);
+                $this->data['url_coleccion']='/marcas/'.$this->urlenc_aux($marca->cat_name).'/'.$this->urlenc_aux($coleccion[0]->coleccion_name);
+                // Variantes: se mantienen en formato /tienda/articulo (301) para no romper el cambio de variante
                 $this->data['url_pre_variante']='/tienda/articulo/'.$this->urlenc_aux($marca->cat_name).'/'.$this->urlenc_aux($coleccion[0]->coleccion_name).'/id/';
                 $this->data['url_producto']='/tienda/articulo/'.$this->urlenc_aux($marca->cat_name).'/'.$this->urlenc_aux($coleccion[0]->coleccion_name).'/id/'.$this->data['key']['item_id'];
                 $this->data['a_migas'][$this->data['url_marca']]=$marca->cat_name;
                 $this->data['a_migas'][$this->data['url_coleccion']]=$coleccion[0]->coleccion_name;
-                $this->data['a_migas'][$this->data['url_producto']]=$this->data['key']['item_ref'];
+                $this->data['a_migas'][current_url()]=$this->data['key']['item_ref'];
             }
             else{
                 $this->data['url_producto']='/tienda/articulo/herramientas/'.$this->urlenc_aux($this->data['key']['item_name']).'/id/'.$this->data['key']['item_id'];
-                $this->data['a_migas'][$this->data['url_producto']]=$this->data['key']['item_name'];
+                $this->data['a_migas'][current_url()]=$this->data['key']['item_name'];
             }
 
             $this->data['includes_header'][]='<link rel="stylesheet" href="/includes/content-collapse.css">';            
