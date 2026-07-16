@@ -126,12 +126,6 @@ $route['complementos'] = 'tienda/complementos';
 $route['outlet'] = 'tienda/papel_pintado/economicos';
 $route['marcas'] = 'tienda/marcas';
 
-// URL SEO de producto (Opcion A): /{marca}/{coleccion}/{nombre}-{id}  (ultimo segmento acaba en -numero)
-// Va ANTES del catch-all; articulo() extrae el id del final. Las viejas /tienda/articulo/... siguen igual.
-$route['([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
-// Producto de herramientas (sin marca/coleccion): /herramientas/{nombre}-{id}
-$route['herramientas/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
-
 // MARCAS (Opcion B: quitar /tienda/, mantener IDs). Seccion de marcas:
 $route['marcas/marca/(:any)'] = 'tienda/marcas/marca/$1';
 $route['marcas/marca/(:any)/(:any)'] = 'tienda/marcas/marca/$1/$2';
@@ -158,6 +152,14 @@ $route['alfombras/marcas'] = 'tienda/alfombras/marcas';
 // Marcas Opcion A (slugs limpios, sin ID): /marcas/{marca-slug}[/{coleccion-slug}]
 $route['marcas/(:any)'] = 'tienda/marca_seo/$1';
 $route['marcas/(:any)/(:any)'] = 'tienda/marca_seo/$1/$2';
+
+// URL SEO de producto (Opcion A): /{marca}/{coleccion}/{nombre}-{id}  (ultimo segmento acaba en -numero)
+// IMPORTANTE: va DESPUES de las rutas de marcas. Si estuviera antes, una coleccion cuyo slug
+// acaba en numero (ej. /marcas/roberto-cavalli/roberto-cavalli-9) la capturaria como si fuera
+// un producto (id=9) y mostraria el catalogo vacio. articulo() extrae el id del ultimo segmento.
+$route['([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
+// Producto de herramientas (sin marca/coleccion): /herramientas/{nombre}-{id}
+$route['herramientas/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
 
 $route['(:any)'] = 'tienda/comprobar_url/$1';
 $route['(:any)/(:any)'] = 'tienda/comprobar_url/$1/$2';
