@@ -4015,34 +4015,34 @@ $this->db->cache_off();
         echo '<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="https://depapelpintado.es/sitemaps/main-sitemap.xsl"?>';
         echo "\n<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'> \n";
         echo "<url>\n";
-        echo "       <loc>https://depapelpintado.es/tienda/marcas</loc>\n";
+        echo "       <loc>https://depapelpintado.es/marcas</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://depapelpintado.es/tienda/papel_pintado/marcas</loc>\n";
+        echo "       <loc>https://depapelpintado.es/papel-pintado/marcas</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://depapelpintado.es/tienda/fotomurales/marcas</loc>\n";
+        echo "       <loc>https://depapelpintado.es/murales/marcas</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://depapelpintado.es/tienda/revestimientos/marcas</loc>\n";
+        echo "       <loc>https://depapelpintado.es/revestimientos/marcas</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://depapelpintado.es/tienda/telas/marcas</loc>\n";
+        echo "       <loc>https://depapelpintado.es/telas/marcas</loc>\n";
         echo "</url>\n";
         echo "<url>\n";
-        echo "       <loc>https://depapelpintado.es/tienda/alfombras/marcas</loc>\n";
+        echo "       <loc>https://depapelpintado.es/alfombras/marcas</loc>\n";
         echo "</url>\n";
         asort($a_marcas);
         foreach ($a_marcas as $idmarca => $nombre_marca) {
             echo "<url>\n";
-            echo "       <loc>https://depapelpintado.es/tienda/marcas/marca/$idmarca/".$this->urlenc_aux($nombre_marca)."</loc>\n";
+            echo "       <loc>https://depapelpintado.es/marcas/".$this->urlenc_aux($nombre_marca)."</loc>\n";
             echo "</url>\n";
             if (isset($a_colecciones[$idmarca])){
                 $colecciones_tratar=$a_colecciones[$idmarca];
                 asort($colecciones);
                 foreach ($colecciones_tratar as $idcoleccion => $nombre_coleccion) {
                     echo "<url>\n";
-                    echo "       <loc>https://depapelpintado.es/tienda/marcas/marca/$idmarca/".$this->urlenc_aux($nombre_marca)."/$idcoleccion/".$this->urlenc_aux($nombre_coleccion)."</loc>\n";
+                    echo "       <loc>https://depapelpintado.es/marcas/".$this->urlenc_aux($nombre_marca)."/".$this->urlenc_aux($nombre_coleccion)."</loc>\n";
                     echo "</url>\n";
                 }
             }

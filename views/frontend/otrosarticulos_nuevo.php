@@ -47,14 +47,14 @@ if(isset($otro) && count($otro)){
   }
 
   $items_scroll = array_slice($otro, 0, 30);
-  $url_coleccion='/tienda/'.$seccionbase.'/marca/'.$key['cat_id'].'/'.urlenc($key['cat_name']).'/'.$key['coleccion_id'].'/'.urlenc($key['coleccion_name']);
+  $url_coleccion='/marcas/'.urlenc($key['cat_name']).'/'.urlenc($key['coleccion_name']);
   echo "<h3 class='col-12 text-center pb-3 mb-0'>$texto_intro</h3> \n";
   echo "<div class='col-12 px-2'>";
   echo "<div class='otros-articulos-wrap'>";
   echo "<button class='otros-scroll-btn otros-scroll-left' onclick='scrollOtrosArticulos(-1)' aria-label='Anterior'>&#8249;</button>";
   echo "<div class='otros-articulos-scroll' id='otros-articulos-scroll'>";
   foreach ($items_scroll as $p) {
-    $url_p='/tienda/articulo/'.urlenc($p['cat_name']).'/'.urlenc($p['coleccion_name']).'/id/'.$p['item_id'];
+    $url_p='/'.urlenc($p['cat_name']).'/'.urlenc($p['coleccion_name']).'/'.urlenc((isset($p['item_name']) && trim($p['item_name'])!='')?$p['item_name']:$p['item_ref']).'-'.$p['item_id'];
     $img_p='/includes/'.str_replace('../', '', $p['img']).'th.jpg';
     echo "<a class='otro-art-card' href='".htmlspecialchars($url_p)."'>";
     echo "<img src='".htmlspecialchars($img_p)."' alt='".htmlspecialchars($p['item_ref'])."' loading='lazy' />";
@@ -107,7 +107,7 @@ if(isset($todas_las_colecciones) && count($todas_las_colecciones)>1){
       $cuantas_llevamos=0;
       foreach($todas_las_colecciones as $c){
         if ($c['coleccion_id']!=$datos_item_ko['item_coleccion_id']){
-          $url_coleccion='/tienda/'.$seccionbase.'/marca/'.$fabricante->cat_id.'/'.urlenc($fabricante->cat_name).'/'.$c['coleccion_id'].'/'.urlenc($c['coleccion_name']);
+          $url_coleccion='/marcas/'.urlenc($fabricante->cat_name).'/'.urlenc($c['coleccion_name']);
           ?>
           <li >
             <div class="preficha">
@@ -176,7 +176,7 @@ if(isset($todas_las_colecciones) && count($todas_las_colecciones)>1){
         <?php
         $cuantas_llevamos=0;
         foreach($colecciones_tipo as $c){
-          $url_coleccion='/tienda/'.$seccionbase.'/marca/'.$fabricante->cat_id.'/'.urlenc($fabricante->cat_name).'/'.$c['coleccion_id'].'/'.urlenc($c['coleccion_name']);
+          $url_coleccion='/marcas/'.urlenc($fabricante->cat_name).'/'.urlenc($c['coleccion_name']);
           ?>
           <li >
             <div class="preficha">
@@ -203,7 +203,7 @@ if(isset($todas_las_colecciones) && count($todas_las_colecciones)>1){
       <?php
 
       if(count($colecciones_tipo) > $cuantas_llevamos){
-        $url_marca='/tienda/'.$seccionbase.'/marca/'.$fabricante->cat_id.'/'.urlenc($fabricante->cat_name);
+        $url_marca='/marcas/'.urlenc($fabricante->cat_name);
         echo "<div class='unit-100 text-centered'>\n ";
         echo "<h3 class='link_button2'><a href='$url_marca' class=''>Ver todas las colecciones de $categ</a></h3> \n";
         echo "</div> \n";
