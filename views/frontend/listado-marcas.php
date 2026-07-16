@@ -117,6 +117,18 @@ ksort($por_letra);
 .marca-logo-item:hover img { filter: grayscale(0%); opacity: 1; }
 @media (max-width: 991px) { .marca-logo-item { width: 25%; } }
 @media (max-width: 575px) { .marca-logo-item { width: 33.33%; } }
+
+/* ---- Buscador de marca ---- */
+.marcas-buscador { position: relative; max-width: 420px; }
+.marcas-buscador input {
+  width: 100%; font-family: 'Poppins', sans-serif; font-size: 16px;
+  padding: 11px 16px; border: 1px solid #ddd4ce; border-radius: 3px;
+  outline: none; color: #444; transition: border-color 0.2s, box-shadow 0.2s;
+}
+.marcas-buscador input:focus { border-color: #BB8AA3; box-shadow: 0 0 0 3px rgba(187,138,163,0.18); }
+.marcas-buscador-count { display: block; margin-top: 6px; font-size: 13px; color: #999; font-family: 'Poppins', sans-serif; }
+.marcas-sin-resultados { display: none; color: #999; font-family: 'Poppins', sans-serif; padding: 20px 0; }
+.marcas-sin-resultados.show { display: block; }
 </style>
 
 <div class="wrapper marcas-wrapper">
@@ -125,30 +137,15 @@ ksort($por_letra);
     <?php $this->load->view('frontend/migas_nuevas_small', $this->data); ?>
 
     <div class="row">
-      <!-- Sidebar -->
-      <div class="col-xl-2 col-lg-3 col-md-4 col-sm-12 mb-4">
-        <div class="columna-filtros">
-          <ul class="pl-4 filtros-solo-estilos contenido-colapsable-filtro-movil">
-            <?php
-            $opciones = [
-              -1 => ['/marcas',                 'Todas las Marcas'],
-               0  => ['/tienda/papel_pintado/marcas',  'Papel Pintado'],
-               1  => ['/tienda/murales/marcas',        'Murales'],
-               2  => ['/tienda/revestimientos/marcas', 'Revestimientos'],
-               3  => ['/tienda/telas/marcas',          'Telas'],
-               4  => ['/tienda/alfombras/marcas',      'Alfombras'],
-            ];
-            foreach ($opciones as $val => [$url, $label]) {
-              $sel = ($categ == $val) ? ' class="selected"' : '';
-              echo "<li><a href='$url' title='$label'$sel>$label</a></li>\n";
-            }
-            ?>
-          </ul>
-        </div>
-      </div>
+      <!-- Contenido a ancho completo (sin filtro por tipo; buscador de marca en vivo) -->
+      <div class="col-12">
 
-      <!-- Contenido -->
-      <div class="col-xl-10 col-lg-9 col-md-8 col-sm-12">
+        <!-- Buscador de marca -->
+        <div class="marcas-buscador mb-4">
+          <input type="search" id="buscar-marca" autocomplete="off" placeholder="Busca tu marca&hellip;" aria-label="Buscar marca">
+          <span class="marcas-buscador-count" id="buscar-marca-count"></span>
+        </div>
+        <p class="marcas-sin-resultados" id="marcas-sin-resultados">No hemos encontrado ninguna marca con ese nombre.</p>
 
         <!-- GRUPO 1: TODAS las marcas en orden alfabético -->
         <p class="marcas-section-title">Marcas destacadas</p>
@@ -160,11 +157,11 @@ ksort($por_letra);
         </div>
 
         <?php foreach ($por_letra as $letra => $marcas_letra): ?>
-          <div class="marcas-letra-grupo" id="marca-letra-<?= htmlspecialchars($letra) ?>">
+          <div class="marcas-letra-grupo" id="marca-letra-<?= htmlspecialchars($letra) ?>" data-grupo-letra>
             <div class="marcas-letra-head"><?= htmlspecialchars($letra) ?></div>
             <ul class="marcas-lista-letra">
               <?php foreach ($marcas_letra as $l): ?>
-                <li><a href="<?= '/marcas/'.urlenc($l->cat_name) ?>"><?= htmlspecialchars($l->cat_name) ?></a></li>
+                <li class="marca-item" data-nombre="<?= htmlspecialchars(mb_strtolower($l->cat_name)) ?>"><a href="<?= '/marcas/'.urlenc($l->cat_name) ?>"><?= htmlspecialchars($l->cat_name) ?></a></li>
               <?php endforeach; ?>
             </ul>
           </div>
@@ -180,7 +177,7 @@ ksort($por_letra);
               ? $includes_dir.'images/logos/'.$l->cat_id.'_negativo.jpg'
               : $includes_dir.'images/logos/'.$l->cat_id.'.jpg';
           ?>
-            <div class="marca-logo-item">
+            <div class="marca-logo-item" data-nombre="<?= htmlspecialchars(mb_strtolower($l->cat_name)) ?>">
               <a href="<?= '/marcas/'.urlenc($l->cat_name) ?>" title="<?= htmlspecialchars($l->cat_name) ?>">
                 <img src="<?= $src ?>" alt="<?= htmlspecialchars($l->cat_name) ?>" loading="lazy">
               </a>
@@ -193,3 +190,42 @@ ksort($por_letra);
     </div>
   </div>
 </div>
+
+<script>
+(function(){
+  var input = document.getElementById('buscar-marca');
+  if (!input) return;
+  var norm = function(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); };
+  var items  = [].slice.call(document.querySelectorAll('.marca-item'));
+  var logos  = [].slice.call(document.querySelectorAll('.marca-logo-item'));
+  var grupos = [].slice.call(document.querySelectorAll('[data-grupo-letra]'));
+  var abc       = document.querySelector('.marcas-abc-index');
+  var logosGrid = document.querySelector('.marcas-logos-grid');
+  var logosTit  = logosGrid ? logosGrid.previousElementSibling : null;
+  var countEl = document.getElementById('buscar-marca-count');
+  var noRes   = document.getElementById('marcas-sin-resultados');
+  function filtrar(){
+    var t = norm(input.value.trim());
+    var vis = 0, logosVis = 0;
+    items.forEach(function(li){
+      var m = !t || norm(li.getAttribute('data-nombre')).indexOf(t) >= 0;
+      li.style.display = m ? '' : 'none'; if (m) vis++;
+    });
+    logos.forEach(function(d){
+      var m = !t || norm(d.getAttribute('data-nombre')).indexOf(t) >= 0;
+      d.style.display = m ? '' : 'none'; if (m) logosVis++;
+    });
+    grupos.forEach(function(g){
+      var lis = [].slice.call(g.querySelectorAll('.marca-item'));
+      var any = lis.some(function(li){ return li.style.display !== 'none'; });
+      g.style.display = any ? '' : 'none';
+    });
+    if (abc)       abc.style.display       = t ? 'none' : '';
+    if (logosGrid) logosGrid.style.display = logosVis ? '' : 'none';
+    if (logosTit)  logosTit.style.display  = logosVis ? '' : 'none';
+    if (countEl)   countEl.textContent = t ? (vis + ' marca' + (vis === 1 ? '' : 's')) : '';
+    if (noRes)     noRes.className = 'marcas-sin-resultados' + ((t && vis === 0) ? ' show' : '');
+  }
+  input.addEventListener('input', filtrar);
+})();
+</script>
