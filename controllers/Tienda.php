@@ -1908,7 +1908,7 @@ class Tienda extends CI_Controller {
         }
         
         //$this->data['a_migas']['marcas-'.$url_categoria_principal]='Marcas';
-        $this->data['a_migas'][$categoria_principal.'/marcas']='Marcas';
+        $this->data['a_migas'][($tipo_producto==-1 ? '/marcas' : $categoria_principal.'/marcas')]='Marcas';
 
         if($categ=='Foto Murales' || $categ=='Fotomurales') // lo cambiamos para el encabezado
             $categ='Murales';
@@ -1934,10 +1934,23 @@ class Tienda extends CI_Controller {
 
                 $this->data['col'] = $a_colecciones;
 
+                // Pagina de marca (todos los tipos): lista plana y deduplicada de colecciones.
+                // get_col ya viene ordenado por 'orden' ASC y nombre. Cada coleccion una sola vez,
+                // sin agrupar por tipo ni duplicar por tipos fantasma en ccats.
+                if ($tipo_producto==-1){
+                    $col_flat=array();
+                    foreach($colecciones_aux as $c){
+                        if ($c['activo']==1 && $c['publico2']==1 && $c['ccats']!='' && $c['ccats']!='null')
+                            $col_flat[$c['coleccion_id']]=$c;
+                    }
+                    $this->data['col_flat']=$col_flat;
+                }
+
                 if ($tipo_producto!=-1)
                     $this->data['url_marca'] = $categoria_principal.'/marca/'.$id_marca.'/'.$this->urlenc_aux($marca->cat_name);
                 else{
-                    $this->data['url_marca'] = $categoria_principal.'/marcas/marca/'.$id_marca.'/'.$this->urlenc_aux($marca->cat_name);
+                    // SEO amigable: miga de la marca -> /marcas/{slug}
+                    $this->data['url_marca'] = '/marcas/'.$this->urlenc_aux($marca->cat_name);
                     $this->data['url_marca_aux'] = $id_marca.'/'.$this->urlenc_aux($marca->cat_name);
                 }
 

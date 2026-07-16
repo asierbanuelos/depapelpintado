@@ -31,6 +31,31 @@ if (isset($_GET['test']) && $_GET['test']=='eneko'){
     echo "<div class='row listado prefichas prefichas prefichas-nuevas'> \n";
     $count=0;
 
+    // ---- Pagina de marca (todos los tipos): UNA sola lista de colecciones, sin agrupar por tipo ----
+    if ($categ==-1 && isset($col_flat)){
+      foreach($col_flat as $c){
+        if ($c['ccats']=='null') continue;
+        $url_coleccion='/marcas/'.urlenc($fab->cat_name).'/'.urlenc($c['coleccion_name']);
+        ?>
+        <div class="subcategory-block col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-12 col-sp-12">
+          <div class="preficha subcategory-image">
+            <a href="<?php echo $url_coleccion;?>" title="<?php echo $c['coleccion_name']; ?>" >
+              <img class="img-fluid" height="316" width="316" src="/includes/<?php echo str_replace('../', '', $c['col_img'].'th.jpg'); ?>" alt="<?php echo $c['coleccion_name']; ?>" title='<?php echo $c['coleccion_name']; ?>' />
+            </a>
+          </div>
+          <div class="subcategory-meta tit-centrado-imagen text-center">
+            <h4>
+              <a href="<?php echo $url_coleccion;?>" title="<?php echo $c['coleccion_name']; ?>" >
+                <?php echo $c['coleccion_name']; ?>
+              </a>
+            </h4>
+            <div class="subcategory-description"></div>
+          </div>
+        </div>
+        <?php
+      }
+    }
+    else
     foreach($col as $tipo_producto_aux => $colecciones_tipo_producto){
       if ($categ==-1){
         switch ($tipo_producto_aux) {
