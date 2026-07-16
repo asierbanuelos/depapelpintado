@@ -1421,7 +1421,7 @@ class Tienda extends CI_Controller {
         exit;
         */
     }
-    function listado_productos_coleccion($categoria_principal, $idcoleccion=0){
+    function listado_productos_coleccion($categoria_principal, $idcoleccion=0, $mostrar_todos=false){
         // Todos los artículos de un tipo de producto
         $this->data['categoria_principal'] = $categoria_principal;
         $this->data['productos_coleccion'] = true;
@@ -1516,9 +1516,11 @@ class Tienda extends CI_Controller {
 
             $this->data['texto_h1_seccion']='Colección '.$coleccion[0]->coleccion_name.' de '.$categ.' '.$marca->cat_name; 
 
-            if ($categoria_principal=='todos'){
-                $this->data['meta_title']='Colección '.$coleccion[0]->coleccion_name.' de '.$marca->cat_name; 
-                $this->data['texto_h1_seccion']='Colección '.$coleccion[0]->coleccion_name.' de '.$marca->cat_name; 
+            if ($categoria_principal=='todos' || $mostrar_todos){
+                // Vista unificada de coleccion (todos los tipos): titulo sin la palabra del tipo
+                if (trim($coleccion[0]->meta_titlec)=='')
+                    $this->data['meta_title']='Colección '.$coleccion[0]->coleccion_name.' de '.$marca->cat_name;
+                $this->data['texto_h1_seccion']='Colección '.$coleccion[0]->coleccion_name.' de '.$marca->cat_name;
             }
 
             if (trim($coleccion[0]->meta_descriptionc)!='')
@@ -1526,7 +1528,14 @@ class Tienda extends CI_Controller {
             elseif (trim($marca->meta_descriptionf)!='')
                 $this->data['meta_description']=$marca->meta_descriptionf; 
 
-            if ($categoria_principal=='todos'){
+            if ($mostrar_todos){
+                // Migas amigables de la vista unificada: Inicio > Marcas > Marca > Coleccion
+                $this->data['a_migas']['/marcas']='Marcas';
+                $this->data['a_migas']['/marcas/'.$this->urlenc_aux($marca->cat_name)]=$marca->cat_name;
+                $this->data['a_migas']['/marcas/'.$this->urlenc_aux($marca->cat_name).'/'.$this->urlenc_aux($coleccion[0]->coleccion_name)]=$coleccion[0]->coleccion_name;
+                $this->data['url_especifica']='marcas/'.$this->urlenc_aux($marca->cat_name).'/'.$this->urlenc_aux($coleccion[0]->coleccion_name);
+            }
+            elseif ($categoria_principal=='todos'){
                 //$this->data['a_migas']['marcas-'.$categoria_principal]='Marcas';
                 $this->data['a_migas']['/tienda/marcas']='Marcas';
                 $this->data['a_migas']['/tienda/marca/'.$this->urlenc_aux($marca->cat_id).'/'.$this->urlenc_aux($marca->cat_name)]=$marca->cat_name;
@@ -1612,6 +1621,8 @@ class Tienda extends CI_Controller {
             $this->data['col_text_publico']=$coleccion[0]->col_text_publico;
             $this->data['col_text']=$coleccion[0]->col_text;
             $this->data['id_marca']=$marca->cat_id;
+            // Vista unificada: mostrar TODOS los productos de la coleccion (todos los tipos), sin filtrar por tipo
+            if ($mostrar_todos) $this->data['categ']=-1;
             $this->data['filtros_categorias_seo']= $this->flexi_cart_model->get_filtros_izquierda_listado($this->data['categ'], 0, $idcoleccion, $this->data['productos_outlet']);
             $this->data['menu_categorias_seo']=$this->flexi_cart_model->get_categorias_seo_menu_filtrado_por_items($this->data['categ'], $this->data['filtros_categorias_seo']['ids_categoria']);
             $this->data['mostrar_categorias_seo']=count($this->data['menu_categorias_seo']) ? true : false;
@@ -3466,7 +3477,7 @@ $this->db->cache_off();
             $id_col = $this->flexi_cart_model->get_id_coleccion_por_slug($id_marca, $col_slug);
             if ($id_col){
                 $this->data['url_canonica'] = base_url().'marcas/'.$marca_slug.'/'.$col_slug;
-                $this->listado_productos_coleccion($this->flexi_cart_model->get_tipo_slug_coleccion($id_col), $id_col);
+                $this->listado_productos_coleccion($this->flexi_cart_model->get_tipo_slug_coleccion($id_col), $id_col, true);
                 return;
             }
         }
