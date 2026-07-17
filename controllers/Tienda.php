@@ -2017,9 +2017,9 @@ class Tienda extends CI_Controller {
         }
         else{
             if ($tipo_producto!=-1)
-                $this->data['texto_h1_seccion']='Listado de Marcas de '.$categ; 
+                $this->data['texto_h1_seccion']='Listado de Marcas de '.$categ;
             else
-                $this->data['texto_h1_seccion']='Todas las Marcas'; 
+                $this->data['texto_h1_seccion']='Listado de Marcas';
 
             $this->load->view('frontend/header', $this->data);
             //$this->load->view('frontend/migas_nuevas_small', $this->data);

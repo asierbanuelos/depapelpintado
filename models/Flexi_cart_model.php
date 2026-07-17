@@ -5990,7 +5990,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
       if($cats=="")$result=$this->db/*->select("cat_name AS n, cat_id AS i,",FALSE)*/->from('demo_categories')->where($whereclause)->where(array('activo'=>1,'publico'=>1))->order_by('cat_name',$order)->get()->result();
       else if($cats=='all') $result=$this->db/*->select("cat_name AS n, cat_id AS i,",FALSE)*/->from('demo_categories')->where(array('activo'=>1,'publico'=>1))->where('cats IS NOT NULL')->order_by('cat_name',$order)->get()->result();
       else if($cats=='papeles_murales_revestimientos') {
-        $result=$this->db/*->select("cat_name AS n, cat_id AS i,",FALSE)*/->select('demo_categories.*', FALSE)
+        $result=$this->db/*->select("cat_name AS n, cat_id AS i,",FALSE)*/->select('demo_categories.*, COUNT(demo_items.item_id) AS n_productos', FALSE)
           ->from('demo_categories')
           ->join('demo_items', 'demo_items.item_cat_fk = demo_categories.cat_id')
           ->where_in('demo_items.item_tipo', array(0, 1, 2))
