@@ -46,7 +46,7 @@ elseif(isset($losmas) && $losmas==1){
 </div>
 
 <!-- Bloque blanco: filtros + catálogo -->
-<div class="categ-wrapper">
+<div class="categ-wrapper filtros-ocultos">
   <div class="container">
     <div class="row">
 

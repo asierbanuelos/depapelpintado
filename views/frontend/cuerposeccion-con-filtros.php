@@ -41,7 +41,7 @@ if (isset($col_text_publico))
   </div>
 </div>
 
-<div class="categ-wrapper">
+<div class="categ-wrapper filtros-ocultos">
   <div class="container categ-header">
     <h1 class="categ-h1"><?php echo strip_tags($texto_h1); ?></h1>
   </div>
