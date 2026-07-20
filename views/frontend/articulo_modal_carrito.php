@@ -56,7 +56,7 @@ if (trim($img_modal)!=''){
             <img id='imagen-modal' src="<?php echo $img_modal_th;?>" data-full-size-image-url="<?php echo $img_modal_full_size;?>" title="<?php echo $title_modal_th; ?>" alt="<?php echo $alt_modal_th; ?>" loading="lazy" class="product-image">
           </div>
           <div class="col-sm-7 col-xs-12">
-            <h3 class="h6 product-name" id='nombre-prod-modal'><?php echo $nom_prod_modal; ?></h3>
+            <div class="h6 product-name" id='nombre-prod-modal'><?php echo $nom_prod_modal; ?></div>
             <p class="product-price"><span id='precio-unitario-modal'></span> €</p>
             <span class="product-quantity">Cantidad: <strong><span id='cantidad-modal'></span></strong></span>
           </div>
