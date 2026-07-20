@@ -5483,6 +5483,46 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		}
 	}
 
+	// Convierte una lista de IDs en una condicion SQL equivalente pero mucho mas corta,
+	// agrupando tramos consecutivos en BETWEEN (los productos de una misma coleccion suelen
+	// tener IDs correlativos). Mismo resultado exacto que "columna IN (id1,id2,...)", solo
+	// que en vez de miles de numeros sueltos genera unos pocos rangos.
+	private function ids_to_sql_condition($column, $ids){
+		$ids = array_values(array_unique(array_map('intval', $ids)));
+		if (empty($ids))
+			return $column.' IN (0)';
+		sort($ids, SORT_NUMERIC);
+
+		$ranges = array();
+		$singles = array();
+		$start = $ids[0];
+		$prev = $ids[0];
+		$n = count($ids);
+		for ($i = 1; $i < $n; $i++){
+			$id = $ids[$i];
+			if ($id == $prev + 1){
+				$prev = $id;
+				continue;
+			}
+			if ($prev - $start >= 2)
+				$ranges[] = array($start, $prev);
+			else
+				for ($j = $start; $j <= $prev; $j++) $singles[] = $j;
+			$start = $id;
+			$prev = $id;
+		}
+		if ($prev - $start >= 2)
+			$ranges[] = array($start, $prev);
+		else
+			for ($j = $start; $j <= $prev; $j++) $singles[] = $j;
+
+		$parts = array();
+		foreach ($ranges as $r) $parts[] = $column.' BETWEEN '.$r[0].' AND '.$r[1];
+		if (count($singles)) $parts[] = $column.' IN ('.implode(',', $singles).')';
+
+		return '('.implode(' OR ', $parts).')';
+	}
+
 	function get_items_filtros_nuevo_listado($tipo_producto,$a_ids,$page=-1, $order='', $cat_seo_ambiente=0){
 		// Caché de 5 minutos para evitar queries con miles de IDs en cada petición
 		$cache_key = 'items_' . md5(serialize(array(
@@ -5516,8 +5556,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		$a_where=array();
 		$a_join=array();
 		$a_join[]=' LEFT JOIN item_stock ON demo_items.item_id=item_stock.stock_item_fk ';
-		$a_where[]=' demo_items.item_id IN ('.implode(',', $a_ids).') ';
-		
+		$a_where[]=' '.$this->ids_to_sql_condition('demo_items.item_id', $a_ids).' ';
+
 		if ($tipo_producto>=0){
 			if ($tipo_producto==0){
 				$a_where[]=" demo_items.item_tipo=0 ";
@@ -5676,13 +5716,13 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		}
 		// Add tonalidades (color swatches)
 		if (!empty($a_item_idak)) {
-			$ids_str = implode(',', $a_item_idak);
+			$ids_cond = $this->ids_to_sql_condition('gi.gama_item_item', $a_item_idak);
 			$ton_rows = $this->db->query("
 				SELECT gi.gama_item_item AS item_id,
 					GROUP_CONCAT(DISTINCT g.idtonalidad ORDER BY g.idtonalidad SEPARATOR ',') AS tonalidades
 				FROM demo_gama_item gi
 				LEFT JOIN demo_gama g ON g.gama_id = gi.gama_item_gama AND g.idtonalidad > 0
-				WHERE gi.gama_item_item IN ($ids_str)
+				WHERE $ids_cond
 				GROUP BY gi.gama_item_item
 			")->result_array();
 			$a_ton = array();
@@ -5726,7 +5766,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		$a_where=array();
 		$a_join=array();
 		$a_join[]=' LEFT JOIN item_stock ON demo_items.item_id=item_stock.stock_item_fk ';
-		$a_where[]=' demo_items.item_id IN ('.implode(',', $a_ids).') ';
+		$a_where[]=' '.$this->ids_to_sql_condition('demo_items.item_id', $a_ids).' ';
 		if ($tipo_producto>=0){
 			if ($tipo_producto==0)
 				$a_where[]=" demo_items.item_tipo=0 ";
