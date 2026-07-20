@@ -51,6 +51,9 @@ if (!empty($il_slider) || !empty($il_chips_v)):
 .catalogo-interlinks .il-slider { display:flex; gap:16px; overflow-x:auto; scroll-behavior:smooth; padding:4px 2px 14px; scrollbar-width:thin; }
 .catalogo-interlinks .il-slider::-webkit-scrollbar { height:6px; }
 .catalogo-interlinks .il-slider::-webkit-scrollbar-thumb { background:#ddd4ce; border-radius:10px; }
+.catalogo-interlinks .il-slider.il-centered { justify-content:center; }
+.catalogo-interlinks .il-slider.il-centered::-webkit-scrollbar { display:none; }
+.catalogo-interlinks .il-slider.il-centered { scrollbar-width:none; }
 .catalogo-interlinks .il-card { flex:0 0 185px; text-decoration:none; color:inherit; transition:transform .2s; }
 .catalogo-interlinks .il-card:hover { transform:translateY(-3px); }
 .catalogo-interlinks .il-thumb { aspect-ratio:1/1; border:1px solid #ece6e2; border-radius:2px; overflow:hidden; background:#f6f1ee; box-shadow:0 10px 26px -18px rgba(46,42,44,.3); }
@@ -58,7 +61,7 @@ if (!empty($il_slider) || !empty($il_chips_v)):
 .catalogo-interlinks .il-card:hover .il-thumb img { transform:scale(1.06); }
 .catalogo-interlinks .il-cap { font-family:'MoonCreme',Georgia,serif; font-size:16px; text-align:center; margin-top:11px; color:#2e2a2c; transition:color .2s; }
 .catalogo-interlinks .il-card:hover .il-cap { color:#9c637f; }
-.catalogo-interlinks .il-nav { position:absolute; top:calc(50% - 26px); transform:translateY(-50%); width:40px; height:40px; border-radius:50%; background:#fff; border:1px solid #ddd4ce; color:#2e2a2c; font-size:20px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px -6px rgba(0,0,0,.3); z-index:2; }
+.catalogo-interlinks .il-nav { position:absolute; top:calc(50% - 26px); transform:translateY(-50%); width:40px; height:40px; border-radius:50%; background:#fff; border:1px solid #ddd4ce; color:#2e2a2c; font-size:20px; line-height:1; cursor:pointer; display:none; align-items:center; justify-content:center; box-shadow:0 4px 14px -6px rgba(0,0,0,.3); z-index:2; }
 .catalogo-interlinks .il-nav.prev { left:-8px; } .catalogo-interlinks .il-nav.next { right:-8px; }
 .catalogo-interlinks .il-nav:hover { background:#2e2a2c; color:#fff; border-color:#2e2a2c; }
 .catalogo-interlinks .il-chips-block { margin-top:30px; }
@@ -69,6 +72,21 @@ if (!empty($il_slider) || !empty($il_chips_v)):
 @media (max-width:575px){ .catalogo-interlinks { padding:32px 0 40px; } .catalogo-interlinks .il-card { flex-basis:150px; } }
 </style>
 <script>
+(function(){
+  function ilInit(){
+    var wraps = document.querySelectorAll('.catalogo-interlinks .il-slider-wrap');
+    for (var i=0;i<wraps.length;i++){
+      var s = wraps[i].querySelector('.il-slider'); if(!s) continue;
+      var overflow = s.scrollWidth > s.clientWidth + 4;
+      var navs = wraps[i].querySelectorAll('.il-nav');
+      for (var j=0;j<navs.length;j++) navs[j].style.display = overflow ? 'flex' : 'none';
+      s.classList.toggle('il-centered', !overflow);
+    }
+  }
+  ilInit();
+  window.addEventListener('load', ilInit);
+  window.addEventListener('resize', ilInit);
+})();
 function ilSlide(b,d){ var s=b.parentElement.querySelector('.il-slider'); if(s) s.scrollBy({left:d*(185+16)*2,behavior:'smooth'}); }
 </script>
 <?php endif; ?>
