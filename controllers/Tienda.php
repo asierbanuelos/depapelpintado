@@ -355,10 +355,14 @@ class Tienda extends CI_Controller {
 
     function isLog() {
         if ($this->session->userdata('email') && $this->session->userdata('logged_in')) {
-            $user = $this->db->where('email', $this->session->userdata('email'))->get('users')->row();
-            if ($user) return $user;
+            $query = $this->db->where('email', $this->session->userdata('email'))->get('users');
+            if ($query) {
+                $user = $query->row();
+                if ($user) return $user;
+            }
         }
-        return $this->db->where('user_id', 1)->get('users')->row();
+        $query = $this->db->where('user_id', 1)->get('users');
+        return $query ? $query->row() : null;
     }
 
     function logout() {
