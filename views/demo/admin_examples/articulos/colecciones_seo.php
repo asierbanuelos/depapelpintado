@@ -17,7 +17,9 @@
     <div class="container" style="background-color:#eee;padding: 10px;border-radius: 10px;">
       <div style="height: 20px"></div>
       <div style="font-size:30px;font-weight: 300;color: #B05380;text-align:center;border-bottom: 1px solid #B05380;">Info SEO<br /><span class='icatname'></span> - <span class='iname'></span></div>
-      <div style="height: 20px"></div>
+      <div style="height: 12px"></div>
+      <div style="text-align:center;margin-bottom:16px;"><a href="/admin_library/tipos_producto_seo" style="display:inline-block;background:#B05380;color:#fff;text-decoration:none;padding:8px 20px;border-radius:4px;">Editar textos SEO de las categorías (papel pintado, murales…)</a></div>
+      <div style="height: 8px"></div>
       <?=form_open('admin_library/update_col_seo');?>
         <div style="display:none"><?= form_input('col','','class="iid"') ?></div>
 

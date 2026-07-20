@@ -1489,6 +1489,7 @@ class Demo_cart_admin_model extends CI_Model {
 			if(isset($data['xml_META_be']))
 				$xml_META_be=$data['xml_META_be'];
       $fabarray=array(
+      	'col_intro'=>isset($data['col_intro'])?$data['col_intro']:'',
       	'col_text'=>$data['col_text'],
       	'col_text_publico'=>$col_text_publico,
       	'greca_misma_coleccion_be'=>$greca_misma_coleccion_be,

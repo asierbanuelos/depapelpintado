@@ -909,6 +909,36 @@ class Admin_library extends CI_Controller {
 
       redirect('admin_library/colecciones_seo');
     }
+
+    // === Editor de textos SEO de COLECCION (intro corta + descripcion + metas) ===
+    function editar_coleccion_seo($id=0){
+      $coleccion = $this->db->where('coleccion_id',(int)$id)->get('demo_coleccion')->row();
+      if (!$coleccion){ show_404(); return; }
+      $this->data['coleccion'] = $coleccion;
+      $this->load->view('demo/admin_examples/articulos/coleccion_editar_seo', $this->data);
+    }
+    function update_coleccion_seo(){
+      $this->load->model('demo_cart_admin_model');
+      $this->demo_cart_admin_model->demo_update_col_seo();
+      redirect('admin_library/colecciones_seo');
+    }
+
+    // === Editor de textos SEO de CATEGORIA (tipo_producto) ===
+    function tipos_producto_seo(){
+      $this->data['tipos'] = $this->db->order_by('tipo_producto_id','ASC')->get('tipo_producto')->result();
+      $this->load->view('demo/admin_examples/articulos/tipos_producto_seo_listado', $this->data);
+    }
+    function editar_tipo_producto_seo($id=0){
+      $tipo = $this->db->where('tipo_producto_id',(int)$id)->get('tipo_producto')->row();
+      if (!$tipo){ show_404(); return; }
+      $this->data['tipo_producto'] = $tipo;
+      $this->load->view('demo/admin_examples/articulos/tipo_producto_editar_seo', $this->data);
+    }
+    function update_tipo_producto_seo(){
+      $this->load->model('demo_cart_admin_model');
+      $this->demo_cart_admin_model->demo_save_tipo_producto_seo();
+      redirect('admin_library/tipos_producto_seo');
+    }
     function publicar_texto_coleccion($id, $estado_anterior){
       //$this->db->cache_delete_all();
       $this->load->model('demo_cart_admin_model');
