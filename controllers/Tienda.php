@@ -1965,7 +1965,7 @@ class Tienda extends CI_Controller {
         }
         else{
             $this->data['url_marca'] = $categoria_principal.'/marcas/marca';
-            $this->data['fab'] = $this->flexi_cart_model->get_categories('papeles_murales_revestimientos');
+            $this->data['fab'] = $this->flexi_cart_model->get_categories('todas_familias_con_productos');
         }
         
         //$this->data['a_migas']['marcas-'.$url_categoria_principal]='Marcas';

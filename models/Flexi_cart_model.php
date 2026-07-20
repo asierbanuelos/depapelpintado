@@ -6026,6 +6026,23 @@ class Flexi_cart_model extends Flexi_cart_lite_model
           ->order_by('demo_categories.cat_name',$order)
           ->get()->result();
       }
+      else if($cats=='todas_familias_con_productos') {
+        // Igual que 'papeles_murales_revestimientos' pero incluyendo tambien Telas (3) y Alfombras (4).
+        // Se excluye Herramientas (5), que no es una familia de "marcas" como tal.
+        $result=$this->db->select('demo_categories.*, COUNT(demo_items.item_id) AS n_productos', FALSE)
+          ->from('demo_categories')
+          ->join('demo_items', 'demo_items.item_cat_fk = demo_categories.cat_id')
+          ->where_in('demo_items.item_tipo', array(0, 1, 2, 3, 4))
+          ->where(array(
+            'demo_categories.activo'=>1,
+            'demo_categories.publico'=>1,
+            'demo_items.activo'=>1,
+            'demo_items.publico3'=>1,
+          ))
+          ->group_by('demo_categories.cat_id')
+          ->order_by('demo_categories.cat_name',$order)
+          ->get()->result();
+      }
       else $result= $this->db/*->select("cat_name AS n, cat_id AS i,",FALSE)*/->from('demo_categories')->like('cats',$cats,'both')->where(array('activo'=>1,'publico'=>1))->order_by('cat_name',$order)->get()->result();
       //$this->db->cache_off();
       return $result; 
