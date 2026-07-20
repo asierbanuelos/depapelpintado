@@ -1388,18 +1388,29 @@ class Tienda extends CI_Controller {
         $this->data['ocultar_submenu']=true;
         $this->data['mostrar_estilos_viejos']=true;
 
-        // Interlinks (Fase 2 SEO): marcas de la categoria + otras categorias
-        $this->data['interlinks'] = array();
-        $this->data['interlinks'][] = array('titulo'=>'Marcas', 'enlaces'=>array(
-            array('url'=>'/marcas', 'texto'=>'Todas las marcas de '.$categ),
-        ));
+        // Interlinks (Fase 2 SEO): titulo por keyword + chips (marcas destacadas + otras categorias)
+        $familia_kw_il = mb_strtolower($categ);
+        $this->data['interlinks_titulo'] = 'Explora más <span class="il-kw">'.htmlspecialchars($familia_kw_il).'</span>';
+        $this->data['interlinks_sub'] = 'Marcas y categorías relacionadas';
+        $this->data['interlinks_slider'] = array();
+        // Marcas destacadas (top por nº de productos)
+        $marcas_top_il = $this->flexi_cart_model->get_categories('papeles_murales_revestimientos');
+        usort($marcas_top_il, function($a,$b){ return (isset($b->n_productos)?(int)$b->n_productos:0) - (isset($a->n_productos)?(int)$a->n_productos:0); });
+        $enl_marcas_il = array();
+        foreach (array_slice($marcas_top_il, 0, 6) as $mk_il) {
+            $enl_marcas_il[] = array('url'=>'/marcas/'.$this->urlenc_aux($mk_il->cat_name), 'texto'=>$mk_il->cat_name);
+        }
+        $enl_marcas_il[] = array('url'=>'/marcas', 'texto'=>'Todas las marcas →');
         $cats_il = array('papel-pintado'=>'Papel Pintado','murales'=>'Murales','revestimientos'=>'Revestimientos','telas'=>'Telas','alfombras'=>'Alfombras');
         $enlaces_cats_il = array();
         foreach ($cats_il as $slug_il=>$nombre_il) {
             if ($slug_il==$slug_canonico) continue;
             $enlaces_cats_il[] = array('url'=>'/'.$slug_il, 'texto'=>$nombre_il);
         }
-        $this->data['interlinks'][] = array('titulo'=>'Otras categorías', 'enlaces'=>$enlaces_cats_il);
+        $this->data['interlinks_chips'] = array(
+            array('label'=>'Marcas de '.$familia_kw_il, 'enlaces'=>$enl_marcas_il),
+            array('label'=>'Otras categorías', 'enlaces'=>$enlaces_cats_il),
+        );
 
         //$this->data['categoria_principal'] = 'tienda/papel_pintado';
         if ($this->data['categ']==5){
@@ -1670,20 +1681,27 @@ class Tienda extends CI_Controller {
             $this->data['includes_footer'][]='<script src="/includes/js/listado-productos.min.js?v=2"></script>';            
             unset($this->data['images']);
 
-            // Interlinks (Fase 2 SEO): otras colecciones de la marca + explora
-            $this->data['interlinks'] = array();
-            $enlaces_cols_il = array();
+            // Interlinks (Fase 2 SEO): slider de otras colecciones de la marca + chips, titulo por keyword
+            $familia_kw_il = (isset($categ) && trim($categ)!='') ? mb_strtolower($categ) : 'colecciones';
+            $this->data['interlinks_titulo'] = 'Más colecciones de <span class="il-kw">'.htmlspecialchars($familia_kw_il.' de '.$marca->cat_name).'</span>';
+            $this->data['interlinks_sub'] = 'Descubre otros catálogos de la marca';
+            $slider_il = array();
             foreach ($this->flexi_cart_model->get_col($marca->cat_id, -1) as $oc_il) {
-                if ($oc_il['coleccion_id']==$idcoleccion || trim($oc_il['coleccion_name'])=='' || $oc_il['ccats']=='null') continue;
-                $enlaces_cols_il[] = array('url'=>'/marcas/'.$this->urlenc_aux($marca->cat_name).'/'.$this->urlenc_aux($oc_il['coleccion_name']), 'texto'=>$oc_il['coleccion_name']);
-                if (count($enlaces_cols_il)>=12) break;
+                if ($oc_il['coleccion_id']==$idcoleccion || trim($oc_il['coleccion_name'])=='' || $oc_il['ccats']=='null' || trim($oc_il['col_img'])=='') continue;
+                $slider_il[] = array(
+                    'url'=>'/marcas/'.$this->urlenc_aux($marca->cat_name).'/'.$this->urlenc_aux($oc_il['coleccion_name']),
+                    'nombre'=>$oc_il['coleccion_name'],
+                    'img'=>'/includes/'.str_replace('../','',$oc_il['col_img']).'th.jpg',
+                );
+                if (count($slider_il)>=14) break;
             }
-            if (!empty($enlaces_cols_il))
-                $this->data['interlinks'][] = array('titulo'=>'Más colecciones de '.$marca->cat_name, 'enlaces'=>$enlaces_cols_il);
-            $this->data['interlinks'][] = array('titulo'=>'Explora', 'enlaces'=>array(
-                array('url'=>'/marcas/'.$this->urlenc_aux($marca->cat_name), 'texto'=>'Todas las colecciones de '.$marca->cat_name),
-                array('url'=>'/marcas', 'texto'=>'Todas las marcas'),
-            ));
+            $this->data['interlinks_slider'] = $slider_il;
+            $this->data['interlinks_chips'] = array(
+                array('label'=>'Explora', 'enlaces'=>array(
+                    array('url'=>'/marcas/'.$this->urlenc_aux($marca->cat_name), 'texto'=>'Ver todo '.$marca->cat_name),
+                    array('url'=>'/marcas', 'texto'=>'Todas las marcas'),
+                )),
+            );
 
             if ($categoria_principal=='todos'){
                         $this->load->view('frontend/header', $this->data);
