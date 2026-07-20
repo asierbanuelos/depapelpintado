@@ -1656,6 +1656,20 @@ class Tienda extends CI_Controller {
             $this->data['includes_footer'][]='<script src="/includes/js/listado-productos.min.js?v=2"></script>';            
             unset($this->data['images']);
 
+            // Interlinks (Fase 2 SEO): otras colecciones de la marca + explora
+            $this->data['interlinks'] = array();
+            $enlaces_cols_il = array();
+            foreach ($this->flexi_cart_model->get_col($marca->cat_id, -1) as $oc_il) {
+                if ($oc_il['coleccion_id']==$idcoleccion || trim($oc_il['coleccion_name'])=='' || $oc_il['ccats']=='null') continue;
+                $enlaces_cols_il[] = array('url'=>'/marcas/'.$this->urlenc_aux($marca->cat_name).'/'.$this->urlenc_aux($oc_il['coleccion_name']), 'texto'=>$oc_il['coleccion_name']);
+                if (count($enlaces_cols_il)>=12) break;
+            }
+            if (!empty($enlaces_cols_il))
+                $this->data['interlinks'][] = array('titulo'=>'Más colecciones de '.$marca->cat_name, 'enlaces'=>$enlaces_cols_il);
+            $this->data['interlinks'][] = array('titulo'=>'Explora', 'enlaces'=>array(
+                array('url'=>'/marcas/'.$this->urlenc_aux($marca->cat_name), 'texto'=>'Todas las colecciones de '.$marca->cat_name),
+                array('url'=>'/marcas', 'texto'=>'Todas las marcas'),
+            ));
 
             if ($categoria_principal=='todos'){
                         $this->load->view('frontend/header', $this->data);

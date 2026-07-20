@@ -214,6 +214,8 @@ function toggleCategoriaDesc() {
 </script>
 <?php endif; ?>
 
+<?php $this->load->view('frontend/catalogo_interlinks', $this->data); ?>
+
 <?php // newsletter_banner_footer se carga en footer.php ?>
 
 <?php
