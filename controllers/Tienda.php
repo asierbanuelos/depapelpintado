@@ -1142,7 +1142,8 @@ class Tienda extends CI_Controller {
         $this->data['mostrar_categorias_seo']=true;
         $this->data['idcoleccion'] = 0;
         //$this->data['enlace_marcas']='marcas-'.$categoria_principal;
-        $this->data['enlace_marcas']='tienda/'.$categoria_principal.'/marcas';
+        // El enlace "Marcas de {categoria}" de la pagina de categoria va al listado general /marcas
+        $this->data['enlace_marcas']='marcas';
         $this->data['enlace_estilos']='estilos-'.$categoria_principal;
         $categ = "";
         // Fase 2 SEO: el canonical debe apuntar a la URL amigable, no a /tienda/...
@@ -1158,7 +1159,7 @@ class Tienda extends CI_Controller {
             case 'papel-pintado': 
                 $categ = "Papel Pintado";
                 $categoria_principal='tienda/papel_pintado';
-                $this->data['enlace_marcas']=$categoria_principal.'/marcas';
+                $this->data['enlace_marcas']='marcas';
                 $this->data['categ']=0;
                 $this->data['meta_title']='Papel pintado para Pared - Amplio Catálogo'; 
                 $this->data['meta_description']='Elige el Papel Pintado que mejor se adapte a tu ambiente. En nuestro amplio catálogo con las últimas novedades y más de 1000 muestrarios encontrarás lo que buscas. ¡Visítanos!'; 
