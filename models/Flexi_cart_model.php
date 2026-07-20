@@ -5460,6 +5460,29 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		return $filtros;
 	}
 
+	// Evita que varias peticiones simultaneas con la misma cache vacia (estampida) ejecuten a la vez
+	// la misma query pesada: solo una la calcula, el resto espera y lee la cache recien escrita.
+	private function acquire_cache_lock($cache_file){
+		$lock_fp = @fopen($cache_file . '.lock', 'c');
+		if (!$lock_fp) return false;
+		$waited = 0;
+		while (!flock($lock_fp, LOCK_EX | LOCK_NB)){
+			usleep(100000); // 0.1s
+			$waited += 0.1;
+			if ($waited >= 8){ // no bloquear la peticion mas de 8s: seguimos sin lock antes que colgarla
+				fclose($lock_fp);
+				return false;
+			}
+		}
+		return $lock_fp;
+	}
+	private function release_cache_lock($lock_fp){
+		if ($lock_fp){
+			flock($lock_fp, LOCK_UN);
+			fclose($lock_fp);
+		}
+	}
+
 	function get_items_filtros_nuevo_listado($tipo_producto,$a_ids,$page=-1, $order='', $cat_seo_ambiente=0){
 		// Caché de 5 minutos para evitar queries con miles de IDs en cada petición
 		$cache_key = 'items_' . md5(serialize(array(
@@ -5475,6 +5498,15 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		if (file_exists($cache_file) && (time() - filemtime($cache_file)) < 300) {
 			$cached = @unserialize(@file_get_contents($cache_file));
 			if ($cached !== false) return $cached;
+		}
+
+		$lock_fp = $this->acquire_cache_lock($cache_file);
+		if ($lock_fp && file_exists($cache_file) && (time() - filemtime($cache_file)) < 300) {
+			$cached = @unserialize(@file_get_contents($cache_file));
+			if ($cached !== false) {
+				$this->release_cache_lock($lock_fp);
+				return $cached;
+			}
 		}
 
 		// recibimos todos los ids de la categoría por un filtrado previo
@@ -5661,10 +5693,35 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		}
 		@file_put_contents($cache_file . '.tmp', serialize($result));
 		@rename($cache_file . '.tmp', $cache_file);
+		$this->release_cache_lock($lock_fp);
 		return $result;
 	}
 
 	function count_items_filtros_nuevo_listado($tipo_producto, $a_ids, $cat_seo_ambiente=0){
+		// Caché de 5 minutos, igual que get_items_filtros_nuevo_listado: evita recalcular con miles de IDs en cada peticion
+		$cache_key = 'countitems_' . md5(serialize(array(
+			$tipo_producto, count($a_ids), $cat_seo_ambiente,
+			isset($_REQUEST['calidad'])      ? $_REQUEST['calidad']      : '',
+			isset($_REQUEST['marca'])        ? $_REQUEST['marca']        : '',
+			isset($_REQUEST['estilo'])       ? $_REQUEST['estilo']       : '',
+			isset($_REQUEST['color'])        ? $_REQUEST['color']        : '',
+			isset($_REQUEST['id_coleccion']) ? $_REQUEST['id_coleccion'] : '',
+		)));
+		$cache_file = APPPATH . 'cache/' . $cache_key . '.cache';
+		if (file_exists($cache_file) && (time() - filemtime($cache_file)) < 300) {
+			$cached = @unserialize(@file_get_contents($cache_file));
+			if ($cached !== false) return $cached;
+		}
+
+		$lock_fp = $this->acquire_cache_lock($cache_file);
+		if ($lock_fp && file_exists($cache_file) && (time() - filemtime($cache_file)) < 300) {
+			$cached = @unserialize(@file_get_contents($cache_file));
+			if ($cached !== false) {
+				$this->release_cache_lock($lock_fp);
+				return $cached;
+			}
+		}
+
 		if (count($a_ids)==0) $a_ids[]=0;
 		$a_where=array();
 		$a_join=array();
@@ -5705,7 +5762,12 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		$join_txt=implode(' ', $a_join);
 		$query=$this->db->query("SELECT COUNT(DISTINCT IF(demo_items.item_model_id>0, demo_items.item_model_id, demo_items.item_id)) as total FROM demo_items $join_txt WHERE $where_txt");
 		$row=$query->row();
-		return (int)$row->total;
+		$total=(int)$row->total;
+
+		@file_put_contents($cache_file . '.tmp', serialize($total));
+		@rename($cache_file . '.tmp', $cache_file);
+		$this->release_cache_lock($lock_fp);
+		return $total;
 	}
 
     function get_fab($fab=null){
