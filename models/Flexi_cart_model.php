@@ -5014,6 +5014,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			$a_where[]=' demo_items.item_economico=1 ';
 		
 		$where_txt=implode(' AND ', $a_where);
+		$where_base_txt=$where_txt; // Condiciones base, reutilizables sin volver a serializar miles de IDs
 		$query=$this->db->query("SELECT item_id FROM demo_items WHERE ".$where_txt);
 		//echo "<br />".$this->db->last_query();
 		$result=$query->result_array();
@@ -5048,11 +5049,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 						$a_vinilo_be[]=0;
 				}
 				
-				$a_where=array();
-				$a_where[]=' item_id IN ('.implode(',', $a_item_idak).') ';
-				$a_where[]=' item_vinilo IN ('.implode(',',$a_vinilo_be).') ';
-				$where_txt=implode(' AND ', $a_where);
-				
+				$where_txt=$where_base_txt.' AND item_vinilo IN ('.implode(',',$a_vinilo_be).') ';
+
 				$query=$this->db->query("SELECT item_id FROM demo_items WHERE ".$where_txt);
 				//echo "<br />".$this->db->last_query();
 				$result=$query->result_array();
@@ -5080,11 +5078,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				}
 
 				
-				$a_where=array();
-				$a_where[]=' item_id IN ('.implode(',', $a_item_idak).') ';
-				$a_where[]=' item_lavable IN ('.implode(',',$a_limpieza_val).') ';
-				$where_txt=implode(' AND ', $a_where);
-				
+				$where_txt=$where_base_txt.' AND item_lavable IN ('.implode(',',$a_limpieza_val).') ';
+
 				$query=$this->db->query("SELECT item_id FROM demo_items WHERE ".$where_txt);
 				//echo "<br />".$this->db->last_query();
 				$result=$query->result_array();
@@ -5109,11 +5104,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				$temp->where_in('demo_items.item_cat_fk',$a_marcas);
 				$result=$temp->get()->result_array();
 				*/
-				$a_where=array();
-				$a_where[]=' item_id IN ('.implode(',', $a_item_idak).') ';
-				$a_where[]=' item_cat_fk IN ('.$_REQUEST['marca'].') ';
-				$where_txt=implode(' AND ', $a_where);
-				
+				$where_txt=$where_base_txt.' AND item_cat_fk IN ('.$_REQUEST['marca'].') ';
+
 				$query=$this->db->query("SELECT item_id FROM demo_items WHERE ".$where_txt);
 				//echo "<br />".$this->db->last_query();
 				$result=$query->result_array();
@@ -5137,12 +5129,9 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				$temp->where_in('estilo_item_estilo',$a_estilos);
 				$result=$temp->get()->result_array();
 				*/
-				$a_where=array();
-				$a_where[]=' estilo_item_item IN ('.implode(',', $a_item_idak).') ';
-				$a_where[]=' estilo_item_estilo IN ('.$_REQUEST['estilo'].') ';
-				$where_txt=implode(' AND ', $a_where);
-				
-				$query=$this->db->query("SELECT estilo_item_item FROM demo_estilo_item WHERE ".$where_txt);
+				$where_txt=$where_base_txt.' AND estilo_item_estilo IN ('.$_REQUEST['estilo'].') ';
+
+				$query=$this->db->query("SELECT estilo_item_item FROM demo_estilo_item JOIN demo_items ON demo_items.item_id = estilo_item_item WHERE ".$where_txt);
 				//echo "<br />".$this->db->last_query();
 				$result=$query->result_array();
 				foreach ($result as $i=>$ezaugarriak){
@@ -5164,12 +5153,9 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				$temp->where_in('gama_item_gama',$a_colores);
 				$result=$temp->get()->result_array();
 				*/
-				$a_where=array();
-				$a_where[]=' gama_item_item IN ('.implode(',', $a_item_idak).') ';
-				$a_where[]=' gama_item_gama IN ('.$_REQUEST['color'].') ';
-				$where_txt=implode(' AND ', $a_where);
-				
-				$query=$this->db->query("SELECT gama_item_item FROM demo_gama_item WHERE ".$where_txt);
+				$where_txt=$where_base_txt.' AND gama_item_gama IN ('.$_REQUEST['color'].') ';
+
+				$query=$this->db->query("SELECT gama_item_item FROM demo_gama_item JOIN demo_items ON demo_items.item_id = gama_item_item WHERE ".$where_txt);
 				//echo "<br />".$this->db->last_query();
 				$result=$query->result_array();
 				foreach ($result as $i=>$ezaugarriak){
