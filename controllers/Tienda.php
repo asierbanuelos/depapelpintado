@@ -1387,6 +1387,20 @@ class Tienda extends CI_Controller {
 
         $this->data['ocultar_submenu']=true;
         $this->data['mostrar_estilos_viejos']=true;
+
+        // Interlinks (Fase 2 SEO): marcas de la categoria + otras categorias
+        $this->data['interlinks'] = array();
+        $this->data['interlinks'][] = array('titulo'=>'Marcas', 'enlaces'=>array(
+            array('url'=>'/marcas', 'texto'=>'Todas las marcas de '.$categ),
+        ));
+        $cats_il = array('papel-pintado'=>'Papel Pintado','murales'=>'Murales','revestimientos'=>'Revestimientos','telas'=>'Telas','alfombras'=>'Alfombras');
+        $enlaces_cats_il = array();
+        foreach ($cats_il as $slug_il=>$nombre_il) {
+            if ($slug_il==$slug_canonico) continue;
+            $enlaces_cats_il[] = array('url'=>'/'.$slug_il, 'texto'=>$nombre_il);
+        }
+        $this->data['interlinks'][] = array('titulo'=>'Otras categorías', 'enlaces'=>$enlaces_cats_il);
+
         //$this->data['categoria_principal'] = 'tienda/papel_pintado';
         if ($this->data['categ']==5){
             $this->load->view('frontend/migas_nuevas_small', $this->data);
