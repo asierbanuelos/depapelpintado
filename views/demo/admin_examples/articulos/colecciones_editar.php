@@ -52,6 +52,9 @@
         <legend style='padding:0 5px;'> Web depapelpintado.es </legend>
         <div style="display:none"><?= form_input('coleccion_id',(int)$coleccion->coleccion_id,'') ?></div>
         <div style="display:none"><?= form_input('volver_ekam',(int)$volver_ekam,'') ?></div>
+        <div class="sec row">Intro corta (1-2 frases, se muestra bajo el título del catálogo):</div>
+        <div class="sec row"><textarea id="col_intro" name="col_intro" maxlength="500" style="height:60px" placeholder="Ej. Descubre la colección X de MARCA: papel pintado de estilo… (1-2 frases)"><?php echo isset($coleccion->col_intro) ? $coleccion->col_intro : ''; ?></textarea></div>
+        <br />
         <div class="sec row">Descripción (al menos 900 palabras):</div>
         <div class="sec row"><textarea id="col_text" name="col_text"><?php echo $coleccion->col_text; ?></textarea></div>
         <br />

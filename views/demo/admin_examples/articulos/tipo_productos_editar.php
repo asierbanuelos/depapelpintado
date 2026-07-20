@@ -50,6 +50,9 @@
       <fieldset style='width:100%;'>
         <legend style='padding:0 5px;'> Web depapelpintado.es </legend>
         <div style="display:none"><?= form_input('tipo_producto_id',(int)$tipo_producto->tipo_producto_id,'') ?></div>
+        <div class="sec row">Intro corta (1-2 frases, se muestra bajo el título del catálogo):</div>
+        <div class="sec row"><textarea id="intro_tipo_producto" name="intro_tipo_producto" maxlength="500" style="height:60px" placeholder="Ej. Encuentra el papel pintado ideal para tu pared: más de 1000 muestrarios… (1-2 frases)"><?php echo isset($tipo_producto->intro_tipo_producto) ? $tipo_producto->intro_tipo_producto : ''; ?></textarea></div>
+        <br />
         <div class="sec row">Descripción (al menos 900 palabras):</div>
         <div class="sec row"><textarea id="descripcion_tipo_producto" name="descripcion_tipo_producto"><?php echo $tipo_producto->descripcion_tipo_producto; ?></textarea></div>
         <br />

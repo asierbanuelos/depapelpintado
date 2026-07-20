@@ -1263,11 +1263,14 @@ class Tienda extends CI_Controller {
             default: break;
         }
 
+        $this->data['catalogo_intro']='';
         $tipo_producto_seo= $this->flexi_cart_model->get_tipo_producto_seo($this->data['categ']);
         if (isset($tipo_producto_seo[0])){
+            if (isset($tipo_producto_seo[0]->intro_tipo_producto))
+                $this->data['catalogo_intro']=$tipo_producto_seo[0]->intro_tipo_producto;
             if (trim($tipo_producto_seo[0]->descripcion_tipo_producto)!='')
                 $this->data['texto__intro_seo']=$tipo_producto_seo[0]->descripcion_tipo_producto;
-            
+
             if (trim($tipo_producto_seo[0]->meta_title_tipo_producto)!='')
                 $this->data['meta_title']=$tipo_producto_seo[0]->meta_title_tipo_producto;
             
@@ -1457,6 +1460,7 @@ class Tienda extends CI_Controller {
         $coleccion = $this->flexi_cart_model->get_coleccion($idcoleccion);
         if (isset($coleccion[0])){
             $marca = $this->flexi_cart_model->get_fab($coleccion[0]->coleccion_cat_id);
+            $this->data['catalogo_intro'] = isset($coleccion[0]->col_intro) ? $coleccion[0]->col_intro : '';
 
             $categ = "";
             $categ_enlace = $categoria_principal;

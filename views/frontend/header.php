@@ -859,6 +859,8 @@ if (!isset($url_canonica))
   .categ-breadcrumb a:hover { color: #333; }
   .categ-h1 { font-family: 'MoonCreme', Georgia, serif; font-size: clamp(28px, 4vw, 52px); font-weight: normal; letter-spacing: 6px; text-transform: uppercase; color: #222; margin: 0 0 16px; line-height: 1.2; }
   @media (max-width: 767px) { .categ-h1 { text-align: center; } }
+  .categ-intro { font-family: 'Poppins', sans-serif; font-size: 15px; line-height: 1.65; color: #555; max-width: 820px; margin: 0 0 6px; font-weight: 300; }
+  @media (max-width: 767px) { .categ-intro { text-align: center; font-size: 14px; } }
   .categ-desc { font-family: 'Poppins', sans-serif; font-size: 13px; color: #666; font-weight: 300; line-height: 1.7; max-height: 52px; overflow: hidden; transition: max-height 0.6s ease; }
   .categ-desc.expanded { max-height: 9999px; }
   .categ-leer-mas { font-family: 'Poppins', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #BB8AA3; cursor: pointer; border: none; background: none; padding: 6px 0 0; display: inline-block; }

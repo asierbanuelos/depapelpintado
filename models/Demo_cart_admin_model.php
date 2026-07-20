@@ -1526,6 +1526,7 @@ class Demo_cart_admin_model extends CI_Model {
 				$xml_META_be=$data['xml_META_be'];
 
       $datos_array=array(
+      	'col_intro'=>isset($data['col_intro'])?$data['col_intro']:'',
       	'col_text'=>$data['col_text'],
       	'col_text_publico'=>$col_text_publico,
       	'greca_misma_coleccion_be'=>$greca_misma_coleccion_be,
@@ -1925,6 +1926,7 @@ class Demo_cart_admin_model extends CI_Model {
       $data=$this->input->post(NULL, TRUE);
 
       $datos_array=array(
+      	'intro_tipo_producto'=>isset($data['intro_tipo_producto'])?$data['intro_tipo_producto']:'',
       	'descripcion_tipo_producto'=>$data['descripcion_tipo_producto'],
       	'meta_title_tipo_producto'=>$data['meta_title_tipo_producto'],
       	'meta_description_tipo_producto'=>$data['meta_description_tipo_producto'],

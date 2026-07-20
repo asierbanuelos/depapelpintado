@@ -48,6 +48,7 @@ if (trim($texto_descripcion) != '') {
 <div class="categ-header">
   <div class="container">
     <h1 class="categ-h1"><?php echo strip_tags($texto_h1); ?></h1>
+    <?php if (!empty($catalogo_intro)): ?><p class="categ-intro"><?php echo $catalogo_intro; ?></p><?php endif; ?>
   </div>
 </div>
 
