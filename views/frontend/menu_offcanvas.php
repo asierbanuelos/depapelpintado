@@ -20,7 +20,7 @@ $categorias_resaltadas_menu=$this->flexi_cart_model->get_categorias_resaltadas_m
         <a class="nav-link ver-submenu" href="/papel-pintado" role="button" aria-haspopup="true" aria-expanded="false">PAPEL PINTADO</a>
         <ul class="dropdown-menu">
           <li><?=anchor("papel-pintado","Ver todos",'class=""');?></li>
-          <li><?=anchor("marcas","Marcas",'class=""');?></li>
+          <li><?=anchor("tienda/papel_pintado/marcas","Marcas",'class=""');?></li>
           <li><?=anchor("estilos-papel-pintado","Estilos",'class=""');?></li>
         </ul>
       </li>
@@ -28,7 +28,7 @@ $categorias_resaltadas_menu=$this->flexi_cart_model->get_categorias_resaltadas_m
         <a class="nav-link ver-submenu" href="/alfombras" role="button" aria-haspopup="true" aria-expanded="false">ALFOMBRAS</a>
         <ul class="dropdown-menu">
           <li><?=anchor("alfombras","Ver todas",'class="miclase"');?></li>
-          <li><?=anchor("marcas","Marcas",'class="miclase"');?></li>
+          <li><?=anchor("tienda/alfombras/marcas","Marcas",'class="miclase"');?></li>
           <li><?=anchor("estilos-alfombras","Estilos",'class="miclase"');?></li>
           <?php
           if (isset($categorias_resaltadas_menu[4])){
@@ -43,7 +43,7 @@ $categorias_resaltadas_menu=$this->flexi_cart_model->get_categorias_resaltadas_m
         <a class="nav-link ver-submenu" href="/murales" role="button" aria-haspopup="true" aria-expanded="false">MURALES</a>
         <ul class="dropdown-menu">
           <li><?=anchor("murales","Ver todos",'class="miclase"');?></li>
-          <li><?=anchor("marcas","Marcas",'class="miclase"');?></li>
+          <li><?=anchor("tienda/murales/marcas","Marcas",'class="miclase"');?></li>
           <li><?=anchor("estilos-murales","Estilos",'class="miclase"');?></li>
         </ul>
       </li>
@@ -51,7 +51,7 @@ $categorias_resaltadas_menu=$this->flexi_cart_model->get_categorias_resaltadas_m
         <a class="nav-link ver-submenu" href="/revestimientos" role="button" aria-haspopup="true" aria-expanded="false">REVESTIMIENTOS</a>
         <ul class="dropdown-menu">
           <li><?=anchor("revestimientos","Ver todos",'class="miclase"');?></li>
-          <li><?=anchor("marcas","Marcas",'class="miclase"');?></li>
+          <li><?=anchor("tienda/revestimientos/marcas","Marcas",'class="miclase"');?></li>
           <li><?=anchor("estilos-revestimientos","Estilos",'class="miclase"');?></li>
         </ul>
       </li>
@@ -62,7 +62,7 @@ $categorias_resaltadas_menu=$this->flexi_cart_model->get_categorias_resaltadas_m
         <a class="nav-link ver-submenu" href="/telas" role="button" aria-haspopup="true" aria-expanded="false">TELAS</a>
         <ul class="dropdown-menu">
           <li><?=anchor("telas","Ver todas",'class="miclase"');?></li>
-          <li><?=anchor("marcas","Marcas",'class="miclase"');?></li>
+          <li><?=anchor("tienda/telas/marcas","Marcas",'class="miclase"');?></li>
           <li><?=anchor("estilos-telas","Estilos",'class="miclase"');?></li>
         </ul>
       </li>
