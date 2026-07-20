@@ -4970,24 +4970,10 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		else
 			$a_colecciones[$idcoleccion]=$idcoleccion;
 
-		$a_ids_categoria_seo=array(); // Todos los items de la categoría SEO en caso de llegar con valor
-		if ($nueva_categoria_id!=0){
-			$temp=$this->db->select("nuevacategoria_item_id",FALSE);
-			$temp->from('nueva_categoria_item');
-			$temp->where('nueva_categoria_id',$nueva_categoria_id);
-		
-			$result=$temp->get()->result_array();
-			foreach ($result as $i=>$ezaugarriak){
-				$a_ids_categoria_seo[$ezaugarriak['nuevacategoria_item_id']]=$ezaugarriak['nuevacategoria_item_id'];
-			}
-		}
-
 		$a_where=array();
 		if ($nueva_categoria_id!=0){
-			if (count($a_ids_categoria_seo))
-				$a_where[]=' item_id IN ('.implode(',', $a_ids_categoria_seo).') ';
-			else
-				$a_where[]=' item_id IN (0) ';
+			// Subquery en vez de traer los IDs a PHP y re-serializarlos: evita listas IN() de decenas de miles de caracteres
+			$a_where[]=' item_id IN (SELECT nuevacategoria_item_id FROM nueva_categoria_item WHERE nueva_categoria_id = '.(int)$nueva_categoria_id.') ';
 		}
 		$a_where[]=' demo_items.activo=1 ';
 		$a_where[]=' demo_items.publico3=1 ';
@@ -5205,12 +5191,16 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				if (count($a_items_limpieza_seleccionada))
 					$a_item_idak_aux=array_intersect($a_item_idak_aux, $a_items_limpieza_seleccionada);
 
-				if (count($a_item_idak_aux))
-					$a_where[]=' item_id IN ('.implode(',', $a_item_idak_aux).')';
-				else
-					$a_where[]=' item_id IN (0)';
-
-				$where_txt=implode(' AND ', $a_where);
+				if (count($a_items_estilos_seleccionados)==0 && count($a_items_colores_seleccionados)==0 && count($a_items_marcas_seleccionadas)==0 && count($a_items_limpieza_seleccionada)==0){
+					$where_txt=$where_base_txt; // Sin otras facetas activas: reutilizamos el WHERE base
+				}
+				else{
+					if (count($a_item_idak_aux))
+						$a_where[]=' item_id IN ('.implode(',', $a_item_idak_aux).')';
+					else
+						$a_where[]=' item_id IN (0)';
+					$where_txt=implode(' AND ', $a_where);
+				}
 				$query=$this->db->query("SELECT item_vinilo, COUNT(item_id) as 'num' FROM `demo_items` WHERE ".$where_txt." GROUP BY item_vinilo");
 				$result=$query->result_array();
 
@@ -5243,12 +5233,16 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				if (count($a_items_calidad_seleccionada))
 					$a_item_idak_aux=array_intersect($a_item_idak_aux, $a_items_calidad_seleccionada);
 
-				if (count($a_item_idak_aux))
-					$a_where[]=' item_id IN ('.implode(',', $a_item_idak_aux).')';
-				else
-					$a_where[]=' item_id IN (0)';
-
-				$where_txt=implode(' AND ', $a_where);
+				if (count($a_items_estilos_seleccionados)==0 && count($a_items_colores_seleccionados)==0 && count($a_items_marcas_seleccionadas)==0 && count($a_items_calidad_seleccionada)==0){
+					$where_txt=$where_base_txt; // Sin otras facetas activas: reutilizamos el WHERE base
+				}
+				else{
+					if (count($a_item_idak_aux))
+						$a_where[]=' item_id IN ('.implode(',', $a_item_idak_aux).')';
+					else
+						$a_where[]=' item_id IN (0)';
+					$where_txt=implode(' AND ', $a_where);
+				}
 				$query=$this->db->query("SELECT item_lavable, COUNT(item_id) as 'num' FROM `demo_items` WHERE ".$where_txt." GROUP BY item_lavable");
 				$result=$query->result_array();
 				/*
@@ -5294,23 +5288,16 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			if (count($a_items_limpieza_seleccionada))
 				$a_item_idak_aux=array_intersect($a_item_idak_aux, $a_items_limpieza_seleccionada);
 
-			if (count($a_item_idak_aux))
-				$a_where[]=' item_id IN ('.implode(',', $a_item_idak_aux).')';
-			else
-				$a_where[]=' item_id IN (0)';
-			/*
-			if (count($a_items_estilos_seleccionados)==0 && count($a_items_colores_seleccionados)==0 && count($a_items_calidad_seleccionada)==0)
-				$a_where[]=' item_id IN ('.implode(',', $a_item_idak).')';
-			else{
-				if (count($a_items_estilos_seleccionados))
-					$a_where[]=' item_id IN ('.implode(',', $a_items_estilos_seleccionados).')';
-				if (count($a_items_colores_seleccionados))
-					$a_where[]=' item_id IN ('.implode(',', $a_items_colores_seleccionados).')';
-				if (count($a_items_calidad_seleccionada))
-					$a_where[]=' item_id IN ('.implode(',', $a_items_calidad_seleccionada).')';
+			if (count($a_items_estilos_seleccionados)==0 && count($a_items_colores_seleccionados)==0 && count($a_items_calidad_seleccionada)==0 && count($a_items_limpieza_seleccionada)==0){
+				$where_txt=$where_base_txt; // Sin otras facetas activas: reutilizamos el WHERE base
 			}
-			*/
-			$where_txt=implode(' AND ', $a_where);
+			else{
+				if (count($a_item_idak_aux))
+					$a_where[]=' item_id IN ('.implode(',', $a_item_idak_aux).')';
+				else
+					$a_where[]=' item_id IN (0)';
+				$where_txt=implode(' AND ', $a_where);
+			}
 			$query=$this->db->query("SELECT item_cat_fk, COUNT(*) as cont FROM demo_items WHERE ".$where_txt." GROUP BY item_cat_fk");
 			$result=$query->result_array();
 			$query->free_result();
@@ -5350,24 +5337,18 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			if (count($a_items_limpieza_seleccionada))
 				$a_item_idak_aux=array_intersect($a_item_idak_aux, $a_items_limpieza_seleccionada);
 
-			if (count($a_item_idak_aux))
-				$a_where[]=' estilo_item_item IN ('.implode(',', $a_item_idak_aux).')';
-			else
-				$a_where[]=' estilo_item_item IN (0)';
-			/*
-			if (count($a_items_marcas_seleccionadas)==0 && count($a_items_colores_seleccionados)==0 && count($a_items_calidad_seleccionada)==0)
-				$a_where[]=' estilo_item_item IN ('.implode(',', $a_item_idak).')';
-			else{
-				if (count($a_items_marcas_seleccionadas))
-					$a_where[]=' estilo_item_item IN ('.implode(',', $a_items_marcas_seleccionadas).')';
-				if (count($a_items_colores_seleccionados))
-					$a_where[]=' estilo_item_item IN ('.implode(',', $a_items_colores_seleccionados).')';
-				if (count($a_items_calidad_seleccionada))
-					$a_where[]=' estilo_item_item IN ('.implode(',', $a_items_calidad_seleccionada).')';
+			if (count($a_items_marcas_seleccionadas)==0 && count($a_items_colores_seleccionados)==0 && count($a_items_calidad_seleccionada)==0 && count($a_items_limpieza_seleccionada)==0){
+				$where_txt=$where_base_txt; // Sin otras facetas activas: reutilizamos el WHERE base
+				$query=$this->db->query("SELECT estilo_item_estilo, COUNT(DISTINCT estilo_item_item) as cont FROM demo_estilo_item JOIN demo_items ON demo_items.item_id = estilo_item_item WHERE ".$where_txt." GROUP BY estilo_item_estilo");
 			}
-			*/
-			$where_txt=implode(' AND ', $a_where);
-			$query=$this->db->query("SELECT estilo_item_estilo, COUNT(DISTINCT estilo_item_item) as cont FROM demo_estilo_item WHERE ".$where_txt." GROUP BY estilo_item_estilo");
+			else{
+				if (count($a_item_idak_aux))
+					$a_where[]=' estilo_item_item IN ('.implode(',', $a_item_idak_aux).')';
+				else
+					$a_where[]=' estilo_item_item IN (0)';
+				$where_txt=implode(' AND ', $a_where);
+				$query=$this->db->query("SELECT estilo_item_estilo, COUNT(DISTINCT estilo_item_item) as cont FROM demo_estilo_item WHERE ".$where_txt." GROUP BY estilo_item_estilo");
+			}
 			$result=$query->result_array();
 			$query->free_result();
 	        $estilos = $this->get_estilo_guztiak();
@@ -5407,25 +5388,18 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			if (count($a_items_limpieza_seleccionada))
 				$a_item_idak_aux=array_intersect($a_item_idak_aux, $a_items_limpieza_seleccionada);
 
-			if (count($a_item_idak_aux))
-				$a_where[]=' gama_item_item IN ('.implode(',', $a_item_idak_aux).')';
-			else
-				$a_where[]=' gama_item_item IN (0)';
-			
-			/*
-			if (count($a_items_marcas_seleccionadas)==0 && count($a_items_estilos_seleccionados)==0 && count($a_items_calidad_seleccionada)==0)
-				$a_where[]=' gama_item_item IN ('.implode(',', $a_item_idak).')';
-			else{
-				if (count($a_items_marcas_seleccionadas))
-					$a_where[]=' gama_item_item IN ('.implode(',', $a_items_marcas_seleccionadas).')';
-				if (count($a_items_estilos_seleccionados))
-					$a_where[]=' gama_item_item IN ('.implode(',', $a_items_estilos_seleccionados).')';
-				if (count($a_items_calidad_seleccionada))
-					$a_where[]=' gama_item_item IN ('.implode(',', $a_items_calidad_seleccionada).')';
+			if (count($a_items_marcas_seleccionadas)==0 && count($a_items_estilos_seleccionados)==0 && count($a_items_calidad_seleccionada)==0 && count($a_items_limpieza_seleccionada)==0){
+				$where_txt=$where_base_txt; // Sin otras facetas activas: reutilizamos el WHERE base
+				$query=$this->db->query("SELECT gama_item_gama, COUNT(DISTINCT gama_item_item) as cont FROM demo_gama_item JOIN demo_items ON demo_items.item_id = gama_item_item WHERE ".$where_txt." GROUP BY gama_item_gama");
 			}
-			*/
-			$where_txt=implode(' AND ', $a_where);
-			$query=$this->db->query("SELECT gama_item_gama, COUNT(DISTINCT gama_item_item) as cont FROM demo_gama_item WHERE ".$where_txt." GROUP BY gama_item_gama");
+			else{
+				if (count($a_item_idak_aux))
+					$a_where[]=' gama_item_item IN ('.implode(',', $a_item_idak_aux).')';
+				else
+					$a_where[]=' gama_item_item IN (0)';
+				$where_txt=implode(' AND ', $a_where);
+				$query=$this->db->query("SELECT gama_item_gama, COUNT(DISTINCT gama_item_item) as cont FROM demo_gama_item WHERE ".$where_txt." GROUP BY gama_item_gama");
+			}
 			$result=$query->result_array();
 			$query->free_result();
 	        $colores = $this->get_gama_array();
