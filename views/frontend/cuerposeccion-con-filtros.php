@@ -31,6 +31,12 @@ elseif(isset($losmas) && $losmas==1){
 if (isset($col_text_publico))
   $texto_descripcion=$col_text;
 
+// Fase 1 SEO: la descripcion nunca debe traer otro <h1> (solo el categ-h1) ni encabezados vacios
+if (trim($texto_descripcion) != '') {
+  $texto_descripcion = preg_replace('/<(\/?)h1\b/i', '<$1h2', $texto_descripcion);
+  $texto_descripcion = preg_replace('/<h([1-6])[^>]*>(?:\s|&nbsp;|&#160;|<br\s*\/?>)*<\/h\1>/i', '', $texto_descripcion);
+}
+
 ?>
 <!-- CSS en header.php -->
 
