@@ -3,16 +3,18 @@
 class Contenido_model extends CI_Model
 {
 	public function __construct() {}
-    
+
     public function get_contents(){
       $temp =$this->db->select("*",FALSE);
       $temp->from('contenido')->order_by("id, ASC");
-      return $temp->get()->result();
+      $query = $temp->get();
+      return $query ? $query->result() : array();
     }
     public function get_paypal(){
       $temp =$this->db->select("*",FALSE);
       $temp->from('pagos')->where("name","paypal");
-      return $temp->get()->row();
+      $query = $temp->get();
+      return $query ? $query->row() : null;
     }
     public function set_paypal(){
       $temp =$this->db->where("name","paypal")->update("pagos",array('user'=>$_POST['usr'],'pass'=>$_POST['pass'],'token'=>$_POST['token'],'test'=>$_POST['test'],'test_ip'=>$_POST['test_ip']));
@@ -26,7 +28,8 @@ class Contenido_model extends CI_Model
       else $temp->where('tipo','Promo Derecha');
         if($activos)$temp->where('activo',1)->limit(4);
         $temp->order_by('orden','asc');
-      $result= $temp->get()->result();
+      $query = $temp->get();
+      $result = $query ? $query->result() : array();
 	  $this->db->cache_off();
 	  return $result;
     }
@@ -34,7 +37,8 @@ class Contenido_model extends CI_Model
       $this->db->cache_on();
       $temp=$this->db->select("*",FALSE);
       $temp->from('contenido');
-      $result=$temp->where('id',$id)->get()->row();
+      $query = $temp->where('id',$id)->get();
+      $result = $query ? $query->row() : null;
 	  $this->db->cache_off();
 	  return $result;
     }
@@ -42,7 +46,8 @@ class Contenido_model extends CI_Model
 	public function get_page_edit($id){
       $temp=$this->db->select("*",FALSE);
       $temp->from('contenido');
-      $result=$temp->where('id',$id)->get()->row();
+      $query = $temp->where('id',$id)->get();
+      $result = $query ? $query->row() : null;
 	  return $result;
     }
     public function update_page(){
@@ -67,11 +72,12 @@ class Contenido_model extends CI_Model
       $temp->where('tipo','Imagen');
       $temp->where('zona',$zona);
       $temp->where('activo',1);
-      
+
       $temp->order_by('orden','asc');
       $temp->order_by("id DESC");
-      
-      return $temp->get()->result();
+
+      $query = $temp->get();
+      return $query ? $query->result() : array();
     }
     public function get_imagenes($activos=true, $zona=""){
       $temp=$this->db->select("*",FALSE);
@@ -83,7 +89,8 @@ class Contenido_model extends CI_Model
         }
         $temp->order_by('orden','asc');
       $temp->order_by("id DESC");
-      return $temp->get()->result();
+      $query = $temp->get();
+      return $query ? $query->result() : array();
     }
     public function get_imagenes_admin($activos=true, $zona=""){
       $temp=$this->db->select("*",FALSE);
@@ -99,11 +106,12 @@ class Contenido_model extends CI_Model
       $temp->order_by('activo','desc');
       $temp->order_by('orden','asc');
       $temp->order_by("id DESC");
-      return $temp->get()->result();
+      $query = $temp->get();
+      return $query ? $query->result() : array();
     }
      public function add_image(){
       $data=array('titulo'=>"NUEVA",'tipo'=>'Imagen');
       $temp=$this->db->insert('contenido',$data);
-    } 
+    }
 }
 ?>
