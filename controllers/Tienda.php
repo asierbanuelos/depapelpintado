@@ -1394,7 +1394,15 @@ class Tienda extends CI_Controller {
         $this->data['ocultar_submenu']=true;
         $this->data['mostrar_estilos_viejos']=true;
 
-        // Interlinks (Fase 2 SEO): titulo por keyword + chips (marcas destacadas + otras categorias)
+        // Interlinks (Fase 2 SEO) - DESACTIVADO TEMPORALMENTE (2026-07-21): mientras se
+        // confirma que el servidor esta estable, no calculamos nada aqui. Se puede
+        // reactivar descomentando el bloque de abajo (ya lleva cache de 10 min en
+        // get_categories(), pero se prefiere no arriesgar mientras el trafico sigue alto).
+        $this->data['interlinks_titulo'] = '';
+        $this->data['interlinks_sub'] = '';
+        $this->data['interlinks_slider'] = array();
+        $this->data['interlinks_chips'] = array();
+        /*
         $familia_kw_il = mb_strtolower($categ);
         $this->data['interlinks_titulo'] = 'Explora más <span class="il-kw">'.htmlspecialchars($familia_kw_il).'</span>';
         $this->data['interlinks_sub'] = 'Marcas y categorías relacionadas';
@@ -1417,6 +1425,7 @@ class Tienda extends CI_Controller {
             array('label'=>'Marcas de '.$familia_kw_il, 'enlaces'=>$enl_marcas_il),
             array('label'=>'Otras categorías', 'enlaces'=>$enlaces_cats_il),
         );
+        */
 
         //$this->data['categoria_principal'] = 'tienda/papel_pintado';
         if ($this->data['categ']==5){
@@ -1688,7 +1697,12 @@ class Tienda extends CI_Controller {
             $this->data['includes_footer'][]='<script src="/includes/js/listado-productos.min.js?v=2"></script>';            
             unset($this->data['images']);
 
-            // Interlinks (Fase 2 SEO): slider de otras colecciones de la marca + chips, titulo por keyword
+            // Interlinks (Fase 2 SEO) - DESACTIVADO TEMPORALMENTE (2026-07-21)
+            $this->data['interlinks_titulo'] = '';
+            $this->data['interlinks_sub'] = '';
+            $this->data['interlinks_slider'] = array();
+            $this->data['interlinks_chips'] = array();
+            /*
             $familia_kw_il = (isset($categ) && trim($categ)!='') ? mb_strtolower($categ) : 'colecciones';
             $this->data['interlinks_titulo'] = 'Más colecciones de <span class="il-kw">'.htmlspecialchars($familia_kw_il.' de '.$marca->cat_name).'</span>';
             $this->data['interlinks_sub'] = 'Descubre otros catálogos de la marca';
@@ -1709,6 +1723,7 @@ class Tienda extends CI_Controller {
                     array('url'=>'/marcas', 'texto'=>'Todas las marcas'),
                 )),
             );
+            */
 
             if ($categoria_principal=='todos'){
                         $this->load->view('frontend/header', $this->data);
