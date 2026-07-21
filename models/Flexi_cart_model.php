@@ -3774,8 +3774,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				->where($sql_where)
 				->limit(1)
 				->get();
-				
-			return ($query->num_rows() == 1) ? $query->row_array() : FALSE;
+
+			return ($query && $query->num_rows() == 1) ? $query->row_array() : FALSE;
 		}
 		
 		return FALSE;
@@ -4446,7 +4446,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
           AND nc.tipo_producto = " . (int)$tipo_producto . "
           AND nc.nueva_categoria_activo = 1
         LIMIT " . (int)$limit;
-      return $this->db->query($sql)->result_array();
+      $query = $this->db->query($sql);
+      return $query ? $query->result_array() : array();
     }
 
     function get_items_portada($limit = 8) {
@@ -4468,7 +4469,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
         GROUP BY i.item_id
         ORDER BY i.portada DESC, i.item_id DESC
         LIMIT " . (int)$limit;
-      return $this->db->query($sql)->result_array();
+      $query = $this->db->query($sql);
+      return $query ? $query->result_array() : array();
     }
 
     function search_items($search="",$page=-1){
@@ -4812,9 +4814,10 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			$aux->where('disc_expire_date > ',$this->database_date_time());
 			$aux->where_in('disc_group_item_item_fk',$a_item_idak);
 			$aux->order_by('disc_order_by','desc');
-			
-			$result=$aux->get()->result_array();
-			
+
+			$query=$aux->get();
+			$result = $query ? $query->result_array() : array();
+
 			$a_idak=array();
 			foreach($result as $row){
 				$a_idak[$row['disc_group_item_item_fk']]=$row;
@@ -4831,8 +4834,9 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			$aux->where('disc_group_status',1);
 			$aux->where('disc_expire_date > ',$this->database_date_time());
 			$aux->order_by('disc_order_by','desc');
-			
-			$result=$aux->get()->result_array();
+
+			$query=$aux->get();
+			$result = $query ? $query->result_array() : array();
 			
 			$a_idak=array();
 			foreach($result as $row){
@@ -5003,8 +5007,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		$where_base_txt=$where_txt; // Condiciones base, reutilizables sin volver a serializar miles de IDs
 		$query=$this->db->query("SELECT item_id FROM demo_items WHERE ".$where_txt);
 		//echo "<br />".$this->db->last_query();
-		$result=$query->result_array();
-		$query->free_result();
+		$result = $query ? $query->result_array() : array();
+		if ($query) $query->free_result();
 
 		$a_item_idak=array(); // Todos los items de la categoría
 		foreach ($result as $i=>$ezaugarriak){
@@ -5039,12 +5043,12 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 
 				$query=$this->db->query("SELECT item_id FROM demo_items WHERE ".$where_txt);
 				//echo "<br />".$this->db->last_query();
-				$result=$query->result_array();
+				$result = $query ? $query->result_array() : array();
 
 				foreach ($result as $i=>$ezaugarriak){
 					$a_items_calidad_seleccionada[$ezaugarriak['item_id']]=$ezaugarriak['item_id'];
 				}
-				$query->free_result();
+				if ($query) $query->free_result();
 			}
 
 			$a_items_limpieza_seleccionada=array();
@@ -5068,12 +5072,12 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 
 				$query=$this->db->query("SELECT item_id FROM demo_items WHERE ".$where_txt);
 				//echo "<br />".$this->db->last_query();
-				$result=$query->result_array();
+				$result = $query ? $query->result_array() : array();
 
 				foreach ($result as $i=>$ezaugarriak){
 					$a_items_limpieza_seleccionada[$ezaugarriak['item_id']]=$ezaugarriak['item_id'];
 				}
-				$query->free_result();
+				if ($query) $query->free_result();
 			}
 
 
@@ -5094,12 +5098,12 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 
 				$query=$this->db->query("SELECT item_id FROM demo_items WHERE ".$where_txt);
 				//echo "<br />".$this->db->last_query();
-				$result=$query->result_array();
+				$result = $query ? $query->result_array() : array();
 
 				foreach ($result as $i=>$ezaugarriak){
 					$a_items_marcas_seleccionadas[$ezaugarriak['item_id']]=$ezaugarriak['item_id'];
 				}
-				$query->free_result();
+				if ($query) $query->free_result();
 			}
 
 			$a_items_estilos_seleccionados=array();
@@ -5119,11 +5123,11 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 
 				$query=$this->db->query("SELECT estilo_item_item FROM demo_estilo_item JOIN demo_items ON demo_items.item_id = estilo_item_item WHERE ".$where_txt);
 				//echo "<br />".$this->db->last_query();
-				$result=$query->result_array();
+				$result = $query ? $query->result_array() : array();
 				foreach ($result as $i=>$ezaugarriak){
 					$a_items_estilos_seleccionados[$ezaugarriak['estilo_item_item']]=$ezaugarriak['estilo_item_item'];
 				}
-				$query->free_result();
+				if ($query) $query->free_result();
 			}
 
 			$a_items_colores_seleccionados=array();
@@ -5143,11 +5147,11 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 
 				$query=$this->db->query("SELECT gama_item_item FROM demo_gama_item JOIN demo_items ON demo_items.item_id = gama_item_item WHERE ".$where_txt);
 				//echo "<br />".$this->db->last_query();
-				$result=$query->result_array();
+				$result = $query ? $query->result_array() : array();
 				foreach ($result as $i=>$ezaugarriak){
 					$a_items_colores_seleccionados[$ezaugarriak['gama_item_item']]=$ezaugarriak['gama_item_item'];
 				}
-				$query->free_result();
+				if ($query) $query->free_result();
 			}
 
 			$kategoria_datuak=$this->get_all_cat_array();
@@ -5202,7 +5206,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 					$where_txt=implode(' AND ', $a_where);
 				}
 				$query=$this->db->query("SELECT item_vinilo, COUNT(item_id) as 'num' FROM `demo_items` WHERE ".$where_txt." GROUP BY item_vinilo");
-				$result=$query->result_array();
+				$result = $query ? $query->result_array() : array();
 
 				$a_kalitateak=array();
 				foreach ($result as $i=>$ezaugarriak){
@@ -5217,7 +5221,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				}
 				ksort($a_kalitateak);
 				$filtros['calidades']=$a_kalitateak;
-				$query->free_result();
+				if ($query) $query->free_result();
 			}
 
 			if ($nueva_categoria_id!=0 && $tipo_producto>=0 && $tipo_producto<=1){
@@ -5244,7 +5248,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 					$where_txt=implode(' AND ', $a_where);
 				}
 				$query=$this->db->query("SELECT item_lavable, COUNT(item_id) as 'num' FROM `demo_items` WHERE ".$where_txt." GROUP BY item_lavable");
-				$result=$query->result_array();
+				$result = $query ? $query->result_array() : array();
 				/*
 				if(isset($_GET['testing'])){
 					echo "<br />".$this->db->last_query();
@@ -5273,7 +5277,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				}
 				ksort($a_limpieza);
 				$filtros['limpiezas']=$a_limpieza;
-				$query->free_result();
+				if ($query) $query->free_result();
 			}
 
 			$a_where=array();
@@ -5299,8 +5303,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				$where_txt=implode(' AND ', $a_where);
 			}
 			$query=$this->db->query("SELECT item_cat_fk, COUNT(*) as cont FROM demo_items WHERE ".$where_txt." GROUP BY item_cat_fk");
-			$result=$query->result_array();
-			$query->free_result();
+			$result = $query ? $query->result_array() : array();
+			if ($query) $query->free_result();
 
 			$a_markak=array();
 			foreach ($result as $ezaugarriak){
@@ -5349,8 +5353,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				$where_txt=implode(' AND ', $a_where);
 				$query=$this->db->query("SELECT estilo_item_estilo, COUNT(DISTINCT estilo_item_item) as cont FROM demo_estilo_item WHERE ".$where_txt." GROUP BY estilo_item_estilo");
 			}
-			$result=$query->result_array();
-			$query->free_result();
+			$result = $query ? $query->result_array() : array();
+			if ($query) $query->free_result();
 	        $estilos = $this->get_estilo_guztiak();
 			$a_estiloak=array();
 			foreach ($result as $ezaugarriak){
@@ -5400,8 +5404,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				$where_txt=implode(' AND ', $a_where);
 				$query=$this->db->query("SELECT gama_item_gama, COUNT(DISTINCT gama_item_item) as cont FROM demo_gama_item WHERE ".$where_txt." GROUP BY gama_item_gama");
 			}
-			$result=$query->result_array();
-			$query->free_result();
+			$result = $query ? $query->result_array() : array();
+			if ($query) $query->free_result();
 	        $colores = $this->get_gama_array();
 			$a_koloreak=array();
 			$aux_colores_seleccion=array();
@@ -5421,7 +5425,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			if (count($aux_colores_seleccion))
 				$id_zerrenda=implode(',', $aux_colores_seleccion);
 			$query=$this->db->query("SELECT gama_id, idtonalidad FROM demo_gama WHERE activo=1 AND gama_id IN ($id_zerrenda) ");
-			$result=$query->result_array();
+			$result = $query ? $query->result_array() : array();
 
 			$a_tonalidades=array();
 			foreach ($result as $i=>$ezaugarriak){
@@ -5429,7 +5433,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			}
 			ksort($a_koloreak);
 			$filtros['tonalidades']=$a_tonalidades;
-			$query->free_result();
+			if ($query) $query->free_result();
 			
 			//Como items finales nos quedamos con todos los que cumplan las condicines de filtrado
 			if (count($a_items_marcas_seleccionadas))
@@ -5624,8 +5628,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		$query_txt="SELECT * FROM (SELECT $select_inner FROM demo_items $join_txt WHERE $where_txt ORDER BY RAND()) AS demo_items GROUP BY $group_field $order_by $limit_txt ";
 
 		$query=$this->db->query($query_txt);
-		$result=$query->result_array();
-		$query->free_result();
+		$result = $query ? $query->result_array() : array();
+		if ($query) $query->free_result();
 
 		$a_ids_categorias_presentes[0]=0;
 		$a_ids_colecciones_presentes[0]=0;
@@ -6067,10 +6071,16 @@ class Flexi_cart_model extends Flexi_cart_lite_model
       }
       //$this->db->cache_on();
       $whereclause = "(cats LIKE '%Papel Pintado%' OR cats LIKE '%Foto Murales%') ";
-      if($cats=="")$result=$this->db/*->select("cat_name AS n, cat_id AS i,",FALSE)*/->from('demo_categories')->where($whereclause)->where(array('activo'=>1,'publico'=>1))->order_by('cat_name',$order)->get()->result();
-      else if($cats=='all') $result=$this->db/*->select("cat_name AS n, cat_id AS i,",FALSE)*/->from('demo_categories')->where(array('activo'=>1,'publico'=>1))->where('cats IS NOT NULL')->order_by('cat_name',$order)->get()->result();
+      if($cats=="") {
+        $query=$this->db->from('demo_categories')->where($whereclause)->where(array('activo'=>1,'publico'=>1))->order_by('cat_name',$order)->get();
+        $result = $query ? $query->result() : array();
+      }
+      else if($cats=='all') {
+        $query=$this->db->from('demo_categories')->where(array('activo'=>1,'publico'=>1))->where('cats IS NOT NULL')->order_by('cat_name',$order)->get();
+        $result = $query ? $query->result() : array();
+      }
       else if($cats=='papeles_murales_revestimientos') {
-        $result=$this->db/*->select("cat_name AS n, cat_id AS i,",FALSE)*/->select('demo_categories.*, COUNT(demo_items.item_id) AS n_productos', FALSE)
+        $query=$this->db->select('demo_categories.*, COUNT(demo_items.item_id) AS n_productos', FALSE)
           ->from('demo_categories')
           ->join('demo_items', 'demo_items.item_cat_fk = demo_categories.cat_id')
           ->where_in('demo_items.item_tipo', array(0, 1, 2))
@@ -6082,12 +6092,13 @@ class Flexi_cart_model extends Flexi_cart_lite_model
           ))
           ->group_by('demo_categories.cat_id')
           ->order_by('demo_categories.cat_name',$order)
-          ->get()->result();
+          ->get();
+        $result = $query ? $query->result() : array();
       }
       else if($cats=='todas_familias_con_productos') {
         // Igual que 'papeles_murales_revestimientos' pero incluyendo tambien Telas (3) y Alfombras (4).
         // Se excluye Herramientas (5), que no es una familia de "marcas" como tal.
-        $result=$this->db->select('demo_categories.*, COUNT(demo_items.item_id) AS n_productos', FALSE)
+        $query=$this->db->select('demo_categories.*, COUNT(demo_items.item_id) AS n_productos', FALSE)
           ->from('demo_categories')
           ->join('demo_items', 'demo_items.item_cat_fk = demo_categories.cat_id')
           ->where_in('demo_items.item_tipo', array(0, 1, 2, 3, 4))
@@ -6099,9 +6110,13 @@ class Flexi_cart_model extends Flexi_cart_lite_model
           ))
           ->group_by('demo_categories.cat_id')
           ->order_by('demo_categories.cat_name',$order)
-          ->get()->result();
+          ->get();
+        $result = $query ? $query->result() : array();
       }
-      else $result= $this->db/*->select("cat_name AS n, cat_id AS i,",FALSE)*/->from('demo_categories')->like('cats',$cats,'both')->where(array('activo'=>1,'publico'=>1))->order_by('cat_name',$order)->get()->result();
+      else {
+        $query=$this->db->from('demo_categories')->like('cats',$cats,'both')->where(array('activo'=>1,'publico'=>1))->order_by('cat_name',$order)->get();
+        $result = $query ? $query->result() : array();
+      }
       //$this->db->cache_off();
       @file_put_contents($cache_file . '.tmp', serialize($result));
       @rename($cache_file . '.tmp', $cache_file);
@@ -6484,11 +6499,11 @@ class Flexi_cart_model extends Flexi_cart_lite_model
     function get_tipos_producto_coleccion($idcoleccion){
 		$res= array();
 		$query=$this->db->query("SELECT DISTINCT(item_tipo) as 'item_tipo' FROM demo_items WHERE activo=1 AND publico3=1 AND item_coleccion_id='$idcoleccion'");
-		$result=$query->result();
+		$result = $query ? $query->result() : array();
 		foreach($result as $row){
 			$res[$row->item_tipo]=$row->item_tipo;
 		}
-		$query->free_result();
+		if ($query) $query->free_result();
 		return $res;
     }
 
