@@ -6047,6 +6047,24 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		return $item;
 	}
     function get_categories($cats="",$order="ASC"){
+      // Caché de 10 minutos: esta función (sobre todo las ramas con JOIN+GROUP BY
+      // sobre demo_items) se llama ahora en cada página de categoría (interlinks SEO),
+      // no solo en /marcas, y no tiene sentido recalcular el conteo de productos por
+      // marca en cada visita.
+      $cache_key = 'get_categories_' . md5($cats.'|'.$order);
+      $cache_file = APPPATH . 'cache/' . $cache_key . '.cache';
+      if (file_exists($cache_file) && (time() - filemtime($cache_file)) < 600) {
+        $cached = @unserialize(@file_get_contents($cache_file));
+        if ($cached !== false) return $cached;
+      }
+      $lock_fp = $this->acquire_cache_lock($cache_file);
+      if ($lock_fp && file_exists($cache_file) && (time() - filemtime($cache_file)) < 600) {
+        $cached = @unserialize(@file_get_contents($cache_file));
+        if ($cached !== false) {
+          $this->release_cache_lock($lock_fp);
+          return $cached;
+        }
+      }
       //$this->db->cache_on();
       $whereclause = "(cats LIKE '%Papel Pintado%' OR cats LIKE '%Foto Murales%') ";
       if($cats=="")$result=$this->db/*->select("cat_name AS n, cat_id AS i,",FALSE)*/->from('demo_categories')->where($whereclause)->where(array('activo'=>1,'publico'=>1))->order_by('cat_name',$order)->get()->result();
@@ -6085,7 +6103,10 @@ class Flexi_cart_model extends Flexi_cart_lite_model
       }
       else $result= $this->db/*->select("cat_name AS n, cat_id AS i,",FALSE)*/->from('demo_categories')->like('cats',$cats,'both')->where(array('activo'=>1,'publico'=>1))->order_by('cat_name',$order)->get()->result();
       //$this->db->cache_off();
-      return $result; 
+      @file_put_contents($cache_file . '.tmp', serialize($result));
+      @rename($cache_file . '.tmp', $cache_file);
+      $this->release_cache_lock($lock_fp);
+      return $result;
     }
     function get_categoriessample($cats=""){
       $whereclause = "(cats LIKE '%Papel Pintado%' OR cats LIKE '%Foto Murales%') ";
