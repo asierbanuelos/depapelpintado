@@ -912,6 +912,7 @@ class Admin_library extends CI_Controller {
 
     // === Editor de textos SEO de COLECCION (intro corta + descripcion + metas) ===
     function editar_coleccion_seo($id=0){
+      $this->db->cache_off();
       $coleccion = $this->db->where('coleccion_id',(int)$id)->get('demo_coleccion')->row();
       if (!$coleccion){ show_404(); return; }
       $this->data['coleccion'] = $coleccion;
@@ -920,6 +921,7 @@ class Admin_library extends CI_Controller {
     function update_coleccion_seo(){
       $this->load->model('demo_cart_admin_model');
       $this->demo_cart_admin_model->demo_update_col_seo();
+      $this->db->cache_delete_all(); // limpiar cache de BD para que el cambio se vea al momento
       redirect('admin_library/colecciones_seo');
     }
 
@@ -929,6 +931,7 @@ class Admin_library extends CI_Controller {
       $this->load->view('demo/admin_examples/articulos/tipos_producto_seo_listado', $this->data);
     }
     function editar_tipo_producto_seo($id=0){
+      $this->db->cache_off();
       $tipo = $this->db->where('tipo_producto_id',(int)$id)->get('tipo_producto')->row();
       if (!$tipo){ show_404(); return; }
       $this->data['tipo_producto'] = $tipo;
@@ -937,6 +940,7 @@ class Admin_library extends CI_Controller {
     function update_tipo_producto_seo(){
       $this->load->model('demo_cart_admin_model');
       $this->demo_cart_admin_model->demo_save_tipo_producto_seo();
+      $this->db->cache_delete_all(); // limpiar cache de BD para que el cambio se vea al momento
       redirect('admin_library/tipos_producto_seo');
     }
     function publicar_texto_coleccion($id, $estado_anterior){
