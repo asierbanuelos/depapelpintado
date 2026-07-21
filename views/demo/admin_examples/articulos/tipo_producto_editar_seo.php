@@ -16,7 +16,10 @@ $nom = isset($nombres_tipo[(int)$tipo_producto->tipo_producto_id]) ? $nombres_ti
       <div style="height:20px"></div>
       <div style="font-size:34px;font-weight:300;color:#B05380;text-align:center;border-bottom:1px solid #B05380;">Textos SEO — <?php echo htmlspecialchars($nom); ?></div>
       <div style="height:10px"></div>
-      <p><a href="/admin_library/tipos_producto_seo" style="color:#B05380;">&larr; Volver al listado de categorías</a></p>
+      <p style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+        <a href="/admin_library/tipos_producto_seo" style="color:#B05380;">&larr; Volver al listado de categorías</a>
+        <?php if (!empty($url_web)): ?><a href="<?php echo $url_web; ?>" target="_blank" rel="noopener" style="display:inline-block;background:#333;color:#fff;text-decoration:none;padding:8px 18px;border-radius:4px;">Ver en la web &#8599;</a><?php endif; ?>
+      </p>
 
       <input type="hidden" name="tipo_producto_id" value="<?php echo (int)$tipo_producto->tipo_producto_id; ?>">
 
