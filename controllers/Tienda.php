@@ -1013,8 +1013,11 @@ class Tienda extends CI_Controller {
         // Listado de productos de una categoría  SEO concreta
         //$this->output->cache(10);
 
-        //$orden = 0;
-        $orden = 4; // Por defecto el más reciente primero (id descendente)
+        // Orden por defecto de la categoria: portada primero (tus destacados de
+        // listado_articulos_portada), luego el campo 'orden' manual (orden>0 arriba)
+        // y el resto aleatorio con semilla que cambia cada 3 dias.
+        // (orden=0 -> $this->orden()='' -> ORDER BY por defecto de get_items_filtros_nuevo_listado ~5570)
+        $orden = 0;
         if (isset($_REQUEST['orden']))
             $orden = $_REQUEST['orden'];
         $this->data['orden_seleccionado'] = $orden;
@@ -1285,8 +1288,11 @@ class Tienda extends CI_Controller {
         $this->data['categoria_principal'] = $categoria_principal;
         $this->data['a_migas'][base_url().$categoria_principal]=$categ;
 
-        //$orden = 0;
-        $orden = 4; // Por defecto el más reciente primero (id descendente)
+        // Orden por defecto de la categoria: portada primero (tus destacados de
+        // listado_articulos_portada), luego el campo 'orden' manual (orden>0 arriba)
+        // y el resto aleatorio con semilla que cambia cada 3 dias.
+        // (orden=0 -> $this->orden()='' -> ORDER BY por defecto de get_items_filtros_nuevo_listado ~5570)
+        $orden = 0;
         if (isset($_REQUEST['orden']))
             $orden = $_REQUEST['orden'];
         $this->data['orden_seleccionado'] = $orden;
