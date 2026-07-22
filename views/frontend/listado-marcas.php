@@ -42,7 +42,7 @@ ksort($por_letra);
   --mk-accent-deep: #9c637f;
   --mk-tile: #f6f1ee;
   --mk-tile-alt: #f1ebe9;
-  padding: 30px 0 70px;
+  padding: 0 0 70px;
 }
 
 /* ---- Hero ---- */
@@ -151,9 +151,13 @@ ksort($por_letra);
 .marcas-sin-resultados p { font-family: 'Poppins', sans-serif; color: var(--mk-muted); margin: 0; }
 </style>
 
-<div class="wrapper marcas-wrapper">
+<div class="categ-breadcrumb-bar">
   <div class="container">
     <?php $this->load->view('frontend/migas_nuevas_small', $this->data); ?>
+  </div>
+</div>
+<div class="wrapper marcas-wrapper">
+  <div class="container">
 
     <!-- Hero -->
     <header class="marcas-hero">
