@@ -2184,7 +2184,9 @@ class Tienda extends CI_Controller {
             $nombre_slug_prod = (trim($datos_item['item_name'])!='') ? $datos_item['item_name'] : (trim($datos_item['item_ref'])!='' ? $datos_item['item_ref'] : 'producto');
             $url_seo_producto = $this->urlenc_aux($marca->cat_name).'/'.$this->urlenc_aux($coleccion[0]->coleccion_name).'/'.$this->urlenc_aux($nombre_slug_prod).'-'.$datos_item['item_id'];
             $this->data['url_canonica'] = base_url().$url_seo_producto;
-            if (strpos($this->uri->uri_string(), 'tienda/articulo') === 0) {
+            // 301 de CUALQUIER URL no canonica -> la amigable: cubre /tienda/articulo/... y
+            // las viejas con '/' en la referencia (ej. /cole-and-son/albemarle/94/8043-32181).
+            if (rawurldecode($this->uri->uri_string()) !== $url_seo_producto) {
                 redirect($url_seo_producto, 'location', 301);
                 return;
             }
@@ -2196,7 +2198,7 @@ class Tienda extends CI_Controller {
             $nombre_slug_herr = (trim($datos_item['item_name'])!='') ? $datos_item['item_name'] : (trim($datos_item['item_ref'])!='' ? $datos_item['item_ref'] : 'producto');
             $url_seo_herr = 'herramientas/'.$this->urlenc_aux($nombre_slug_herr).'-'.$datos_item['item_id'];
             $this->data['url_canonica'] = base_url().$url_seo_herr;
-            if (strpos($this->uri->uri_string(), 'tienda/articulo') === 0) {
+            if (rawurldecode($this->uri->uri_string()) !== $url_seo_herr) {
                 redirect($url_seo_herr, 'location', 301);
                 return;
             }
