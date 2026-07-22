@@ -4811,7 +4811,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 	private function slug_seo($str){
 		$search =  explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u,Á,É,Í,Ó,Ú,Ñ,%,!,(,)");
 		$replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,ñ,,,,");
-		return str_replace($search,$replace,strtolower(str_replace(',','', str_replace('+','-plus-',str_replace('#','number-',str_replace('&','and',str_replace(' ','-',rawurldecode($str))))))));
+		return str_replace($search,$replace,strtolower(str_replace(',','', str_replace('+','-plus-',str_replace('#','number-',str_replace('&','and',str_replace(' ','-',str_replace('/','-',rawurldecode($str)))))))));
 	}
 	function get_id_marca_por_slug($slug){
 		$marcas = $this->db->select('c.cat_id, c.cat_name, COUNT(i.item_id) as prod', FALSE)
