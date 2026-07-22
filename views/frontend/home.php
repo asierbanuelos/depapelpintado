@@ -231,7 +231,8 @@ if ($gaur <= '2022-08-26')
   text-transform: uppercase;
   color: #a07d54;
 }
-.home-popup-copy h2 {
+.home-popup-copy .home-popup-title {
+  display: block;
   font-size: clamp(30px, 4vw, 48px);
   line-height: 1;
   margin: 0 0 18px;
@@ -308,11 +309,11 @@ if ($gaur <= '2022-08-26')
   .home-popup-eyebrow {
     color: #d7b691;
   }
-  .home-popup-copy h2,
+  .home-popup-copy .home-popup-title,
   .home-popup-copy p {
     color: #fff;
   }
-  .home-popup-copy h2 {
+  .home-popup-copy .home-popup-title {
     margin-bottom: 14px;
   }
   .home-popup-copy p {
@@ -362,7 +363,7 @@ if ($gaur <= '2022-08-26')
           <div class="home-popup-copy">
             <div>
               <span class="home-popup-eyebrow">Inicio</span>
-              <h2 id="homeRegisterPopupTitle">Regístrate</h2>
+              <span class="home-popup-title" id="homeRegisterPopupTitle">Regístrate</span>
               <p>¿No tienes cuenta en dePapelPintado? Regístrate y consigue 10 euros de descuento.</p>
               <div class="home-popup-actions">
                 <a class="home-popup-btn home-popup-btn-primary" href="/tienda/mi_cuenta/nueva">Regístrate</a>
@@ -518,7 +519,7 @@ if ($gaur <= '2022-08-26')
           </div>
         </a>
         <div class="categoria-tile-label">
-          <a href="<?= $el->enlace ?>"><h3 style="font-size:inherit;font-weight:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;margin:0;"><?= $titulo_display ?></h3></a>
+          <a href="<?= $el->enlace ?>"><h2 style="font-size:inherit;font-weight:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;margin:0;"><?= $titulo_display ?></h2></a>
         </div>
       </div>
       <?php endforeach; ?>
@@ -537,7 +538,7 @@ if ($gaur <= '2022-08-26')
           </div>
         </a>
         <div class="categoria-tile-label">
-          <a href="<?= $cs['enlace'] ?>"><h3 style="font-size:inherit;font-weight:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;margin:0;"><?= $cs['titulo'] ?></h3></a>
+          <a href="<?= $cs['enlace'] ?>"><h2 style="font-size:inherit;font-weight:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;margin:0;"><?= $cs['titulo'] ?></h2></a>
         </div>
       </div>
       <?php endforeach; ?>
