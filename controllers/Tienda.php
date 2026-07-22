@@ -671,8 +671,10 @@ class Tienda extends CI_Controller {
         // introducir aqui el contenido a mostrar en los metas
         //  para el titulo sigue este formato: "Papelpintado %title% - %color estilo y demas%"
         $meta_datos['title']='Inicio - De Papel Pintado';
-        
+
         $this->data['meta_datos'] = $meta_datos;
+        $this->data['meta_title']='Tienda de Papel Pintado Online · Miles de diseños | De Papel Pintado';
+        $this->data['meta_description']='Tu tienda de papel pintado online: miles de papeles pintados, murales y revestimientos de las mejores marcas. Envío gratis a España. ¡Decora tu pared con estilo!';
 
         $this->data['categ'] = -1;
         

@@ -55,7 +55,7 @@
   font-weight: 300;
   letter-spacing: 3px;
   color: rgba(255,255,255,0.88);
-  margin-bottom: 36px;
+  margin: 0 0 36px;
   text-transform: uppercase;
 }
 .hero-static-btn {
@@ -136,8 +136,8 @@ if (!$_banner2_exists && !empty($images)) {
   <div class="hero-static-overlay"></div>
   <div class="hero-static-content">
     <p class="hero-static-badge"><?= $_banner_badge ?></p>
-    <h1 class="hero-static-h1"><?= $_banner_h1 ?></h1>
-    <p class="hero-static-sub"><?= $_banner_sub ?></p>
+    <div class="hero-static-h1"><?= $_banner_h1 ?></div>
+    <h1 class="hero-static-sub"><?= $_banner_sub ?></h1>
     <a href="<?= $_banner_url ?>" class="hero-static-btn"><?= $_banner_btn ?></a>
   </div>
 </div>

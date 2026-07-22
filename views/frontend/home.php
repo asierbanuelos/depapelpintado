@@ -58,7 +58,8 @@ if ($gaur <= '2022-08-26')
   margin-bottom: 12px;
   display: block;
 }
-.trust-badge-item h4 {
+.trust-badge-item .trust-badge-title {
+  display: block;
   font-size: 17px;
   font-weight: 700;
   letter-spacing: 1.5px;
@@ -380,22 +381,22 @@ if ($gaur <= '2022-08-26')
         <div class="row">
           <div class="col-md-3 trust-badge-item">
             <span class="trust-badge-icon"><i class="fas fa-exchange-alt"></i></span>
-            <h4>Cambios y devoluciones</h4>
+            <span class="trust-badge-title">Cambios y devoluciones</span>
             <p>¡Hacemos cambios y devoluciones en cualquier compra sin problema!</p>
           </div>
           <div class="col-md-3 trust-badge-item">
             <span class="trust-badge-icon"><i class="far fa-user"></i></span>
-            <h4>Atención personal</h4>
+            <span class="trust-badge-title">Atención personal</span>
             <p>Te ayudamos a elegir, por teléfono, email, WhatsApp o videollamada.</p>
           </div>
           <div class="col-md-3 trust-badge-item">
             <span class="trust-badge-icon"><i class="far fa-heart"></i></span>
-            <h4>Envíos gratis</h4>
+            <span class="trust-badge-title">Envíos gratis</span>
             <p>Por compras superiores de 50€</p>
           </div>
           <div class="col-md-3 trust-badge-item">
             <span class="trust-badge-icon"><i class="far fa-paper-plane"></i></span>
-            <h4>Envíos a Europa</h4>
+            <span class="trust-badge-title">Envíos a Europa</span>
             <p>¡Llegamos a todos los rincones! (Si estás en otro país igual escríbenos)</p>
           </div>
         </div>
@@ -406,22 +407,22 @@ if ($gaur <= '2022-08-26')
           <?php for ($ti = 0; $ti < 2; $ti++): ?>
           <div class="trust-badge-item trust-slide-item">
             <span class="trust-badge-icon"><i class="fas fa-exchange-alt"></i></span>
-            <h4>Cambios y devoluciones</h4>
+            <span class="trust-badge-title">Cambios y devoluciones</span>
             <p>¡Hacemos cambios y devoluciones en cualquier compra sin problema!</p>
           </div>
           <div class="trust-badge-item trust-slide-item">
             <span class="trust-badge-icon"><i class="far fa-user"></i></span>
-            <h4>Atención personal</h4>
+            <span class="trust-badge-title">Atención personal</span>
             <p>Te ayudamos a elegir, por teléfono, email, WhatsApp o videollamada.</p>
           </div>
           <div class="trust-badge-item trust-slide-item">
             <span class="trust-badge-icon"><i class="far fa-heart"></i></span>
-            <h4>Envíos gratis</h4>
+            <span class="trust-badge-title">Envíos gratis</span>
             <p>Por compras superiores de 50€</p>
           </div>
           <div class="trust-badge-item trust-slide-item">
             <span class="trust-badge-icon"><i class="far fa-paper-plane"></i></span>
-            <h4>Envíos a Europa</h4>
+            <span class="trust-badge-title">Envíos a Europa</span>
             <p>¡Llegamos a todos los rincones!</p>
           </div>
           <?php endfor; ?>
@@ -556,7 +557,7 @@ if ($gaur <= '2022-08-26')
       letter-spacing: 5px;
       text-transform: uppercase;
       color: #555;
-      margin-bottom: 40px;
+      margin: 0 0 40px;
       font-family: 'Poppins', sans-serif;
     }
     .producto-card {
@@ -668,7 +669,7 @@ if ($gaur <= '2022-08-26')
 
     <div class="productos-home">
       <div class="container">
-        <p class="productos-home-titulo">Selección</p>
+        <h2 class="productos-home-titulo">Los papeles pintados más vendidos</h2>
         <div class="row">
           <?php foreach ($novedades as $k):
             $pre = isset($tipo_label[$k['item_tipo']]) ? $tipo_label[$k['item_tipo']] : '';
@@ -782,6 +783,14 @@ if ($gaur <= '2022-08-26')
       margin: 0;
       font-family: 'MoonCreme', Georgia, serif;
     }
+    .estancias-home-desc {
+      margin: 14px 0 0;
+      max-width: 720px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #8a8a8a;
+      font-family: 'Poppins', sans-serif;
+    }
     .estancia-tile {
       margin-bottom: 8px;
     }
@@ -813,7 +822,8 @@ if ($gaur <= '2022-08-26')
     <div class="estancias-home">
       <div class="container">
         <div class="estancias-home-header">
-          <h2 class="estancias-home-titulo">Papel Pintado</h2>
+          <h2 class="estancias-home-titulo">Papel pintado para cada estancia</h2>
+          <p class="estancias-home-desc">Descubre ideas de papel pintado para el dormitorio, el salón, la cocina o el baño. Encuentra el diseño perfecto para cada rincón de tu hogar entre miles de referencias de las mejores marcas.</p>
         </div>
         <div class="row">
           <?php
@@ -881,7 +891,7 @@ if ($gaur <= '2022-08-26')
 </style>
 <div class="faq-home-section">
   <div class="container">
-    <h2>Preguntas frecuentes</h2>
+    <h2>Preguntas frecuentes sobre papel pintado</h2>
     <div class="faq-home-list" itemscope itemtype="https://schema.org/FAQPage">
       <?php foreach ($faqs as $faq): ?>
       <div class="faq-home-item" itemprop="mainEntity" itemscope itemtype="https://schema.org/Question">
