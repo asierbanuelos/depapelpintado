@@ -1625,6 +1625,7 @@ class Demo_cart_admin_model extends CI_Model {
       	'nueva_categoria_activo'=>$nueva_categoria_activo,
       	'categoria_publico'=>$categoria_publico,
       	'h1_categoria'=>$data['h1_categoria'],
+      	'intro_categoria'=>isset($data['intro_categoria']) ? $data['intro_categoria'] : '',
       	//'h2_categoria'=>$data['h2_categoria'],
       	'descripcion_categoria'=>$data['descripcion_categoria'],
       	'meta_title_categoria'=>$data['meta_title_categoria'],

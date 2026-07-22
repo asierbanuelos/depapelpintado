@@ -68,6 +68,12 @@
         ?>
         <div class="sec row"><div class="col two">Texto H1:</div><?= form_input("h1_categoria", $categoria->h1_categoria, 'class="ten"') ?></div>
         <br />
+        <?php if (!empty($url_web)): ?>
+        <div class="sec row" style="margin-bottom:10px;"><a href="<?= $url_web ?>" target="_blank" style="display:inline-block;background:#B05380;color:#fff;text-decoration:none;padding:6px 16px;border-radius:4px;">Ver en la web &rarr;</a></div>
+        <?php endif; ?>
+        <div class="sec row" style="margin-top:6px;"><strong>Intro corta</strong> (1-2 frases, se muestra bajo el título del catálogo):</div>
+        <div class="sec row"><textarea name="intro_categoria" maxlength="500" style="width:100%;height:70px;" placeholder="Ej. Descubre el papel pintado para… (1-2 frases)"><?php echo htmlspecialchars(isset($categoria->intro_categoria) ? $categoria->intro_categoria : ''); ?></textarea></div>
+        <br />
         <div class="sec row">Descripción (al menos 900 palabras):</div>
         <div class="sec row"><textarea id="descripcion_categoria" name="descripcion_categoria"><?php echo $categoria->descripcion_categoria; ?></textarea></div>
         <br />

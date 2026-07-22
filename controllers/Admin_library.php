@@ -1052,21 +1052,25 @@ class Admin_library extends CI_Controller {
     }
     function editar_categoria_seo($id=0){
       $this->load->model('demo_cart_admin_model');
+      $this->db->cache_off();
       //$this->data['estilos']=$this->demo_cart_admin_model->get_estilos("DESC");
       if ($id==0){
         $this->data['categoria']=$this->objeto_vacio('nueva_categoria');
+        $this->data['categoria_ekam']=$this->objeto_vacio('nueva_categoria');
       }
       else{
         $nueva_categoria=$this->demo_cart_admin_model->get_categoria_seo($id);
-        $this->data['categoria']=$nueva_categoria[0];
+        $this->data['categoria']=$nueva_categoria['principal'];
+        $this->data['categoria_ekam']=isset($nueva_categoria['ekam']) ? $nueva_categoria['ekam'] : $this->objeto_vacio('nueva_categoria');
       }
+      $this->data['url_web']=trim($this->data['categoria']->nueva_categoria_name_url)!='' ? '/'.$this->data['categoria']->nueva_categoria_name_url : '';
       $this->data['filtros_categoria']=$this->demo_cart_admin_model->get_filtros_categoria_array();
       $this->load->view('demo/admin_examples/articulos/categorias_editar', $this->data);
     }
     function update_categoria_seo(){
-      //$this->db->cache_delete_all();
       $this->load->model('demo_cart_admin_model');
       $return = $this->demo_cart_admin_model->demo_save_categoria_seo();
+      $this->db->cache_delete_all();
       //echo json_encode($return);
       redirect('admin_library/categorias_seo');
     }
