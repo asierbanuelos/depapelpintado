@@ -43,7 +43,7 @@ if (trim($img_modal)!=''){
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title h6" id="exampleModalLongTitle">Producto agregado a su carrito de compras</h2>
+        <span class="modal-title h6" id="exampleModalLongTitle">Producto agregado a su carrito de compras</span>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
