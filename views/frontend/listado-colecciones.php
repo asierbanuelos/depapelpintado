@@ -10,11 +10,15 @@ if (isset($_GET['test']) && $_GET['test']=='eneko'){
 
 ?>
 
-<div class="wrapper">
-  <h1 class="titulo-1-grande pt-4 pb-4 text-center"><?php echo $texto_h1_seccion; ?></h1>
+<div class="categ-breadcrumb-bar">
   <div class="container">
-    <?php 
-    $this->load->view('frontend/migas_nuevas_small', $this->data);
+    <?php $this->load->view('frontend/migas_nuevas_small', $this->data); ?>
+  </div>
+</div>
+<div class="wrapper">
+  <h1 class="titulo-1-grande pt-2 pb-4 text-center"><?php echo $texto_h1_seccion; ?></h1>
+  <div class="container">
+    <?php
     if (trim($fab->cat_text)!=''){
       ?>
       <div class='col-12'>
