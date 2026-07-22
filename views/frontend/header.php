@@ -859,11 +859,23 @@ if (!isset($url_canonica))
   .categ-breadcrumb a:hover { color: #333; }
   .categ-h1 { font-family: 'MoonCreme', Georgia, serif; font-size: clamp(28px, 4vw, 52px); font-weight: normal; letter-spacing: 6px; text-transform: uppercase; color: #222; margin: 0 0 16px; line-height: 1.2; }
   @media (max-width: 767px) { .categ-h1 { text-align: center; } }
-  .categ-intro { font-family: 'Poppins', sans-serif; font-size: 15px; line-height: 1.65; color: #555; max-width: 820px; margin: 0 0 6px; font-weight: 300; }
+  .categ-intro { font-family: 'Poppins', sans-serif; font-size: 15px; line-height: 1.65; color: #555; max-width: none; margin: 0 0 6px; font-weight: 300; }
   @media (max-width: 767px) { .categ-intro { text-align: center; font-size: 14px; } }
   .categ-desc { font-family: 'Poppins', sans-serif; font-size: 13px; color: #666; font-weight: 300; line-height: 1.7; max-height: 52px; overflow: hidden; transition: max-height 0.6s ease; }
   .categ-desc.expanded { max-height: 9999px; }
   .categ-leer-mas { font-family: 'Poppins', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #BB8AA3; cursor: pointer; border: none; background: none; padding: 6px 0 0; display: inline-block; }
+  /* ---- Descripcion larga del catalogo (colecciones y estilos): tipografia rica ---- */
+  .categ-desc-text { font-family: 'Poppins', sans-serif; font-size: 14px; line-height: 1.85; color: #666; font-weight: 300; }
+  .categ-desc-text > *:first-child { margin-top: 0; }
+  .categ-desc-text h2 { font-family: 'MoonCreme', Georgia, serif; font-size: clamp(20px, 2.4vw, 26px); font-weight: normal; letter-spacing: 2px; text-transform: uppercase; color: #222; margin: 0 0 16px; line-height: 1.3; }
+  .categ-desc-text h3 { font-family: 'MoonCreme', Georgia, serif; font-size: clamp(17px, 2vw, 20px); font-weight: normal; letter-spacing: 1.5px; color: #BB8AA3; margin: 30px 0 12px; line-height: 1.35; }
+  .categ-desc-text h4 { font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600; letter-spacing: .5px; color: #333; margin: 22px 0 10px; }
+  .categ-desc-text p { margin: 0 0 16px; }
+  .categ-desc-text strong, .categ-desc-text b { color: #333; font-weight: 600; }
+  .categ-desc-text a { color: #BB8AA3; text-decoration: none; border-bottom: 1px solid rgba(187,138,163,.4); }
+  .categ-desc-text a:hover { color: #a36185; border-bottom-color: #a36185; }
+  .categ-desc-text ul, .categ-desc-text ol { margin: 0 0 16px; padding-left: 20px; }
+  .categ-desc-text li { margin: 0 0 8px; }
   .categ-divider { border: none; border-top: 1px solid #e8e4df; margin: 0; }
 
   /* ===== PAGINACIÓN ===== */
@@ -922,7 +934,10 @@ if (!isset($url_canonica))
   .listado-productos .articulo-block:hover .card-img-top { transform: scale(1.04); }
   .listado-productos .card-body { padding: 0; }
   .listado-productos .card-text.fabricante { display: none; }
-  .listado-productos .card-title { font-family: 'MoonCreme', Georgia, serif; font-size: 17px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase; color: #000; text-align: left; margin: 0 0 4px; line-height: 1.4; }
+  .card-body .card-title { display: block; font-family: 'MoonCreme', Georgia, serif; font-size: 17px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase; color: #000; text-align: left; margin: 0 0 4px; line-height: 1.4; }
+  .card-body .card-title a { color: #000; text-decoration: none; }
+  .card-body .card-title a:hover { color: #BB8AA3; }
+  .listado-productos .card-title { display: block; font-family: 'MoonCreme', Georgia, serif; font-size: 17px; font-weight: normal; letter-spacing: 2px; text-transform: uppercase; color: #000; text-align: left; margin: 0 0 4px; line-height: 1.4; }
   .listado-productos .card-title a { color: #000; text-decoration: none; }
   .listado-productos .card-title a:hover { color: #BB8AA3; }
   .listado-productos .card-text.precio { font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 300; color: #555; text-align: left; margin: 0 0 6px; }

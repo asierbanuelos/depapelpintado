@@ -220,7 +220,7 @@ foreach($all as $key){
 				?>
 			</div>
 			<div class="card-body px-0">
-				<h3 class="card-title"><a href="<?php echo $url_producto; ?>"><?php echo $txt_referencia; ?></a></h3>
+				<span class="card-title"><a href="<?php echo $url_producto; ?>"><?php echo $txt_referencia; ?></a></span>
 				<p class="card-text precio">
 					<?php
 					if ($todo_ok) {
