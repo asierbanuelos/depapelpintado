@@ -2696,7 +2696,10 @@ class Admin_library extends CI_Controller {
 		//~ print_r($this->data['item_data']);
 		//~ print '</xmp></pre>';
 		//~ exit;
-		
+
+		// Fix Notices: en el admin no estan inicializados los settings del carrito Flexi -> format_currency
+		$this->load->model('flexi_cart_model');
+		if (! isset($this->flexi->cart_contents['settings'])) $this->flexi_cart_model->set_cart_defaults();
 		$this->load->view('demo/admin_examples/orders/order_details_view', $this->data);
 	}
 
