@@ -52,6 +52,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /*
 */
 $route['dgTsg36shsd73dbcr245sj9d'] = 'tools/db_cache_delete';
+// Alias por comodidad: variantes del nombre del editor SEO de categorias principales
+$route['admin_library/tipo_productos_seo'] = 'admin_library/tipos_producto_seo';
+$route['admin_library/categorias_principales_seo'] = 'admin_library/tipos_producto_seo';
 $route['default_controller'] = 'tienda';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
