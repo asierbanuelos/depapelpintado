@@ -4432,6 +4432,26 @@ class Flexi_cart_model extends Flexi_cart_lite_model
     }
 
     function get_estancias_home($tipo_producto = 0, $limit = 4) {
+      // Caché de 5 minutos: misma familia de problema que get_items_portada, subquery
+      // correlacionada por cada fila sin caché en cada visita a portada.
+      $cache_key = 'estancias_home_' . (int)$tipo_producto . '_' . (int)$limit;
+      $cache_file = APPPATH . 'cache/' . $cache_key . '.cache';
+      if (file_exists($cache_file) && (time() - filemtime($cache_file)) < 300) {
+        $cached = @unserialize(@file_get_contents($cache_file));
+        if ($cached !== false) return $cached;
+      }
+      $lock_fp = $this->acquire_cache_lock($cache_file);
+      if ($lock_fp && file_exists($cache_file) && (time() - filemtime($cache_file)) < 300) {
+        $cached = @unserialize(@file_get_contents($cache_file));
+        if ($cached !== false) {
+          $this->release_cache_lock($lock_fp);
+          return $cached;
+        }
+      }
+      if (!$lock_fp && file_exists($cache_file)) {
+        $cached = @unserialize(@file_get_contents($cache_file));
+        if ($cached !== false) return $cached;
+      }
       $sql = "
         SELECT
           nc.nueva_categoria_id, nc.nueva_categoria_name, nc.nueva_categoria_name_url,
@@ -4447,10 +4467,35 @@ class Flexi_cart_model extends Flexi_cart_lite_model
           AND nc.nueva_categoria_activo = 1
         LIMIT " . (int)$limit;
       $query = $this->db->query($sql);
-      return $query ? $query->result_array() : array();
+      $result = $query ? $query->result_array() : array();
+      @file_put_contents($cache_file . '.tmp', serialize($result));
+      @rename($cache_file . '.tmp', $cache_file);
+      $this->release_cache_lock($lock_fp);
+      return $result;
     }
 
     function get_items_portada($limit = 8) {
+      // Caché de 5 minutos: query pesada (varios JOIN + GROUP_CONCAT) que se lanzaba
+      // sin caché en cada visita a portada; bajo tráfico alto se llegaron a amontonar
+      // hasta 10 copias en paralelo, cada una tardando minutos.
+      $cache_key = 'items_portada_' . (int)$limit;
+      $cache_file = APPPATH . 'cache/' . $cache_key . '.cache';
+      if (file_exists($cache_file) && (time() - filemtime($cache_file)) < 300) {
+        $cached = @unserialize(@file_get_contents($cache_file));
+        if ($cached !== false) return $cached;
+      }
+      $lock_fp = $this->acquire_cache_lock($cache_file);
+      if ($lock_fp && file_exists($cache_file) && (time() - filemtime($cache_file)) < 300) {
+        $cached = @unserialize(@file_get_contents($cache_file));
+        if ($cached !== false) {
+          $this->release_cache_lock($lock_fp);
+          return $cached;
+        }
+      }
+      if (!$lock_fp && file_exists($cache_file)) {
+        $cached = @unserialize(@file_get_contents($cache_file));
+        if ($cached !== false) return $cached;
+      }
       $sql = "
         SELECT
           i.item_id, i.item_ref, i.item_name, i.item_tipo, i.item_price,
@@ -4470,7 +4515,11 @@ class Flexi_cart_model extends Flexi_cart_lite_model
         ORDER BY i.portada DESC, i.item_id DESC
         LIMIT " . (int)$limit;
       $query = $this->db->query($sql);
-      return $query ? $query->result_array() : array();
+      $result = $query ? $query->result_array() : array();
+      @file_put_contents($cache_file . '.tmp', serialize($result));
+      @rename($cache_file . '.tmp', $cache_file);
+      $this->release_cache_lock($lock_fp);
+      return $result;
     }
 
     function search_items($search="",$page=-1){
@@ -5473,7 +5522,11 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		while (!flock($lock_fp, LOCK_EX | LOCK_NB)){
 			usleep(100000); // 0.1s
 			$waited += 0.1;
-			if ($waited >= 8){ // no bloquear la peticion mas de 8s: seguimos sin lock antes que colgarla
+			if ($waited >= 25){ // no bloquear la peticion mas de 25s: seguimos sin lock antes que colgarla.
+				// Subido de 8 a 25s (2026-07-21): con la BD muy cargada, las queries que
+				// protege este lock (categorias/portada) pueden tardar mas de 8s incluso
+				// sin contienda, y un timeout corto provoca que varias peticiones se
+				// rindan a la vez y lancen la query pesada en paralelo (estampida).
 				fclose($lock_fp);
 				return false;
 			}
@@ -5551,6 +5604,12 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				$this->release_cache_lock($lock_fp);
 				return $cached;
 			}
+		}
+		if (!$lock_fp && file_exists($cache_file)) {
+			// no conseguimos el lock a tiempo (BD muy cargada): mejor servir cache
+			// caducada que lanzar la query pesada en paralelo con la que ya la tiene
+			$cached = @unserialize(@file_get_contents($cache_file));
+			if ($cached !== false) return $cached;
 		}
 
 		// recibimos todos los ids de la categoría por un filtrado previo
@@ -5764,6 +5823,10 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 				$this->release_cache_lock($lock_fp);
 				return $cached;
 			}
+		}
+		if (!$lock_fp && file_exists($cache_file)) {
+			$cached = @unserialize(@file_get_contents($cache_file));
+			if ($cached !== false) return $cached;
 		}
 
 		if (count($a_ids)==0) $a_ids[]=0;
@@ -6068,6 +6131,12 @@ class Flexi_cart_model extends Flexi_cart_lite_model
           $this->release_cache_lock($lock_fp);
           return $cached;
         }
+      }
+      if (!$lock_fp && file_exists($cache_file)) {
+        // no conseguimos el lock a tiempo (BD muy cargada): mejor servir cache
+        // caducada que lanzar la query pesada en paralelo con la que ya la tiene
+        $cached = @unserialize(@file_get_contents($cache_file));
+        if ($cached !== false) return $cached;
       }
       //$this->db->cache_on();
       $whereclause = "(cats LIKE '%Papel Pintado%' OR cats LIKE '%Foto Murales%') ";
