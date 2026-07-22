@@ -5684,7 +5684,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		// aleatoriamente qué variante de color se muestra en cada actualización de la caché
 		$group_field="IF(demo_items.item_model_id>0, demo_items.item_model_id, demo_items.item_id)";
 
-		$query_txt="SELECT * FROM (SELECT $select_inner FROM demo_items $join_txt WHERE $where_txt ORDER BY RAND()) AS demo_items GROUP BY $group_field $order_by $limit_txt ";
+		$query_txt="SELECT * FROM (SELECT $select_inner FROM demo_items $join_txt WHERE $where_txt ORDER BY portada DESC, orden ASC, RAND()) AS demo_items GROUP BY $group_field $order_by $limit_txt ";
 
 		$query=$this->db->query($query_txt);
 		$result = $query ? $query->result_array() : array();
