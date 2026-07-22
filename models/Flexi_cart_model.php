@@ -5662,10 +5662,10 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			}
 		}
 		$select_inner='demo_items.*';
-		$order_by=" ORDER BY portada desc, IF(orden > 0, orden, 999999) asc, RAND(FLOOR(TO_DAYS(NOW())/3))";
+		$order_by=" ORDER BY portada desc, IF(portada = 1, orden, 999999) asc, RAND(FLOOR(TO_DAYS(NOW())/3))";
 		if ($cat_seo_ambiente!=0){
 			$select_inner.=', demo_item_cat_ambiente.idcategoria AS amb_orden';
-			$order_by=" ORDER BY amb_orden desc, portada desc, IF(orden > 0, orden, 999999) asc, RAND(FLOOR(TO_DAYS(NOW())/3))";
+			$order_by=" ORDER BY amb_orden desc, portada desc, IF(portada = 1, orden, 999999) asc, RAND(FLOOR(TO_DAYS(NOW())/3))";
 		}
 		if ($order!='')
 			$order_by=" ORDER BY $order ";
