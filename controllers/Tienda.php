@@ -1637,7 +1637,11 @@ class Tienda extends CI_Controller {
             
             //$this->data['all'] = $this->flexi_cart_model->get_items_cole($idcoleccion, false, $this->data['categ']);
 
-            $orden = 3; // en colecciones ordenamos por referencia por defecto
+            // Orden por defecto de la coleccion: portada primero, luego el campo 'orden' manual
+            // del panel (orden>0 arriba) y el resto aleatorio con semilla que cambia cada 3 dias.
+            // (orden=0 -> $this->orden() devuelve '' -> se usa el ORDER BY por defecto de
+            //  get_items_filtros_nuevo_listado, ver Flexi_cart_model ~5570).
+            $orden = 0;
             if (isset($_REQUEST['orden']))
                 $orden = $_REQUEST['orden'];
             $this->data['orden_seleccionado'] = $orden;
