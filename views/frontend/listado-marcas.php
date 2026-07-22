@@ -166,14 +166,8 @@ ksort($por_letra);
       <p class="marcas-lede">Explora nuestras firmas de papel pintado, murales, telas y revestimientos. Busca por nombre o navega con el índice alfabético.</p>
     </header>
 
-    <!-- Buscador + índice A-Z -->
+    <!-- Índice A-Z -->
     <div class="marcas-tools">
-      <div class="marcas-tools-row">
-        <div class="marcas-buscador">
-          <input type="search" id="buscar-marca" autocomplete="off" placeholder="Busca tu marca&hellip;" aria-label="Buscar marca">
-        </div>
-        <span class="marcas-count" id="buscar-marca-count"></span>
-      </div>
       <nav class="marcas-abc-index" id="marcas-abc" aria-label="Índice alfabético"></nav>
     </div>
 
@@ -203,26 +197,14 @@ ksort($por_letra);
       </div>
     <?php endforeach; ?>
 
-    <div class="marcas-sin-resultados" id="marcas-sin-resultados">
-      <span>Sin resultados</span>
-      <p>Prueba con otra palabra o navega con el índice alfabético.</p>
-    </div>
-
   </div>
 </div>
 
 <script>
 (function(){
-  var input = document.getElementById('buscar-marca');
-  if (!input) return;
-  var norm = function(s){ return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); };
-  var cards  = [].slice.call(document.querySelectorAll('.marca-card'));
+  var abcEl = document.getElementById('marcas-abc');
+  if (!abcEl) return;
   var grupos = [].slice.call(document.querySelectorAll('[data-grupo-letra]'));
-  var countEl = document.getElementById('buscar-marca-count');
-  var noRes   = document.getElementById('marcas-sin-resultados');
-  var abcEl   = document.getElementById('marcas-abc');
-
-  // Índice A-Z: solo letras con marcas
   var letrasConMarcas = {};
   grupos.forEach(function(g){
     var head = g.querySelector('.marcas-letra-head');
@@ -235,29 +217,10 @@ ksort($por_letra);
     var id = letrasConMarcas[L];
     b.disabled = !id;
     if (id) b.addEventListener('click', function(){
-      input.value = ''; filtrar();
       var el = document.getElementById(id);
       if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
     });
     abcEl.appendChild(b);
   });
-
-  function filtrar(){
-    var t = norm(input.value.trim());
-    var vis = 0;
-    cards.forEach(function(c){
-      var m = !t || norm(c.getAttribute('data-nombre')).indexOf(t) >= 0;
-      c.style.display = m ? '' : 'none';
-      if (m) vis++;
-    });
-    grupos.forEach(function(g){
-      var cs = [].slice.call(g.querySelectorAll('.marca-card'));
-      var any = cs.some(function(c){ return c.style.display !== 'none'; });
-      g.style.display = any ? '' : 'none';
-    });
-    if (countEl) countEl.innerHTML = t ? ('<b>'+vis+'</b> '+(vis===1?'marca':'marcas')) : '';
-    if (noRes) noRes.className = 'marcas-sin-resultados' + ((t && vis===0) ? ' show' : '');
-  }
-  input.addEventListener('input', filtrar);
 })();
 </script>
