@@ -158,6 +158,10 @@ $route['marcas/(:any)/(:any)'] = 'tienda/marca_seo/$1/$2';
 // acaba en numero (ej. /marcas/roberto-cavalli/roberto-cavalli-9) la capturaria como si fuera
 // un producto (id=9) y mostraria el catalogo vacio. articulo() extrae el id del ultimo segmento.
 $route['([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
+// URLs de producto con segmentos de mas (referencias con '/', ej. Cole & Son "94/8043"):
+// articulo() saca el id del ultimo segmento y hace 301 a la URL canonica (con los '/' -> '-').
+$route['([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
+$route['([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
 // Producto de herramientas (sin marca/coleccion): /herramientas/{nombre}-{id}
 $route['herramientas/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
 
