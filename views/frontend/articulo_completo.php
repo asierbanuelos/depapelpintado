@@ -388,7 +388,7 @@ for($i=0;$i<count($otro);$i++){
                       }
                     }
                     //echo '<div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-6 col-sp-6 text-center"><a href="'.base_url().'tienda/articulo/'.$this->uri->segment(3).'/'.$this->uri->segment(4).'/id/'.$item['item_id'].'" class="boton-opciones '.$txt_seleccionado.'">'.$item['texto_relacion'].'</a></div>';
-                    echo '<a href="'.base_url().'tienda/articulo/'.$this->uri->segment(3).'/'.$this->uri->segment(4).'/id/'.$item['item_id'].'" class="boton-opciones '.$txt_seleccionado.'">'.$item['texto_relacion'].'</a>';
+                    echo '<a href="'.base_url().'tienda/articulo/id/'.$item['item_id'].'" class="boton-opciones '.$txt_seleccionado.'">'.$item['texto_relacion'].'</a>';
                   }
                   ?>
                 </div>
@@ -437,7 +437,7 @@ for($i=0;$i<count($otro);$i++){
               <div class="row pb-4">
                 <div class="h5 mb-2 col-12">Otras medidas:</div>
                 <div class="col-12 form-grou">
-                  <select class="form-control" onchange="self.location='<?=base_url()."tienda/articulo/".$this->uri->segment(3)."/".$this->uri->segment(4)."/id/"?>'+this.options[this.selectedIndex].value;">
+                  <select class="form-control" onchange="self.location='<?=base_url()."tienda/articulo/id/"?>'+this.options[this.selectedIndex].value;">
                   <?php
                   foreach($variantes as $item){
                     $opt_selected='';
@@ -472,7 +472,7 @@ for($i=0;$i<count($otro);$i++){
               <div class="row pb-4">
                 <div class="h5 mb-2 col-12">Otras medidas:</div>
                 <div class="col-12 form-grou">
-                  <select class="form-control" onchange="self.location='<?=base_url()."tienda/articulo/".$this->uri->segment(3)."/".$this->uri->segment(4)."/id/"?>'+this.options[this.selectedIndex].value;">
+                  <select class="form-control" onchange="self.location='<?=base_url()."tienda/articulo/id/"?>'+this.options[this.selectedIndex].value;">
                   <?php
                   foreach($variantes as $item){
                     $opt_selected='';
