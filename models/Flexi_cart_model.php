@@ -2446,7 +2446,12 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		}
 
 		// Check per-email and per-IP usage limit.
+		// IP real del cliente detras de Cloudflare (CF-Connecting-IP); si no llega, la de CodeIgniter.
 		$user_ip = $CI->input->ip_address();
+		if (! empty($_SERVER['HTTP_CF_CONNECTING_IP']) && filter_var($_SERVER['HTTP_CF_CONNECTING_IP'], FILTER_VALIDATE_IP))
+		{
+			$user_ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+		}
 		$filtered_discounts = array();
 		foreach ($valid_discounts as $discount)
 		{

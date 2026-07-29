@@ -2007,10 +2007,16 @@ class Flexi_cart_admin_model extends Flexi_cart_lite_model
 					// Log per-email and per-IP discount usage.
 					if ($operator === '-' && ! empty($user_email))
 					{
+						// IP real del cliente detras de Cloudflare (CF-Connecting-IP); si no llega, la de CodeIgniter.
+						$log_ip = $CI->input->ip_address();
+						if (! empty($_SERVER['HTTP_CF_CONNECTING_IP']) && filter_var($_SERVER['HTTP_CF_CONNECTING_IP'], FILTER_VALIDATE_IP))
+						{
+							$log_ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
+						}
 						$this->db->replace('discount_usage_log', array(
 							'discount_id' => $active_discount['id'],
 							'user_email' => $user_email,
-							'user_ip' => $CI->input->ip_address(),
+							'user_ip' => $log_ip,
 							'order_number' => $order_number
 						));
 					}
