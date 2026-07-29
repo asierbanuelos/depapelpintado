@@ -1,5 +1,15 @@
 <div class="wrapper mi-cuenta">
   <div class="container">
+    <?php if (!empty($registro_ok)): ?>
+      <div class="text-center" style="background:#e8f6ec;border:1px solid #b7e1c4;color:#1e7a3d;border-radius:8px;padding:14px 18px;margin:18px 0;">
+        <strong>¡Bienvenido! Tu cuenta se ha creado correctamente.</strong><br>
+        <?php if (!empty($registro_mail_ok)): ?>
+          Te hemos enviado un email de bienvenida a <strong><?php echo htmlspecialchars($this->data['usuario']->email); ?></strong> (revisa también la carpeta de spam).
+        <?php else: ?>
+          Ya puedes usar tu cuenta. Si no te llega el email de bienvenida, revisa la carpeta de spam.
+        <?php endif; ?>
+      </div>
+    <?php endif; ?>
     <div class="row ">
       <div class="col-xl-3 col-lg-3 col-md-4 d-none d-md-block">
       </div>

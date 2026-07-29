@@ -25,6 +25,11 @@ if (!function_exists("urldec")){
 	?>
 	<input type="hidden" name="url_actual" id='url_actual' value="<?php echo current_url(); ?>" />
   <div class="container">
+    <?php if (! empty($message)) { ?>
+      <div id="message" style="margin:0 0 18px;padding:14px 18px;border-radius:8px;background:#fff6e6;border:1px solid #f0d190;color:#7a5a13;text-align:center;font-size:15px;line-height:1.5;">
+        <?php echo $message; ?>
+      </div>
+    <?php } ?>
     <div class='row heading-producto'>
     	<div class='cart-grid-body col-xs-12 col-lg-8' id='ajax_content'>
     		<div class='border rounded'>

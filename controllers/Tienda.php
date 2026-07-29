@@ -95,9 +95,12 @@ class Tienda extends CI_Controller {
 
                             //$this->data["logmsg"] = "Te has registrado correctamente, logeate para acceder a tus datos.";
                             $this->nuevo_usuario=true;
-                            
+                            $this->data['registro_ok']=true;
+
                             //$this->send_info_email($this->input->post("email"), "Gracias por registrarte en depapelpintado.es", $this->load->view('frontend/cuentas/emailregistro', array(), TRUE));
-                            $this->send_registro_email($this->input->post("email"), "Gracias por registrarte en depapelpintado.es", 'emailregistro_bono', TRUE);
+                            $registro_mail_ok = $this->send_registro_email($this->input->post("email"), "Gracias por registrarte en depapelpintado.es", 'emailregistro_bono', TRUE);
+                            $this->data['registro_mail_ok'] = $registro_mail_ok;
+                            if (! $registro_mail_ok) log_message('error', 'Fallo al enviar email de registro a '.$this->input->post("email"));
                         }
                     }
                 } 
@@ -191,6 +194,10 @@ class Tienda extends CI_Controller {
                             $this->data["logmsg"] = 'Los Datos introducidos no son validos.  ¿No recuerdas tu contraseña? <a href="' . base_url() . 'tienda/recuperar_contrasena">Pincha Aqui</a>';
         					$this->data["logmsg_carrito"] = 'Los Datos introducidos no son validos.  ¿No recuerdas tu contraseña? <a href="' . base_url() . 'tienda/recuperar_contrasena">Pincha Aqui</a>';
                         }
+        			}
+        			else{
+        				$this->data["logmsg"] = 'Debes introducir tu contraseña.';
+        				$this->data["logmsg_carrito"] = 'Debes introducir tu contraseña.';
         			}
         		}
     	    }

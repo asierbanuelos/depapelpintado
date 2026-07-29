@@ -27,7 +27,7 @@
             </label>
             <div class="col-md-8">
               <div class="input-group js-parent-focus">
-                <input name="pass" id="field-password" type="password" placeholder="Contraseña" class="form-control" />
+                <input name="pass" id="field-password" type="password" placeholder="Contraseña" class="form-control" required />
                 <span id="imgContrasena" data-activo=false><img src="/includes/iconos/show_hide_password_2_32.png" class="icon"></span>
 
                 <?php
