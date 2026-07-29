@@ -160,13 +160,15 @@ $route['marcas/(:any)/(:any)'] = 'tienda/marca_seo/$1/$2';
 // IMPORTANTE: va DESPUES de las rutas de marcas. Si estuviera antes, una coleccion cuyo slug
 // acaba en numero (ej. /marcas/roberto-cavalli/roberto-cavalli-9) la capturaria como si fuera
 // un producto (id=9) y mostraria el catalogo vacio. articulo() extrae el id del ultimo segmento.
-$route['([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
+// Nota: el char class incluye '.' porque algunos nombres tienen punto (ej. "Cumulus DAMASK.")
+// y el slug queda como "cumulus-damask.-107122". articulo() extrae el id del ultimo segmento.
+$route['([a-z0-9\-.]+)/([a-z0-9\-.]+)/([a-z0-9\-.]+-[0-9]+)'] = 'tienda/articulo';
 // URLs de producto con segmentos de mas (referencias con '/', ej. Cole & Son "94/8043"):
 // articulo() saca el id del ultimo segmento y hace 301 a la URL canonica (con los '/' -> '-').
-$route['([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
-$route['([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+)/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
+$route['([a-z0-9\-.]+)/([a-z0-9\-.]+)/([a-z0-9\-.]+)/([a-z0-9\-.]+-[0-9]+)'] = 'tienda/articulo';
+$route['([a-z0-9\-.]+)/([a-z0-9\-.]+)/([a-z0-9\-.]+)/([a-z0-9\-.]+)/([a-z0-9\-.]+-[0-9]+)'] = 'tienda/articulo';
 // Producto de herramientas (sin marca/coleccion): /herramientas/{nombre}-{id}
-$route['herramientas/([a-z0-9\-]+-[0-9]+)'] = 'tienda/articulo';
+$route['herramientas/([a-z0-9\-.]+-[0-9]+)'] = 'tienda/articulo';
 
 $route['(:any)'] = 'tienda/comprobar_url/$1';
 $route['(:any)/(:any)'] = 'tienda/comprobar_url/$1/$2';
