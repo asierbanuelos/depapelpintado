@@ -921,9 +921,7 @@ class Tienda extends CI_Controller {
     }
     function error_url($url){
         $this->load->library('email');
-        $config['wordwrap'] = FALSE;
-        $config['mailtype'] = 'html';
-        $this->email->initialize($config);
+        $this->_init_email_smtp(array('wordwrap' => FALSE, 'mailtype' => 'html'));
         $this->email->from('info@depapelpintado.es', 'dePapelPintado');
         $this->email->to('enanclares77@gmail.com');
 
@@ -4841,21 +4839,14 @@ $this->db->cache_off();
 
         // Test rapido de configuracion de email: ?k=...&testmail=correo@dominio
         if ($this->input->get('testmail')) {
-            ini_set('display_errors', 1); error_reporting(E_ALL);
             $to = $this->input->get('testmail');
-            $this->load->library('email');
-            $this->email->initialize(array(
-                'protocol'=>'smtp','smtp_host'=>'mail.depapelpintado.es','smtp_port'=>465,
-                'smtp_crypto'=>'ssl','smtp_user'=>'info@depapelpintado.es','smtp_pass'=>'Nic+FDV$Dg6&1',
-                'mailtype'=>'html','charset'=>'UTF-8','newline'=>"\r\n",'crlf'=>"\r\n"
+            $this->send_email($to, 'Test SMTP depapelpintado ('.date('H:i:s').')', array(
+                'nombre' => 'Test',
+                'msg'    => 'Prueba de configuracion SMTP.',
+                'pedido' => 'Si recibes este correo, el envio via SMTP funciona correctamente.'
             ));
-            $this->email->from('info@depapelpintado.es', 'dePapelPintado');
-            $this->email->to($to);
-            $this->email->subject('Test SMTP depapelpintado ('.date('H:i:s').')');
-            $this->email->message('<p>Prueba de envio via SMTP. Si recibes esto, funciona.</p>');
-            $ok = $this->email->send(FALSE);
             header('Content-Type: text/plain; charset=utf-8');
-            echo "send() = ".var_export($ok, true)."\n\n".$this->email->print_debugger();
+            echo "Email de prueba enviado a ".$to.". Debug:\n\n".$this->email->print_debugger();
             return;
         }
 
@@ -5520,12 +5511,21 @@ $this->db->cache_off();
      * The example 'Checkout Complete' page displays a confirmation of the users order, displaying their order number.
      * On a real world site, this page is typically accessed after the user has entered their payment details via a online payment gateway.
      */
+    // Inicializa la libreria email con la config SMTP de config/email.php.
+    // Aqui config/email.php NO se auto-carga, asi que lo incluimos explicitamente.
+    // La contrasena vive solo en config/email.php (gitignored), fuera de git.
+    private function _init_email_smtp($base = array()) {
+        $config = array();
+        $file = APPPATH.'config/email.php';
+        if (is_file($file)) { include $file; }
+        foreach ((array)$base as $k => $v) { $config[$k] = $v; }
+        $this->email->initialize($config);
+    }
+
     private function send_email($email, $subject, $body) {
 
         $this->load->library('email');
-        $config['wordwrap'] = FALSE;
-        $config['mailtype'] = 'html';
-        $this->email->initialize($config);
+        $this->_init_email_smtp(array('wordwrap' => FALSE, 'mailtype' => 'html'));
         $this->email->from('info@depapelpintado.es', 'dePapelPintado');
         $this->email->to($email);
 
@@ -5547,9 +5547,7 @@ $this->db->cache_off();
     private function send_info_email($email, $subject, $body) {
 
         $this->load->library('email');
-        $config['wordwrap'] = FALSE;
-        $config['mailtype'] = 'html';
-        $this->email->initialize($config);
+        $this->_init_email_smtp(array('wordwrap' => FALSE, 'mailtype' => 'html'));
         $this->email->from('info@depapelpintado.es', 'dePapelPintado');
         $this->email->to($email);
 
@@ -5564,9 +5562,7 @@ $this->db->cache_off();
     private function send_info_email_copia_oculta($email, $subject, $body) {
 
         $this->load->library('email');
-        $config['wordwrap'] = FALSE;
-        $config['mailtype'] = 'html';
-        $this->email->initialize($config);
+        $this->_init_email_smtp(array('wordwrap' => FALSE, 'mailtype' => 'html'));
         $this->email->from('info@depapelpintado.es', 'dePapelPintado');
         $this->email->to($email);
 
@@ -5581,9 +5577,7 @@ $this->db->cache_off();
     // Envia un email de plantilla (registro) con el logo incrustado (cid), inmune al bloqueo de Cloudflare al proxy de imagenes
     private function send_registro_email($email, $subject, $template, $bcc_self = FALSE) {
         $this->load->library('email');
-        $config['wordwrap'] = FALSE;
-        $config['mailtype'] = 'html';
-        $this->email->initialize($config);
+        $this->_init_email_smtp(array('wordwrap' => FALSE, 'mailtype' => 'html'));
         $this->email->from('info@depapelpintado.es', 'dePapelPintado');
         $this->email->to($email);
         if ($bcc_self) $this->email->bcc('info@depapelpintado.es');
