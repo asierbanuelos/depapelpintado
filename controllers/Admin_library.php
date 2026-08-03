@@ -153,6 +153,11 @@ class Admin_library extends CI_Controller {
 
     // ---- FAQs ----
 
+    // Categorias principales (tipo_producto) para las FAQs
+    private function _faq_tipos_producto(){
+      return array(0=>'Papel Pintado',1=>'Murales',2=>'Revestimientos',3=>'Telas',4=>'Alfombras',5=>'Herramientas',6=>'Complementos');
+    }
+
     function faqs(){
       $this->load->model('demo_cart_admin_model');
       $filtro_tipo    = $this->input->get('tipo') ? $this->input->get('tipo') : '';
@@ -160,6 +165,7 @@ class Admin_library extends CI_Controller {
       // Traer todas siempre; la vista las separa en pestañas
       $this->data['faqs']           = $this->demo_cart_admin_model->get_faqs_admin('', 0);
       $this->data['categorias_seo'] = $this->demo_cart_admin_model->get_categorias_seo_array_para_edicion();
+      $this->data['tipos_producto'] = $this->_faq_tipos_producto();
       $this->data['filtro_tipo']    = $filtro_tipo;
       $this->data['filtro_page_id'] = $filtro_page_id;
       $this->load->view('demo/admin_examples/faqs/listado', $this->data);
@@ -167,9 +173,10 @@ class Admin_library extends CI_Controller {
 
     function faq_nueva(){
       $this->load->model('demo_cart_admin_model');
+      $tipo_get = $this->input->get('tipo');
       $prefill = new stdClass();
       $prefill->faq_id   = 0;
-      $prefill->page_type = $this->input->get('tipo') === 'categoria' ? 'categoria' : 'home';
+      $prefill->page_type = in_array($tipo_get, array('categoria','tipo_producto'), true) ? $tipo_get : 'home';
       $prefill->page_id   = (int)$this->input->get('page_id');
       $prefill->pregunta  = '';
       $prefill->respuesta = '';
@@ -177,6 +184,7 @@ class Admin_library extends CI_Controller {
       $prefill->activo    = 1;
       $this->data['faq']        = $prefill;
       $this->data['categorias_seo'] = $this->demo_cart_admin_model->get_categorias_seo_array_para_edicion();
+      $this->data['tipos_producto'] = $this->_faq_tipos_producto();
       $this->load->view('demo/admin_examples/faqs/editar', $this->data);
     }
 
@@ -184,6 +192,7 @@ class Admin_library extends CI_Controller {
       $this->load->model('demo_cart_admin_model');
       $this->data['faq']        = $this->demo_cart_admin_model->get_faq((int)$id);
       $this->data['categorias_seo'] = $this->demo_cart_admin_model->get_categorias_seo_array_para_edicion();
+      $this->data['tipos_producto'] = $this->_faq_tipos_producto();
       $this->load->view('demo/admin_examples/faqs/editar', $this->data);
     }
 

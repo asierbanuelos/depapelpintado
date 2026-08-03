@@ -215,6 +215,57 @@ function toggleCategoriaDesc() {
 </script>
 <?php endif; ?>
 
+<?php if (!empty($faqs)): ?>
+<style>
+.faq-home-section { background: #f9f6f4; padding: 48px 0 56px; }
+.faq-home-section h2 { font-size: 24px; font-weight: 400; color: #333; text-align: center; margin: 0 0 30px; letter-spacing: .02em; }
+.faq-home-list { max-width: 760px; margin: 0 auto; }
+.faq-home-item { background: #fff; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.07); overflow: hidden; }
+.faq-home-btn { display: flex; justify-content: space-between; align-items: center; width: 100%; background: none; border: none; padding: 18px 20px; font-size: 15px; font-weight: 600; color: #333; cursor: pointer; text-align: left; gap: 16px; line-height: 1.45; }
+.faq-home-btn:hover { color: #B05380; }
+.faq-home-icon { flex-shrink: 0; font-size: 22px; color: #B05380; font-weight: 300; transition: transform .25s; line-height: 1; }
+.faq-home-btn.open .faq-home-icon { transform: rotate(45deg); }
+.faq-home-body { display: none; padding: 0 20px 18px; font-size: 14px; color: #555; line-height: 1.75; border-top: 1px solid #f0ece9; }
+</style>
+<div class="faq-home-section">
+  <div class="container">
+    <h2>Preguntas frecuentes</h2>
+    <div class="faq-home-list" itemscope itemtype="https://schema.org/FAQPage">
+      <?php foreach ($faqs as $faq): ?>
+      <div class="faq-home-item" itemprop="mainEntity" itemscope itemtype="https://schema.org/Question">
+        <button class="faq-home-btn" itemprop="name" onclick="var b=this.nextElementSibling;b.style.display=b.style.display==='block'?'none':'block';this.classList.toggle('open');">
+          <span><?= htmlspecialchars($faq->pregunta) ?></span>
+          <span class="faq-home-icon">+</span>
+        </button>
+        <div class="faq-home-body" itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer">
+          <span itemprop="text"><?= nl2br(htmlspecialchars($faq->respuesta)) ?></span>
+        </div>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</div>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    <?php foreach ($faqs as $i => $faq): ?>
+    <?= $i > 0 ? ',' : '' ?>
+    {
+      "@type": "Question",
+      "name": <?= json_encode($faq->pregunta, JSON_UNESCAPED_UNICODE) ?>,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": <?= json_encode($faq->respuesta, JSON_UNESCAPED_UNICODE) ?>
+      }
+    }
+    <?php endforeach; ?>
+  ]
+}
+</script>
+<?php endif; ?>
+
 <?php $this->load->view('frontend/catalogo_interlinks', $this->data); ?>
 
 <?php // newsletter_banner_footer se carga en footer.php ?>

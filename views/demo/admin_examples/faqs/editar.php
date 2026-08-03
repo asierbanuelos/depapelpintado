@@ -31,20 +31,28 @@
       <label>Página donde aparece esta FAQ</label>
       <div class="page-selector">
         <div>
-          <select name="page_type" id="page_type_sel" onchange="toggleCatSelect(this.value)" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
+          <select name="page_type" id="page_type_sel" onchange="toggleSelectors(this.value)" style="padding:8px;border:1px solid #ccc;border-radius:4px;">
             <option value="home" <?= (!isset($faq)||!$faq||$faq->page_type=='home')?'selected':'' ?>>Home</option>
             <option value="categoria" <?= (isset($faq)&&$faq&&$faq->page_type=='categoria')?'selected':'' ?>>Categoría SEO</option>
+            <option value="tipo_producto" <?= (isset($faq)&&$faq&&$faq->page_type=='tipo_producto')?'selected':'' ?>>Categoría principal</option>
           </select>
         </div>
         <div id="cat_selector" style="<?= (isset($faq)&&$faq&&$faq->page_type=='categoria')?'':'display:none;' ?>flex:1;min-width:260px;">
-          <select name="page_id" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
+          <select name="page_id" id="sel_categoria" <?= (isset($faq)&&$faq&&$faq->page_type=='categoria')?'':'disabled' ?> style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
             <option value="0">-- Selecciona categoría --</option>
             <?php foreach ($categorias_seo as $grupo => $items): ?>
               <optgroup label="<?= htmlspecialchars($grupo) ?>">
                 <?php foreach ($items as $cat_id => $cat_name): ?>
-                  <option value="<?= $cat_id ?>" <?= (isset($faq)&&$faq&&$faq->page_id==$cat_id)?'selected':'' ?>><?= htmlspecialchars($cat_name) ?></option>
+                  <option value="<?= $cat_id ?>" <?= (isset($faq)&&$faq&&$faq->page_type=='categoria'&&$faq->page_id==$cat_id)?'selected':'' ?>><?= htmlspecialchars($cat_name) ?></option>
                 <?php endforeach; ?>
               </optgroup>
+            <?php endforeach; ?>
+          </select>
+        </div>
+        <div id="tipoprod_selector" style="<?= (isset($faq)&&$faq&&$faq->page_type=='tipo_producto')?'':'display:none;' ?>flex:1;min-width:260px;">
+          <select name="page_id" id="sel_tipoprod" <?= (isset($faq)&&$faq&&$faq->page_type=='tipo_producto')?'':'disabled' ?> style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
+            <?php foreach ($tipos_producto as $tid => $tname): ?>
+              <option value="<?= $tid ?>" <?= (isset($faq)&&$faq&&$faq->page_type=='tipo_producto'&&$faq->page_id==$tid)?'selected':'' ?>><?= htmlspecialchars($tname) ?></option>
             <?php endforeach; ?>
           </select>
         </div>
@@ -76,9 +84,16 @@
     <div style="height:60px"></div>
   </div>
   <script>
-  function toggleCatSelect(val){
-    document.getElementById('cat_selector').style.display = (val==='categoria') ? 'block' : 'none';
-    if (val!=='categoria') document.querySelector('[name=page_id]').value='0';
+  function toggleSelectors(val){
+    var cat = document.getElementById('cat_selector');
+    var tip = document.getElementById('tipoprod_selector');
+    var selCat = document.getElementById('sel_categoria');
+    var selTip = document.getElementById('sel_tipoprod');
+    cat.style.display = (val==='categoria') ? 'block' : 'none';
+    tip.style.display = (val==='tipo_producto') ? 'block' : 'none';
+    // Solo el select activo se envia (los disabled no se envian)
+    selCat.disabled = (val!=='categoria');
+    selTip.disabled = (val!=='tipo_producto');
   }
   </script>
 </body>

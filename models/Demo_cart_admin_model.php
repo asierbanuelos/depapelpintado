@@ -1447,8 +1447,8 @@ class Demo_cart_admin_model extends CI_Model {
     function save_faq(){
       $data = $this->input->post(NULL, TRUE);
       $row = array(
-        'page_type' => ($data['page_type'] === 'categoria') ? 'categoria' : 'home',
-        'page_id'   => (int)$data['page_id'],
+        'page_type' => in_array($data['page_type'], array('categoria','tipo_producto'), true) ? $data['page_type'] : 'home',
+        'page_id'   => isset($data['page_id']) ? (int)$data['page_id'] : 0,
         'pregunta'  => $data['pregunta'],
         'respuesta' => $data['respuesta'],
         'orden'     => (int)$data['orden'],

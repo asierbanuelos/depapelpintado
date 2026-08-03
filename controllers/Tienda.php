@@ -1292,7 +1292,11 @@ class Tienda extends CI_Controller {
             
             if (trim($tipo_producto_seo[0]->meta_description_tipo_producto)!='')
                 $this->data['meta_description']=$tipo_producto_seo[0]->meta_description_tipo_producto;
-        } 
+        }
+
+        // FAQs de la categoria principal (tipo_producto = categ)
+        $this->load->model('demo_cart_admin_model');
+        $this->data['faqs'] = $this->demo_cart_admin_model->get_faqs_frontend('tipo_producto', $this->data['categ']);
 
 
         $this->data['categoria_principal'] = $categoria_principal;

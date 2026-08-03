@@ -49,15 +49,20 @@
     // Separar FAQs por tipo
     $faqs_home = array();
     $faqs_cat  = array(); // page_id => [faq, ...]
+    $faqs_tipo = array(); // tipo_producto: page_id => [faq, ...]
     foreach ($faqs as $faq) {
       if ($faq->page_type === 'home') {
         $faqs_home[] = $faq;
+      } elseif ($faq->page_type === 'tipo_producto') {
+        $faqs_tipo[$faq->page_id][] = $faq;
       } else {
         $faqs_cat[$faq->page_id][] = $faq;
       }
     }
     // Determinar pestaña activa
-    $tab_activo = ($filtro_tipo === 'categoria') ? 'categorias' : 'home';
+    $tab_activo = 'home';
+    if ($filtro_tipo === 'categoria') $tab_activo = 'categorias';
+    elseif ($filtro_tipo === 'tipo_producto') $tab_activo = 'principales';
     ?>
 
     <div class="faq-tabs">
@@ -66,6 +71,9 @@
       </button>
       <button class="faq-tab <?= $tab_activo==='categorias'?'active':'' ?>" id="btn-categorias" onclick="switchTab('categorias',this)">
         Categorías SEO <?php if(count($faqs_cat)): ?><span style="background:#B05380;color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;margin-left:4px;"><?= array_sum(array_map('count',$faqs_cat)) ?></span><?php endif; ?>
+      </button>
+      <button class="faq-tab <?= $tab_activo==='principales'?'active':'' ?>" id="btn-principales" onclick="switchTab('principales',this)">
+        Categorías principales <?php if(count($faqs_tipo)): ?><span style="background:#B05380;color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;margin-left:4px;"><?= array_sum(array_map('count',$faqs_tipo)) ?></span><?php endif; ?>
       </button>
     </div>
 
@@ -167,6 +175,49 @@
         <?php endforeach; ?>
       <?php endif; ?>
     </div><!-- /panel categorías -->
+
+    <!-- Panel CATEGORÍAS PRINCIPALES -->
+    <div class="faq-panel <?= $tab_activo==='principales'?'active':'' ?>" id="tab-principales">
+      <div class="cat-filter">
+        <a href="/admin_library/faq_nueva?tipo=tipo_producto" class="faq-nueva-btn" style="font-size:13px;padding:7px 16px;">+ Añadir pregunta a una categoría principal</a>
+      </div>
+      <?php if (empty($faqs_tipo)): ?>
+        <div class="empty-note">No hay preguntas para las categorías principales. <a href="/admin_library/faq_nueva?tipo=tipo_producto" style="color:#B05380;">Crea la primera</a>.</div>
+      <?php else: ?>
+        <?php foreach ($faqs_tipo as $pid => $pfaqs): ?>
+        <div class="faq-cat-group">
+          <div class="faq-cat-title">
+            <?= htmlspecialchars(isset($tipos_producto[$pid]) ? $tipos_producto[$pid] : 'Categoría '.$pid) ?>
+            <a href="/admin_library/faq_nueva?tipo=tipo_producto&page_id=<?= $pid ?>" style="float:right;font-size:12px;color:#B05380;font-weight:600;">+ añadir</a>
+          </div>
+          <table class="faq-table">
+            <thead>
+              <tr>
+                <th style="width:50px;">Orden</th>
+                <th>Pregunta</th>
+                <th style="width:80px;text-align:center;">Estado</th>
+                <th style="width:110px;text-align:center;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($pfaqs as $faq): ?>
+              <tr class="<?= $faq->activo?'':'faq-inactive' ?>">
+                <td style="text-align:center;color:#aaa;"><?= (int)$faq->orden ?></td>
+                <td><?= htmlspecialchars(mb_substr($faq->pregunta,0,110)) ?><?= mb_strlen($faq->pregunta)>110?'…':'' ?></td>
+                <td style="text-align:center;"><?= $faq->activo?'<span class="faq-badge-activo">Activo</span>':'<span class="faq-badge-inactivo">Inactivo</span>' ?></td>
+                <td style="text-align:center;">
+                  <a href="/admin_library/faq_editar/<?= $faq->faq_id ?>" class="btn-edit">Editar</a>
+                  &nbsp;
+                  <button class="btn-del" onclick="if(confirm('¿Eliminar esta pregunta?')) window.location='/admin_library/faq_eliminar/<?= $faq->faq_id ?>';">Borrar</button>
+                </td>
+              </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
+    </div><!-- /panel principales -->
 
     <div style="height:60px"></div>
   </div>
