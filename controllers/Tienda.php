@@ -4841,15 +4841,21 @@ $this->db->cache_off();
 
         // Test rapido de configuracion de email: ?k=...&testmail=correo@dominio
         if ($this->input->get('testmail')) {
+            ini_set('display_errors', 1); error_reporting(E_ALL);
             $to = $this->input->get('testmail');
             $this->load->library('email');
+            $this->email->initialize(array(
+                'protocol'=>'smtp','smtp_host'=>'mail.depapelpintado.es','smtp_port'=>465,
+                'smtp_crypto'=>'ssl','smtp_user'=>'info@depapelpintado.es','smtp_pass'=>'Nic+FDV$Dg6&1',
+                'mailtype'=>'html','charset'=>'UTF-8','newline'=>"\r\n",'crlf'=>"\r\n"
+            ));
             $this->email->from('info@depapelpintado.es', 'dePapelPintado');
             $this->email->to($to);
             $this->email->subject('Test SMTP depapelpintado ('.date('H:i:s').')');
-            $this->email->message('Prueba de envio via SMTP. Si recibes esto, funciona.');
+            $this->email->message('<p>Prueba de envio via SMTP. Si recibes esto, funciona.</p>');
             $ok = $this->email->send(FALSE);
             header('Content-Type: text/plain; charset=utf-8');
-            echo "send() = ".var_export($ok, true)."\n\n".$this->email->print_debugger(array('headers','subject','body'));
+            echo "send() = ".var_export($ok, true)."\n\n".$this->email->print_debugger();
             return;
         }
 
