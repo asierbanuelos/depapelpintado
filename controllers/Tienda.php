@@ -4828,9 +4828,61 @@ $this->db->cache_off();
         redirect('tienda/view_cart');
     }
 
-    ###++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++###	
+    /**
+     * recordatorio_pagos_pendientes
+     * Recordatorio UNICO a pedidos que quedaron en estado 1 (pendiente de pago).
+     * SOLO pedidos creados a partir de la fecha de activacion (NO historicos).
+     * Se envia una sola vez por pedido (columna ord_recordatorio_pago).
+     * Por defecto DRY-RUN (solo previsualiza). Para enviar de verdad: &send=1
+     * Protegido por clave: ?k=<clave>. Pensado para un cron diario (via 127.0.0.1).
+     */
+    function recordatorio_pagos_pendientes() {
+        if ($this->input->get('k') !== 'rp7x2k9m4q') { show_404(); return; }
+
+        $fecha_activacion = '2026-08-03 08:42:00'; // solo pedidos a partir de aqui (nunca historicos)
+        $enviar  = ($this->input->get('send') === '1');
+        $limite  = 50;
+        $hasta   = date('Y-m-d H:i:s', strtotime('-1 day')); // esperar 24h antes de recordar
+
+        $pedidos = $this->db->select('ord_order_number, ord_demo_email, ord_demo_ship_name, ord_demo_bill_name, ord_date, ord_total')
+            ->from('order_summary')
+            ->where('ord_status', 1)
+            ->where('ord_total >', 0)
+            ->where('ord_demo_email !=', '')
+            ->where('ord_date >=', $fecha_activacion)
+            ->where('ord_date <=', $hasta)
+            ->where('ord_recordatorio_pago IS NULL', null, false)
+            ->order_by('ord_date', 'asc')
+            ->limit($limite)
+            ->get()->result_array();
+
+        header('Content-Type: text/plain; charset=utf-8');
+        echo ($enviar ? "=== ENVIO REAL ===" : "=== DRY-RUN (no envia; anade &send=1 para enviar) ===")."\n";
+        echo "Activacion (solo pedidos a partir de): ".$fecha_activacion."\n";
+        echo "Se recuerdan pedidos con fecha <= ".$hasta." (esperamos 24h)\n";
+        echo "Pedidos a recordar en esta pasada: ".count($pedidos)."\n\n";
+
+        foreach ($pedidos as $p) {
+            $on = $p['ord_order_number'];
+            echo ($enviar ? "[ENVIADO] " : "[DRY] ").$on." | ".$p['ord_date']." | ".$p['ord_demo_email']."\n";
+            if ($enviar) {
+                $nombre = (trim($p['ord_demo_ship_name']) != '') ? $p['ord_demo_ship_name'] : $p['ord_demo_bill_name'];
+                $link = base_url().'tienda/checkout_compra_ya/'.$on;
+                $body = array(
+                    'nombre'  => $nombre,
+                    'msg'     => 'Tu pedido n&ordm; '.$on.' sigue PENDIENTE DE PAGO. Todavia estas a tiempo de completarlo.',
+                    'pedido'  => 'Completa el pago de tu pedido pinchando en el siguiente enlace:<br> <a href="'.$link.'">'.$link.'</a>'
+                );
+                $this->send_email($p['ord_demo_email'], 'Tu pedido ('.$on.') sigue pendiente de pago', $body);
+                $this->db->where('ord_order_number', $on)->update('order_summary', array('ord_recordatorio_pago' => date('Y-m-d H:i:s')));
+            }
+        }
+        echo "\nFin.\n";
+    }
+
+    ###++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++###
     // INSERT ITEMS TO CART
-    ###++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++###	
+    ###++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++###
 
     /**
      * insert_link_item_to_cart
