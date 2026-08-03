@@ -4842,13 +4842,14 @@ $this->db->cache_off();
         // Test rapido de configuracion de email: ?k=...&testmail=correo@dominio
         if ($this->input->get('testmail')) {
             $to = $this->input->get('testmail');
-            $ok = $this->send_email($to, 'Test SMTP depapelpintado ('.date('H:i:s').')', array(
-                'nombre' => 'Test',
-                'msg'    => 'Prueba de configuracion SMTP.',
-                'pedido' => 'Si recibes este correo, el envio via SMTP funciona correctamente.'
-            ));
+            $this->load->library('email');
+            $this->email->from('info@depapelpintado.es', 'dePapelPintado');
+            $this->email->to($to);
+            $this->email->subject('Test SMTP depapelpintado ('.date('H:i:s').')');
+            $this->email->message('Prueba de envio via SMTP. Si recibes esto, funciona.');
+            $ok = $this->email->send(FALSE);
             header('Content-Type: text/plain; charset=utf-8');
-            echo "send() = ".var_export($ok, true)."\n\n".$this->email->print_debugger(array('headers'));
+            echo "send() = ".var_export($ok, true)."\n\n".$this->email->print_debugger(array('headers','subject','body'));
             return;
         }
 
