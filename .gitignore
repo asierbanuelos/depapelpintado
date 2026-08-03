@@ -1,2 +1,5 @@
 logs/
 cache/
+
+# Credenciales SMTP (no versionar)
+config/email.php

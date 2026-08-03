@@ -4839,6 +4839,19 @@ $this->db->cache_off();
     function recordatorio_pagos_pendientes() {
         if ($this->input->get('k') !== 'rp7x2k9m4q') { show_404(); return; }
 
+        // Test rapido de configuracion de email: ?k=...&testmail=correo@dominio
+        if ($this->input->get('testmail')) {
+            $to = $this->input->get('testmail');
+            $ok = $this->send_email($to, 'Test SMTP depapelpintado ('.date('H:i:s').')', array(
+                'nombre' => 'Test',
+                'msg'    => 'Prueba de configuracion SMTP.',
+                'pedido' => 'Si recibes este correo, el envio via SMTP funciona correctamente.'
+            ));
+            header('Content-Type: text/plain; charset=utf-8');
+            echo "send() = ".var_export($ok, true)."\n\n".$this->email->print_debugger(array('headers'));
+            return;
+        }
+
         $fecha_activacion = '2026-08-03 08:42:00'; // solo pedidos a partir de aqui (nunca historicos)
         $enviar  = ($this->input->get('send') === '1');
         $limite  = 50;
