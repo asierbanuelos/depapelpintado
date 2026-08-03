@@ -5109,10 +5109,10 @@ $this->db->cache_off();
                 if ($order_data = $this->flexi_cart_admin->get_db_order_summary_row_array('ord_demo_email', $sql_where)) {
                     $body = array(
                         "nombre" => ($this->data['usuario']->ord_demo_ship_name != "") ? $this->data['usuario']->ord_demo_ship_name : $this->data['usuario']->ord_demo_bill_name,
-                        "msg" => "A continuación le detallamos su pedido número " . $this->flexi_cart->order_number() . ".",
-                        "pedido" => $this->getPedido($this->flexi_cart->order_number()) . 'Puede realizar el pago de este pedido pinchando en el siguiente enlace:<br> <a href="' . base_url() . 'tienda/checkout_compra_ya/' . $this->flexi_cart->order_number() . '">' . base_url() . 'tienda/checkout_compra_ya/' . $this->flexi_cart->order_number() . '</a>'
+                        "msg" => "Tu pedido nº " . $this->flexi_cart->order_number() . " está PENDIENTE DE PAGO. No quedará confirmado hasta que completes el pago.",
+                        "pedido" => $this->getPedido($this->flexi_cart->order_number()) . 'Para confirmar tu pedido, completa el pago pinchando en el siguiente enlace:<br> <a href="' . base_url() . 'tienda/checkout_compra_ya/' . $this->flexi_cart->order_number() . '">' . base_url() . 'tienda/checkout_compra_ya/' . $this->flexi_cart->order_number() . '</a>'
                     );
-                    $this->send_email($order_data['ord_demo_email'], "Nuevo Pedido (" . $this->flexi_cart->order_number() . ") Realizado", $body);
+                    $this->send_email($order_data['ord_demo_email'], "Tu pedido (" . $this->flexi_cart->order_number() . ") está pendiente de pago", $body);
                 }
                 $this->flexi_cart_admin->update_db_order_summary(array('ord_status' => 1), $this->flexi_cart->order_number());
 
@@ -5277,10 +5277,10 @@ $this->db->cache_off();
                 if ($order_data = $this->flexi_cart_admin->get_db_order_summary_row_array('ord_demo_email', $sql_where)) {
                     $body = array(
                         "nombre" => ($this->data['usuario']->ord_demo_ship_name != "") ? $this->data['usuario']->ord_demo_ship_name : $this->data['usuario']->ord_demo_bill_name,
-                        "msg" => "A continuación le detallamos su pedido número " . $this->flexi_cart->order_number() . ".",
-                        "pedido" => $this->getPedido($this->flexi_cart->order_number()) . 'Puede realizar el pago de este pedido pinchando en el siguiente enlace:<br> <a href="' . base_url() . 'tienda/checkout_compra_ya/' . $this->flexi_cart->order_number() . '">' . base_url() . 'tienda/checkout_compra_ya/' . $this->flexi_cart->order_number() . '</a>'
+                        "msg" => "Tu pedido nº " . $this->flexi_cart->order_number() . " está PENDIENTE DE PAGO. No quedará confirmado hasta que completes el pago.",
+                        "pedido" => $this->getPedido($this->flexi_cart->order_number()) . 'Para confirmar tu pedido, completa el pago pinchando en el siguiente enlace:<br> <a href="' . base_url() . 'tienda/checkout_compra_ya/' . $this->flexi_cart->order_number() . '">' . base_url() . 'tienda/checkout_compra_ya/' . $this->flexi_cart->order_number() . '</a>'
                     );
-                    $this->send_email($order_data['ord_demo_email'], "Nuevo Pedido (" . $this->flexi_cart->order_number() . ") Realizado", $body);
+                    $this->send_email($order_data['ord_demo_email'], "Tu pedido (" . $this->flexi_cart->order_number() . ") está pendiente de pago", $body);
                     /*
                     // 2025-09-03 probando mail al realizar el pedido (mamua)
                     $this->load->library('email');
