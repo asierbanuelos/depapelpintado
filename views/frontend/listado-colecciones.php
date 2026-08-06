@@ -71,9 +71,12 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 .marca-seo-page .msq-bb-logo img{max-width:230px;max-height:120px;width:auto;height:auto;object-fit:contain;}
 @media(max-width:760px){.marca-seo-page .msq-bb-band{grid-template-columns:1fr;}}
 .marca-seo-page .msq-trust{background:var(--msq-surface);border-bottom:1px solid var(--msq-line);}
-.marca-seo-page .msq-trust .msq-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:0;}
+.marca-seo-page .msq-trust .msq-wrap{padding:0;}
+.marca-seo-page .msq-trust-track{display:grid;grid-template-columns:repeat(4,1fr);}
 .marca-seo-page .msq-cell{padding:16px 14px;text-align:center;border-right:1px solid var(--msq-line);}
-.marca-seo-page .msq-cell:last-child{border-right:none;}
+.marca-seo-page .msq-cell:nth-child(4n){border-right:none;}
+.marca-seo-page .msq-cell.msq-dup{display:none;}
+@keyframes msqTrust{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 .marca-seo-page .msq-cell .t{font-size:13px;font-weight:700;}
 .marca-seo-page .msq-cell .d{font-size:11.5px;color:var(--msq-muted);margin-top:2px;}
 .marca-seo-page .msq-sec{padding:48px 0;}
@@ -105,7 +108,7 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 .marca-seo-page .msq-marquee .msq-slide{width:265px;flex:0 0 auto;}
 .marca-seo-page .msq-marquee .card{margin-bottom:0;}
 @keyframes msqMarquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-@media (prefers-reduced-motion:reduce){.marca-seo-page .msq-marquee-track{animation:none;}}
+@media (prefers-reduced-motion:reduce){.marca-seo-page .msq-marquee-track,.marca-seo-page .msq-trust-track{animation:none;}}
 .marca-seo-page .msq-rooms{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
 .marca-seo-page .msq-rooms a{text-decoration:none;font-size:13.5px;font-weight:600;background:var(--msq-surface);border:1px solid var(--msq-line2);color:var(--msq-ink);padding:11px 20px;border-radius:999px;transition:.18s;}
 .marca-seo-page .msq-rooms a:hover{border-color:var(--msq-accent);color:var(--msq-accent-ink);}
@@ -131,8 +134,8 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 /* ---- RESPONSIVE (orden: 860 -> 640 -> 400) ---- */
 @media (max-width:860px){
   .marca-seo-page .msq-grid,.marca-seo-page .msq-prod{grid-template-columns:repeat(3,1fr);}
-  .marca-seo-page .msq-trust .msq-wrap{grid-template-columns:repeat(2,1fr);}
-  .marca-seo-page .msq-cell:nth-child(2){border-right:none;}
+  .marca-seo-page .msq-trust-track{grid-template-columns:repeat(2,1fr);}
+  .marca-seo-page .msq-cell:nth-child(2n){border-right:none;}
   .marca-seo-page .msq-sec{padding:40px 0;}
 }
 @media (max-width:640px){
@@ -147,12 +150,14 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
   .marca-seo-page .msq-bb-text{padding:24px 20px;}
   .marca-seo-page .msq-bb-logo{padding:22px;}
   .marca-seo-page .msq-bb-logo img{max-height:80px;}
-  /* sliders tactiles */
-  .marca-seo-page .msq-trust .msq-wrap{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-  .marca-seo-page .msq-trust .msq-wrap::-webkit-scrollbar{display:none;}
-  .marca-seo-page .msq-trust .msq-cell{flex:0 0 60%;scroll-snap-align:center;border-right:1px solid var(--msq-line);padding:18px 14px;}
-  .marca-seo-page .msq-trust .msq-cell:nth-child(2){border-right:1px solid var(--msq-line);}
-  .marca-seo-page .msq-trust .msq-cell:last-child{border-right:none;}
+  .marca-seo-page .msq-bb-title{text-align:center;}
+  /* barra de confianza: marquee automatico */
+  .marca-seo-page .msq-trust .msq-wrap{overflow:hidden;}
+  .marca-seo-page .msq-trust-track{display:flex;grid-template-columns:none;width:max-content;animation:msqTrust 18s linear infinite;}
+  .marca-seo-page .msq-trust:active .msq-trust-track{animation-play-state:paused;}
+  .marca-seo-page .msq-trust .msq-cell{flex:0 0 auto;width:54vw;max-width:220px;border-right:1px solid var(--msq-line);padding:18px 14px;}
+  .marca-seo-page .msq-cell.msq-dup{display:block;}
+  /* estancias y otras marcas: swipe */
   .marca-seo-page .msq-rooms,.marca-seo-page .msq-brands{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:4px;}
   .marca-seo-page .msq-rooms::-webkit-scrollbar,.marca-seo-page .msq-brands::-webkit-scrollbar{display:none;}
   .marca-seo-page .msq-rooms a,.marca-seo-page .msq-brands a{flex:0 0 auto;scroll-snap-align:start;}
@@ -185,10 +190,14 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 
   <div class="msq-trust">
     <div class="msq-wrap">
-      <div class="msq-cell"><div class="t">Env&iacute;o a toda Espa&ntilde;a</div><div class="d">gestionamos tu pedido</div></div>
-      <div class="msq-cell"><div class="t">Muestras a casa</div><div class="d">antes de decidir</div></div>
-      <div class="msq-cell"><div class="t">Asesoramiento</div><div class="d">experto por tel&eacute;fono</div></div>
-      <div class="msq-cell"><div class="t">Compra segura</div><div class="d">pago protegido</div></div>
+      <div class="msq-trust-track">
+        <?php ob_start(); ?>
+        <div class="msq-cell"><div class="t">Env&iacute;o a toda Espa&ntilde;a</div><div class="d">gestionamos tu pedido</div></div>
+        <div class="msq-cell"><div class="t">Muestras a casa</div><div class="d">antes de decidir</div></div>
+        <div class="msq-cell"><div class="t">Asesoramiento</div><div class="d">experto por tel&eacute;fono</div></div>
+        <div class="msq-cell"><div class="t">Compra segura</div><div class="d">pago protegido</div></div>
+        <?php $msq_trust=ob_get_clean(); echo $msq_trust; echo str_replace('class="msq-cell"','class="msq-cell msq-dup" aria-hidden="true"',$msq_trust); ?>
+      </div>
     </div>
   </div>
 
