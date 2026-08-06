@@ -36,6 +36,9 @@
         <div class="sec row">Descripción (al menos 900 palabras):</div>
         <div class="sec row"><textarea id="cat_text" name="cat_text"><?php echo $categoria->cat_text; ?></textarea></div>
         <br />
+        <div class="sec row" style="font-weight:bold;">Descripci&oacute;n corta <span style="font-weight:normal;color:#888;">(aparece en el banner de la p&aacute;gina de marca, ~250 caracteres)</span>:</div>
+        <div class="sec row"><textarea class="no-mce" name="descripcion_corta" style="width:100%;height:70px;" maxlength="600"><?php echo isset($categoria->descripcion_corta)?$categoria->descripcion_corta:''; ?></textarea></div>
+        <br />
         <br />
         <div class="">
           <div class="sec row"><div class="col two">Meta-Title:<br />(hasta 60 caracteres aprox.)</div><?= form_input("meta_title_categoria", $categoria->meta_titlef, 'class="ten"') ?></div>
@@ -77,7 +80,7 @@
   <script type="text/javascript">
   tinymce.init({
     convert_urls: false,entity_encoding : "raw",
-      selector: "textarea",
+      selector: "textarea:not(.no-mce)",
       language: "es",
         plugins: [
           "advlist autolink lists link image charmap print preview hr anchor pagebreak",

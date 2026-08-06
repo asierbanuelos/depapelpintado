@@ -1403,7 +1403,8 @@ class Demo_cart_admin_model extends CI_Model {
       	'cat_text'=>$data['cat_text'],
       	'meta_titlef'=>$data['meta_title_categoria'],
         'meta_descriptionf'=>$data['meta_description_categoria'],
-        'meta_keywordsf'=>$data['meta_keywords_categoria']
+        'meta_keywordsf'=>$data['meta_keywords_categoria'],
+        'descripcion_corta'=>(isset($data['descripcion_corta'])?$data['descripcion_corta']:'')
       );
 
       $cat_id=$data['cat_id'];

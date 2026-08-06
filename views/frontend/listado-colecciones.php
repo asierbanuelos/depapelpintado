@@ -139,8 +139,8 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
       <h1 class="msq-bb-title"><?php echo htmlspecialchars($kw_seo, ENT_QUOTES, 'UTF-8');?> <span class="msq-brand"><?php echo htmlspecialchars($marca_disp_seo, ENT_QUOTES, 'UTF-8');?></span></h1>
       <div class="msq-bb-band">
         <div class="msq-bb-text">
-          <?php if (isset($fab->cat_text) && trim($fab->cat_text)!==''): ?>
-            <div class="texto-seo"><?php echo $fab->cat_text;?></div>
+          <?php if (isset($fab->descripcion_corta) && trim($fab->descripcion_corta)!==''): ?>
+            <p><?php echo nl2br(htmlspecialchars($fab->descripcion_corta, ENT_QUOTES, 'UTF-8'));?></p>
           <?php elseif ($subtitulo_seo!==''): ?>
             <p><?php echo $subtitulo_seo;?></p>
           <?php endif; ?>
