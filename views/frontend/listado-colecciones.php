@@ -77,7 +77,7 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 .marca-seo-page .msq-cell .t{font-size:13px;font-weight:700;}
 .marca-seo-page .msq-cell .d{font-size:11.5px;color:var(--msq-muted);margin-top:2px;}
 .marca-seo-page .msq-sec{padding:48px 0;}
-.marca-seo-page .msq-alt{background:var(--msq-surface);}
+.marca-seo-page .msq-alt{background:#f6f4f2;border-top:1px solid var(--msq-line);border-bottom:1px solid var(--msq-line);}
 .marca-seo-page .msq-sec-head{text-align:center;margin-bottom:30px;}
 .marca-seo-page .msq-sec-head h2{font-size:clamp(24px,3.2vw,34px);}
 .marca-seo-page .msq-sec-head p{color:var(--msq-muted);max-width:56ch;margin:10px auto 0;font-size:15px;}
