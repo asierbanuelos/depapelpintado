@@ -60,6 +60,16 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 .marca-seo-page .msq-cta{display:inline-flex;gap:10px;align-items:center;margin-top:26px;background:var(--msq-accent);color:#fff;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:14px 30px;border-radius:999px;transition:.2s;}
 .marca-seo-page .msq-cta:hover{background:var(--msq-accent-ink);transform:translateY(-2px);}
 .marca-seo-page .msq-stat{margin-top:22px;font-size:12.5px;color:var(--msq-faint);letter-spacing:.03em;}
+.marca-seo-page .msq-brandbanner{padding:38px 0 6px;}
+.marca-seo-page .msq-bb-title{font-size:clamp(28px,4.5vw,46px);line-height:1.08;margin-bottom:22px;color:var(--msq-ink);}
+.marca-seo-page .msq-bb-title .msq-brand{color:var(--msq-accent-ink);}
+.marca-seo-page .msq-bb-band{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--msq-line);border-radius:4px;overflow:hidden;}
+.marca-seo-page .msq-bb-band.msq-bb-nologo{grid-template-columns:1fr;}
+.marca-seo-page .msq-bb-text{background:#f6f4f2;padding:36px 44px;display:flex;flex-direction:column;justify-content:center;}
+.marca-seo-page .msq-bb-text .texto-seo,.marca-seo-page .msq-bb-text p{color:var(--msq-muted);line-height:1.7;font-size:15px;margin:0;}
+.marca-seo-page .msq-bb-logo{background:#fff;display:grid;place-items:center;padding:30px;}
+.marca-seo-page .msq-bb-logo img{max-width:230px;max-height:120px;width:auto;height:auto;object-fit:contain;}
+@media(max-width:760px){.marca-seo-page .msq-bb-band{grid-template-columns:1fr;}}
 .marca-seo-page .msq-trust{background:var(--msq-surface);border-bottom:1px solid var(--msq-line);}
 .marca-seo-page .msq-trust .msq-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:0;}
 .marca-seo-page .msq-cell{padding:16px 14px;text-align:center;border-right:1px solid var(--msq-line);}
@@ -124,16 +134,23 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 
 <div class="marca-seo-page">
 
-  <header class="msq-hero">
-    <div class="msq-hero-bg"></div>
+  <div class="msq-brandbanner">
     <div class="msq-wrap">
-      <span class="msq-eyebrow">Marca<?php if($kw_seo!==''):?> &middot; <?php echo htmlspecialchars($kw_seo, ENT_QUOTES, 'UTF-8');?><?php endif;?></span>
-      <h1><?php echo htmlspecialchars($kw_seo, ENT_QUOTES, 'UTF-8');?> <span class="msq-brand"><?php echo htmlspecialchars($marca_disp_seo, ENT_QUOTES, 'UTF-8');?></span></h1>
-      <?php if($subtitulo_seo!==''):?><p class="msq-sub"><?php echo $subtitulo_seo;?></p><?php endif;?>
-      <a href="#msq-col" class="msq-cta">Ver colecciones &rarr;</a>
-      <?php if($n_colec_seo):?><div class="msq-stat"><?php echo $n_colec_seo;?> colecciones &middot; env&iacute;o a toda Espa&ntilde;a &middot; muestras a domicilio</div><?php endif;?>
+      <h1 class="msq-bb-title"><?php echo htmlspecialchars($kw_seo, ENT_QUOTES, 'UTF-8');?> <span class="msq-brand"><?php echo htmlspecialchars($marca_disp_seo, ENT_QUOTES, 'UTF-8');?></span></h1>
+      <div class="msq-bb-band">
+        <div class="msq-bb-text">
+          <?php if (isset($fab->cat_text) && trim($fab->cat_text)!==''): ?>
+            <div class="texto-seo"><?php echo $fab->cat_text;?></div>
+          <?php elseif ($subtitulo_seo!==''): ?>
+            <p><?php echo $subtitulo_seo;?></p>
+          <?php endif; ?>
+        </div>
+        <div class="msq-bb-logo">
+          <img src="/includes/images/logos/<?php echo $marca_id_seo;?>.jpg" width="200" height="100" alt="<?php echo htmlspecialchars($marca_disp_seo, ENT_QUOTES, 'UTF-8');?>" loading="lazy" onerror="this.closest('.msq-bb-logo').style.display='none';this.closest('.msq-bb-band').classList.add('msq-bb-nologo');">
+        </div>
+      </div>
     </div>
-  </header>
+  </div>
 
   <div class="msq-trust">
     <div class="msq-wrap">
@@ -226,21 +243,6 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
         <?php foreach($estancias_marca as $e): if(trim($e['nueva_categoria_name_url'])===''){continue;} ?>
           <a href="/<?php echo $e['nueva_categoria_name_url'];?>"><?php echo htmlspecialchars($e['nueva_categoria_name'], ENT_QUOTES, 'UTF-8');?></a>
         <?php endforeach; ?>
-      </div>
-    </div>
-  </section>
-  <?php endif; ?>
-
-  <?php // ---- Sobre la marca (texto SEO plegable) ---- ?>
-  <?php if (isset($fab->cat_text) && trim($fab->cat_text)!==''): ?>
-  <section class="msq-sec msq-seo">
-    <div class="msq-wrap">
-      <div class="msq-box">
-        <span class="msq-eyebrow">Sobre la marca</span>
-        <div class="msq-fade" id="msqSeoText">
-          <div class="texto-seo"><?php echo $fab->cat_text;?></div>
-        </div>
-        <button class="msq-more" type="button" id="msqMore">Ver m&aacute;s &#9662;</button>
       </div>
     </div>
   </section>
