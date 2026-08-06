@@ -4501,15 +4501,19 @@ class Flexi_cart_model extends Flexi_cart_lite_model
       $q=$this->db->get();
       $rows=$q?$q->result_array():array();
       $out=array();
+      $pre_map=array(0=>'Papel Pintado',1=>'Mural',2=>'Revestimiento',3=>'Tela',4=>'Alfombra',5=>'Herramientas');
       foreach($rows as $r){
         $nombre = (trim($r['item_name'])!='')?$r['item_name']:((isset($r['item_ref'])&&trim($r['item_ref'])!='')?$r['item_ref']:'producto');
         $url = '/'.$this->_slug_seo($r['cat_name']).'/'.$this->_slug_seo($r['coleccion_name']).'/'.$this->_slug_seo($nombre).'-'.$r['item_id'];
         if($r['item_tipo']==5) $url='/herramientas/'.$this->_slug_seo($nombre).'-'.$r['item_id'];
+        $pre = isset($pre_map[(int)$r['item_tipo']]) ? $pre_map[(int)$r['item_tipo']] : '';
+        $unidad = trim($r['item_unidad']);
+        if ($unidad=='m2') $unidad='m<sup>2</sup>'; elseif ($unidad=='m lineal') $unidad='Metro Lineal';
         $out[]=array(
-          'name'=> ($r['item_name']!='')?$r['item_name']:$r['item_ref'],
+          'titulo'=> trim($pre.' '.$r['item_ref']),
           'ref'=> $r['item_ref'],
-          'price'=> ($r['item_price']>0) ? number_format($r['item_price'],2,',','.').' &euro;'.(trim($r['item_unidad'])!=''?'/'.$r['item_unidad']:'') : '',
-          'img'=> '/includes/'.str_replace('../','',$r['img']).'th.jpg',
+          'price'=> ($r['item_price']>0) ? number_format($r['item_price'],2,',','.').' &euro;'.($unidad!=''?'/'.$unidad:'') : '',
+          'img'=> '/includes/'.str_replace('../','',$r['img']).'med.jpg',
           'url'=> $url,
         );
       }

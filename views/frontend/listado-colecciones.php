@@ -92,7 +92,8 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 .marca-seo-page .msq-marquee{overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);}
 .marca-seo-page .msq-marquee-track{display:flex;gap:22px;width:max-content;animation:msqMarquee 70s linear infinite;}
 .marca-seo-page .msq-marquee:hover .msq-marquee-track{animation-play-state:paused;}
-.marca-seo-page .msq-marquee .msq-pcard{width:230px;flex:0 0 auto;}
+.marca-seo-page .msq-marquee .msq-slide{width:265px;flex:0 0 auto;}
+.marca-seo-page .msq-marquee .card{height:100%;margin-bottom:0;}
 @keyframes msqMarquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 @media (prefers-reduced-motion:reduce){.marca-seo-page .msq-marquee-track{animation:none;}}
 .marca-seo-page .msq-rooms{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
@@ -188,18 +189,21 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
       <div class="msq-marquee" aria-label="Productos destacados de <?php echo htmlspecialchars($marca_disp_seo, ENT_QUOTES, 'UTF-8');?>">
         <div class="msq-marquee-track">
           <?php ob_start(); foreach($destacados_marca as $p): ?>
-          <a class="msq-pcard" href="<?php echo $p['url'];?>" title="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8');?>">
-            <div class="msq-pthumb">
-              <img loading="lazy" src="<?php echo $p['img'];?>" alt="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8');?>">
-              <?php if($p['price']!==''):?><span class="msq-price"><?php echo $p['price'];?></span><?php endif;?>
+          <div class="msq-slide">
+            <div class="card mb-4">
+              <div class="card-img" style="overflow:hidden;position:relative;">
+                <a href="<?php echo $p['url'];?>"><img loading="lazy" width="313" height="417" class="card-img-top img-prefichas" src="<?php echo $p['img'];?>" title="<?php echo htmlspecialchars($p['titulo'], ENT_QUOTES, 'UTF-8');?>" alt="<?php echo htmlspecialchars($p['titulo'], ENT_QUOTES, 'UTF-8');?>"></a>
+              </div>
+              <div class="card-body px-0">
+                <span class="card-title"><a href="<?php echo $p['url'];?>"><?php echo htmlspecialchars($p['titulo'], ENT_QUOTES, 'UTF-8');?></a></span>
+                <?php if($p['price']!==''):?><p class="card-text precio"><strong><?php echo $p['price'];?></strong></p><?php endif;?>
+              </div>
             </div>
-            <div class="msq-pn"><?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8');?></div>
-            <?php if(trim($p['ref'])!==''):?><div class="msq-pref">ref. <?php echo htmlspecialchars($p['ref'], ENT_QUOTES, 'UTF-8');?></div><?php endif;?>
-          </a>
+          </div>
           <?php endforeach;
           $msq_cards = ob_get_clean();
           echo $msq_cards; // set original
-          echo str_replace('<a class="msq-pcard"', '<a class="msq-pcard" aria-hidden="true" tabindex="-1"', $msq_cards); // copia para bucle continuo sin salto
+          echo str_replace('<div class="msq-slide">', '<div class="msq-slide" aria-hidden="true">', $msq_cards); // copia para bucle continuo sin salto
           ?>
         </div>
       </div>
