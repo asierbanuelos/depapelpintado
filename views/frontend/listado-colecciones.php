@@ -45,10 +45,10 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 
 <?php if ($preview_seo_marca): // ================= PLANTILLA MEJORADA (mockup) ================= ?>
 <style>
-.marca-seo-page{--msq-ground:#FAF6EF;--msq-surface:#fff;--msq-surface2:#F4EEE4;--msq-ink:#2A2622;--msq-muted:#7C736A;--msq-faint:#A79C90;--msq-accent:#B05380;--msq-accent-ink:#8F3A63;--msq-accent-soft:#F5ECF0;--msq-line:#E9E0D6;--msq-line2:#DCD1C2;--msq-serif:Georgia,'Times New Roman',serif;--msq-shadow:0 1px 3px rgba(42,38,34,.06),0 8px 26px rgba(42,38,34,.06);color:var(--msq-ink);background:var(--msq-ground);}
+.marca-seo-page{--msq-ground:#FAF6EF;--msq-surface:#fff;--msq-surface2:#F4EEE4;--msq-ink:#271f1f;--msq-muted:#666;--msq-faint:#9a9088;--msq-accent:#a36185;--msq-accent-ink:#8f3a63;--msq-accent-soft:#f3eaf0;--msq-line:#E9E0D6;--msq-line2:#DCD1C2;--msq-shadow:0 1px 3px rgba(42,38,34,.06),0 8px 26px rgba(42,38,34,.06);color:var(--msq-ink);background:var(--msq-ground);font-family:'Poppins',sans-serif;}
 .marca-seo-page *{box-sizing:border-box;}
 .marca-seo-page .msq-wrap{max-width:1120px;margin:0 auto;padding:0 22px;}
-.marca-seo-page h1,.marca-seo-page h2,.marca-seo-page h3{font-family:var(--msq-serif);font-weight:400;margin:0;}
+.marca-seo-page h1,.marca-seo-page h2,.marca-seo-page h3{font-family:'Poppins',sans-serif;font-weight:400;margin:0;color:var(--msq-ink);}
 .marca-seo-page .msq-eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--msq-accent);font-weight:600;}
 .marca-seo-page .msq-hero{position:relative;overflow:hidden;border-bottom:1px solid var(--msq-line);}
 .marca-seo-page .msq-hero-bg{position:absolute;inset:0;background:radial-gradient(120% 120% at 80% 0%,var(--msq-accent-soft),transparent 55%),linear-gradient(160deg,var(--msq-surface2),var(--msq-ground));}
@@ -87,7 +87,7 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 .marca-seo-page .msq-pthumb{aspect-ratio:3/4;border-radius:12px;position:relative;overflow:hidden;border:1px solid var(--msq-line);background:var(--msq-surface2);}
 .marca-seo-page .msq-pthumb img{width:100%;height:100%;object-fit:cover;display:block;}
 .marca-seo-page .msq-price{position:absolute;bottom:10px;right:10px;background:var(--msq-surface);color:var(--msq-ink);font-size:13px;font-weight:700;padding:5px 11px;border-radius:999px;box-shadow:var(--msq-shadow);}
-.marca-seo-page .msq-pn{font-family:var(--msq-serif);font-size:16px;margin-top:12px;}
+.marca-seo-page .msq-pn{font-size:16px;margin-top:12px;}
 .marca-seo-page .msq-pref{font-size:12px;color:var(--msq-muted);margin-top:3px;}
 .marca-seo-page .msq-marquee{overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);}
 .marca-seo-page .msq-marquee-track{display:flex;gap:22px;width:max-content;animation:msqMarquee 70s linear infinite;}
@@ -115,7 +115,7 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 .marca-seo-page .msq-faq .a{padding:0 20px 18px;color:var(--msq-muted);font-size:14.5px;border-top:1px solid var(--msq-line);}
 .marca-seo-page .msq-faq .a p{margin:12px 0 0;}
 .marca-seo-page .msq-brands{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
-.marca-seo-page .msq-brands a{text-decoration:none;font-family:var(--msq-serif);font-size:15px;color:var(--msq-muted);border:1px solid var(--msq-line);border-radius:8px;padding:12px 20px;transition:.18s;background:var(--msq-surface);}
+.marca-seo-page .msq-brands a{text-decoration:none;font-size:15px;color:var(--msq-muted);border:1px solid var(--msq-line);border-radius:8px;padding:12px 20px;transition:.18s;background:var(--msq-surface);}
 .marca-seo-page .msq-brands a:hover{color:var(--msq-accent-ink);border-color:var(--msq-accent);}
 @media (max-width:860px){.marca-seo-page .msq-grid,.marca-seo-page .msq-prod{grid-template-columns:repeat(2,1fr);}.marca-seo-page .msq-trust .msq-wrap{grid-template-columns:repeat(2,1fr);}.marca-seo-page .msq-cell:nth-child(2){border-right:none;}}
 @media (max-width:480px){.marca-seo-page .msq-grid,.marca-seo-page .msq-prod{grid-template-columns:1fr;}}
