@@ -8,8 +8,8 @@ if (isset($_GET['test']) && $_GET['test']=='eneko'){
   print '</xmp></pre>';
 }
 
-// ---- SEO marca (PILOTO gated con ?preview_seo=1). Para activar en TODAS las marcas: poner true. ----
-$preview_seo_marca = isset($_GET['preview_seo']);
+// ---- SEO marca: ACTIVADO en todas las marcas (2026-08-06). Para desactivar temporalmente: isset($_GET['preview_seo']) ----
+$preview_seo_marca = true;
 $marca_nombre_seo  = isset($fab->cat_name) ? trim($fab->cat_name) : '';
 $marca_slug_seo    = $marca_nombre_seo!=='' ? urlenc($marca_nombre_seo) : '';
 $marca_id_seo      = isset($id_marca_seo) ? (int)$id_marca_seo : (isset($fab->cat_id)?(int)$fab->cat_id:0);
