@@ -128,16 +128,38 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 .marca-seo-page .msq-brands{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
 .marca-seo-page .msq-brands a{text-decoration:none;font-size:15px;color:var(--msq-muted);border:1px solid var(--msq-line);border-radius:8px;padding:12px 20px;transition:.18s;background:var(--msq-surface);}
 .marca-seo-page .msq-brands a:hover{color:var(--msq-accent-ink);border-color:var(--msq-accent);}
-@media (max-width:860px){.marca-seo-page .msq-grid,.marca-seo-page .msq-prod{grid-template-columns:repeat(2,1fr);}.marca-seo-page .msq-trust .msq-wrap{grid-template-columns:repeat(2,1fr);}.marca-seo-page .msq-cell:nth-child(2){border-right:none;}}
-@media (max-width:480px){.marca-seo-page .msq-grid,.marca-seo-page .msq-prod{grid-template-columns:1fr;}}
+/* ---- RESPONSIVE (orden: 860 -> 640 -> 400) ---- */
+@media (max-width:860px){
+  .marca-seo-page .msq-grid,.marca-seo-page .msq-prod{grid-template-columns:repeat(3,1fr);}
+  .marca-seo-page .msq-trust .msq-wrap{grid-template-columns:repeat(2,1fr);}
+  .marca-seo-page .msq-cell:nth-child(2){border-right:none;}
+  .marca-seo-page .msq-sec{padding:40px 0;}
+}
 @media (max-width:640px){
+  .marca-seo-page .msq-wrap{padding:0 16px;}
+  .marca-seo-page .msq-sec{padding:32px 0;}
+  .marca-seo-page .msq-sec-head{margin-bottom:22px;}
+  .marca-seo-page .msq-grid,.marca-seo-page .msq-prod{grid-template-columns:repeat(2,1fr);gap:12px;}
+  .marca-seo-page .msq-cardb{padding:12px 8px 14px;}
+  .marca-seo-page .msq-cardb h3{font-size:15px;}
+  .marca-seo-page .msq-cardb .n{font-size:11.5px;}
+  .marca-seo-page .msq-bb-title{margin-bottom:14px;}
+  .marca-seo-page .msq-bb-text{padding:24px 20px;}
+  .marca-seo-page .msq-bb-logo{padding:22px;}
+  .marca-seo-page .msq-bb-logo img{max-height:80px;}
+  /* sliders tactiles */
   .marca-seo-page .msq-trust .msq-wrap{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   .marca-seo-page .msq-trust .msq-wrap::-webkit-scrollbar{display:none;}
-  .marca-seo-page .msq-trust .msq-cell{flex:0 0 62%;scroll-snap-align:center;border-right:1px solid var(--msq-line);padding:18px 14px;}
+  .marca-seo-page .msq-trust .msq-cell{flex:0 0 60%;scroll-snap-align:center;border-right:1px solid var(--msq-line);padding:18px 14px;}
+  .marca-seo-page .msq-trust .msq-cell:nth-child(2){border-right:1px solid var(--msq-line);}
   .marca-seo-page .msq-trust .msq-cell:last-child{border-right:none;}
   .marca-seo-page .msq-rooms,.marca-seo-page .msq-brands{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:4px;}
   .marca-seo-page .msq-rooms::-webkit-scrollbar,.marca-seo-page .msq-brands::-webkit-scrollbar{display:none;}
   .marca-seo-page .msq-rooms a,.marca-seo-page .msq-brands a{flex:0 0 auto;scroll-snap-align:start;}
+}
+@media (max-width:400px){
+  .marca-seo-page .msq-marquee .msq-slide{width:215px;}
+  .marca-seo-page .msq-sec-head h2{font-size:22px;}
 }
 </style>
 
