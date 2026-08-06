@@ -50,11 +50,14 @@
     $faqs_home = array();
     $faqs_cat  = array(); // page_id => [faq, ...]
     $faqs_tipo = array(); // tipo_producto: page_id => [faq, ...]
+    $faqs_marca = array(); // marca: page_id => [faq, ...]
     foreach ($faqs as $faq) {
       if ($faq->page_type === 'home') {
         $faqs_home[] = $faq;
       } elseif ($faq->page_type === 'tipo_producto') {
         $faqs_tipo[$faq->page_id][] = $faq;
+      } elseif ($faq->page_type === 'marca') {
+        $faqs_marca[$faq->page_id][] = $faq;
       } else {
         $faqs_cat[$faq->page_id][] = $faq;
       }
@@ -63,6 +66,7 @@
     $tab_activo = 'home';
     if ($filtro_tipo === 'categoria') $tab_activo = 'categorias';
     elseif ($filtro_tipo === 'tipo_producto') $tab_activo = 'principales';
+    elseif ($filtro_tipo === 'marca') $tab_activo = 'marcas';
     ?>
 
     <div class="faq-tabs">
@@ -74,6 +78,9 @@
       </button>
       <button class="faq-tab <?= $tab_activo==='principales'?'active':'' ?>" id="btn-principales" onclick="switchTab('principales',this)">
         Categorías principales <?php if(count($faqs_tipo)): ?><span style="background:#B05380;color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;margin-left:4px;"><?= array_sum(array_map('count',$faqs_tipo)) ?></span><?php endif; ?>
+      </button>
+      <button class="faq-tab <?= $tab_activo==='marcas'?'active':'' ?>" id="btn-marcas" onclick="switchTab('marcas',this)">
+        Marcas <?php if(count($faqs_marca)): ?><span style="background:#B05380;color:#fff;border-radius:10px;padding:1px 7px;font-size:11px;margin-left:4px;"><?= array_sum(array_map('count',$faqs_marca)) ?></span><?php endif; ?>
       </button>
     </div>
 
@@ -218,6 +225,62 @@
         <?php endforeach; ?>
       <?php endif; ?>
     </div><!-- /panel principales -->
+
+    <!-- Panel MARCAS -->
+    <div class="faq-panel <?= $tab_activo==='marcas'?'active':'' ?>" id="tab-marcas">
+      <div class="cat-filter">
+        <label style="font-size:13px;font-weight:600;color:#666;display:block;margin-bottom:6px;">Ver / añadir FAQs de una marca:</label>
+        <select onchange="var v=this.value;window.location='/admin_library/faq_nueva?tipo=marca'+(v!==''?'&page_id='+v:'');">
+          <option value="">— Elige marca para añadir —</option>
+          <?php foreach (($marcas ?? array()) as $mid => $mname): ?>
+            <option value="<?= $mid ?>"><?= htmlspecialchars($mname) ?></option>
+          <?php endforeach; ?>
+        </select>
+        <a href="/admin_library/faq_nueva?tipo=marca&page_id=0" class="faq-nueva-btn" style="margin-left:12px;font-size:13px;padding:7px 16px;">+ Añadir genérica (todas)</a>
+      </div>
+      <p style="font-size:13px;color:#888;margin:0 0 18px;background:#fdf5f9;padding:10px 14px;border-radius:6px;">
+        Las <b>Genéricas</b> aparecen en <b>todas</b> las marcas (usa <b>{marca}</b> y se sustituye por el nombre). Si una marca tiene FAQs propias, esas <b>sustituyen</b> a las genéricas en esa marca.
+      </p>
+      <?php if (empty($faqs_marca)): ?>
+        <div class="empty-note">No hay preguntas de marca todavía. <a href="/admin_library/faq_nueva?tipo=marca&page_id=0" style="color:#B05380;">Crea la primera genérica</a>.</div>
+      <?php else: ?>
+        <?php
+        // genericas (0) primero
+        uksort($faqs_marca, function($a,$b){ return ($a==0?-1:($b==0?1:strcmp((string)$a,(string)$b))); });
+        foreach ($faqs_marca as $pid => $pfaqs): ?>
+        <div class="faq-cat-group">
+          <div class="faq-cat-title">
+            <?= htmlspecialchars(isset($marcas[$pid]) ? $marcas[$pid] : 'Marca ID '.$pid) ?>
+            <a href="/admin_library/faq_nueva?tipo=marca&page_id=<?= $pid ?>" style="float:right;font-size:12px;color:#B05380;font-weight:600;">+ añadir</a>
+          </div>
+          <table class="faq-table">
+            <thead>
+              <tr>
+                <th style="width:50px;">Orden</th>
+                <th>Pregunta</th>
+                <th style="width:80px;text-align:center;">Estado</th>
+                <th style="width:110px;text-align:center;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($pfaqs as $faq): ?>
+              <tr class="<?= $faq->activo?'':'faq-inactive' ?>">
+                <td style="text-align:center;color:#aaa;"><?= (int)$faq->orden ?></td>
+                <td><?= htmlspecialchars(mb_substr($faq->pregunta,0,110)) ?><?= mb_strlen($faq->pregunta)>110?'…':'' ?></td>
+                <td style="text-align:center;"><?= $faq->activo?'<span class="faq-badge-activo">Activo</span>':'<span class="faq-badge-inactivo">Inactivo</span>' ?></td>
+                <td style="text-align:center;">
+                  <a href="/admin_library/faq_editar/<?= $faq->faq_id ?>" class="btn-edit">Editar</a>
+                  &nbsp;
+                  <button class="btn-del" onclick="if(confirm('¿Eliminar esta pregunta?')) window.location='/admin_library/faq_eliminar/<?= $faq->faq_id ?>';">Borrar</button>
+                </td>
+              </tr>
+              <?php endforeach; ?>
+            </tbody>
+          </table>
+        </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
+    </div><!-- /panel marcas -->
 
     <div style="height:60px"></div>
   </div>

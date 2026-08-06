@@ -2085,7 +2085,11 @@ class Tienda extends CI_Controller {
                 $this->data['includes_header'][]='<link rel="stylesheet" href="/includes/content-collapse.css">';
                 // SEO marca (piloto): datos para la plantilla mejorada (mockup). Queries solo lectura, inocuas.
                 $this->load->model('demo_cart_admin_model');
-                $this->data['faqs_marca']          = $this->demo_cart_admin_model->get_faqs_frontend('marca', $id_marca);
+                $faqs_marca = $this->demo_cart_admin_model->get_faqs_frontend('marca', $id_marca);
+                if (empty($faqs_marca)) $faqs_marca = $this->demo_cart_admin_model->get_faqs_frontend('marca', 0); // genéricas (todas las marcas)
+                $marca_disp_faq = function_exists('mb_convert_case') ? mb_convert_case(mb_strtolower($marca->cat_name,'UTF-8'), MB_CASE_TITLE, 'UTF-8') : $marca->cat_name;
+                foreach ($faqs_marca as $ff){ $ff->pregunta=str_replace('{marca}',$marca_disp_faq,$ff->pregunta); $ff->respuesta=str_replace('{marca}',$marca_disp_faq,$ff->respuesta); }
+                $this->data['faqs_marca']          = $faqs_marca;
                 $this->data['id_marca_seo']        = $id_marca;
                 $this->data['destacados_marca']    = $this->flexi_cart_model->get_items_destacados_marca($id_marca, 10);
                 $this->data['conteo_colecciones']  = $this->flexi_cart_model->get_conteo_items_por_coleccion($id_marca);

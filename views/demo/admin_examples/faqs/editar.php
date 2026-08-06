@@ -35,6 +35,7 @@
             <option value="home" <?= (!isset($faq)||!$faq||$faq->page_type=='home')?'selected':'' ?>>Home</option>
             <option value="categoria" <?= (isset($faq)&&$faq&&$faq->page_type=='categoria')?'selected':'' ?>>Categoría SEO</option>
             <option value="tipo_producto" <?= (isset($faq)&&$faq&&$faq->page_type=='tipo_producto')?'selected':'' ?>>Categoría principal</option>
+            <option value="marca" <?= (isset($faq)&&$faq&&$faq->page_type=='marca')?'selected':'' ?>>Marca</option>
           </select>
         </div>
         <div id="cat_selector" style="<?= (isset($faq)&&$faq&&$faq->page_type=='categoria')?'':'display:none;' ?>flex:1;min-width:260px;">
@@ -55,6 +56,14 @@
               <option value="<?= $tid ?>" <?= (isset($faq)&&$faq&&$faq->page_type=='tipo_producto'&&$faq->page_id==$tid)?'selected':'' ?>><?= htmlspecialchars($tname) ?></option>
             <?php endforeach; ?>
           </select>
+        </div>
+        <div id="marca_selector" style="<?= (isset($faq)&&$faq&&$faq->page_type=='marca')?'':'display:none;' ?>flex:1;min-width:260px;">
+          <select name="page_id" id="sel_marca" <?= (isset($faq)&&$faq&&$faq->page_type=='marca')?'':'disabled' ?> style="width:100%;padding:8px;border:1px solid #ccc;border-radius:4px;">
+            <?php foreach (($marcas ?? array()) as $mid => $mname): ?>
+              <option value="<?= $mid ?>" <?= (isset($faq)&&$faq&&$faq->page_type=='marca'&&$faq->page_id==$mid)?'selected':'' ?>><?= htmlspecialchars($mname) ?></option>
+            <?php endforeach; ?>
+          </select>
+          <small style="color:#999;">Usa <b>{marca}</b> en el texto y se sustituirá por el nombre de la marca.</small>
         </div>
       </div>
 
@@ -87,13 +96,17 @@
   function toggleSelectors(val){
     var cat = document.getElementById('cat_selector');
     var tip = document.getElementById('tipoprod_selector');
+    var mar = document.getElementById('marca_selector');
     var selCat = document.getElementById('sel_categoria');
     var selTip = document.getElementById('sel_tipoprod');
+    var selMar = document.getElementById('sel_marca');
     cat.style.display = (val==='categoria') ? 'block' : 'none';
     tip.style.display = (val==='tipo_producto') ? 'block' : 'none';
+    mar.style.display = (val==='marca') ? 'block' : 'none';
     // Solo el select activo se envia (los disabled no se envian)
     selCat.disabled = (val!=='categoria');
     selTip.disabled = (val!=='tipo_producto');
+    selMar.disabled = (val!=='marca');
   }
   </script>
 </body>
