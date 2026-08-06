@@ -60,7 +60,7 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 .marca-seo-page .msq-cta{display:inline-flex;gap:10px;align-items:center;margin-top:26px;background:var(--msq-accent);color:#fff;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:14px 30px;border-radius:999px;transition:.2s;}
 .marca-seo-page .msq-cta:hover{background:var(--msq-accent-ink);transform:translateY(-2px);}
 .marca-seo-page .msq-stat{margin-top:22px;font-size:12.5px;color:var(--msq-faint);letter-spacing:.03em;}
-.marca-seo-page .msq-brandbanner{padding:38px 0 6px;}
+.marca-seo-page .msq-brandbanner{padding:12px 0 6px;}
 .marca-seo-page .msq-bb-title{font-size:clamp(28px,4.5vw,46px);line-height:1.08;margin-bottom:22px;color:var(--msq-ink);}
 .marca-seo-page .msq-bb-title .msq-brand{color:var(--msq-accent-ink);}
 .marca-seo-page .msq-bb-band{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--msq-line);border-radius:4px;overflow:hidden;}
