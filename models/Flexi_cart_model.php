@@ -4479,6 +4479,70 @@ class Flexi_cart_model extends Flexi_cart_lite_model
       return $result;
     }
 
+    // ---- Pagina de marca mejorada (SEO). Metodos additivos, solo lectura. ----
+    private function _slug_seo($str){
+      $search_rep  = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u,Á,É,Í,Ó,Ú,Ñ,!,(,)");
+      $replace_rep = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u,n,,,");
+      return str_replace($search_rep, $replace_rep, strtolower(str_replace(',','', str_replace('+','-plus-', str_replace('#','number-', str_replace('&','and', str_replace(' ','-', rawurldecode($str))))))));
+    }
+    function get_items_destacados_marca($id_marca, $limit=4){
+      $id_marca=(int)$id_marca;
+      if(!$id_marca) return array();
+      $this->db->select("i.item_id, i.item_name, i.item_ref, i.item_price, i.item_unidad, i.img, i.item_tipo, c.cat_name, cl.coleccion_name", FALSE);
+      $this->db->from('demo_items i');
+      $this->db->join('demo_categories c', 'i.item_cat_fk = c.cat_id');
+      $this->db->join('demo_coleccion cl', 'i.item_coleccion_id = cl.coleccion_id');
+      $this->db->where(array('i.item_cat_fk'=>$id_marca,'i.activo'=>1,'c.publico'=>1,'cl.publico2'=>1,'i.publico3'=>1));
+      $this->db->where('i.img !=', "");
+      $this->db->group_by('i.item_id');
+      $this->db->order_by('i.portada','desc');
+      $this->db->order_by('i.item_id','desc');
+      $this->db->limit((int)$limit);
+      $q=$this->db->get();
+      $rows=$q?$q->result_array():array();
+      $out=array();
+      foreach($rows as $r){
+        $nombre = (trim($r['item_name'])!='')?$r['item_name']:((isset($r['item_ref'])&&trim($r['item_ref'])!='')?$r['item_ref']:'producto');
+        $url = '/'.$this->_slug_seo($r['cat_name']).'/'.$this->_slug_seo($r['coleccion_name']).'/'.$this->_slug_seo($nombre).'-'.$r['item_id'];
+        if($r['item_tipo']==5) $url='/herramientas/'.$this->_slug_seo($nombre).'-'.$r['item_id'];
+        $out[]=array(
+          'name'=> ($r['item_name']!='')?$r['item_name']:$r['item_ref'],
+          'ref'=> $r['item_ref'],
+          'price'=> ($r['item_price']>0) ? number_format($r['item_price'],2,',','.').' &euro;'.(trim($r['item_unidad'])!=''?'/'.$r['item_unidad']:'') : '',
+          'img'=> '/includes/'.str_replace('../','',$r['img']).'th.jpg',
+          'url'=> $url,
+        );
+      }
+      return $out;
+    }
+    function get_conteo_items_por_coleccion($id_marca){
+      $id_marca=(int)$id_marca; $out=array();
+      if(!$id_marca) return $out;
+      $this->db->select('item_coleccion_id, COUNT(*) AS n', FALSE);
+      $this->db->from('demo_items');
+      $this->db->where(array('item_cat_fk'=>$id_marca,'activo'=>1,'publico3'=>1));
+      $this->db->group_by('item_coleccion_id');
+      $q=$this->db->get();
+      if($q) foreach($q->result_array() as $r) $out[(int)$r['item_coleccion_id']]=(int)$r['n'];
+      return $out;
+    }
+    function get_marcas_relacionadas($id_marca, $tipo_cats='', $limit=6){
+      $id_marca=(int)$id_marca;
+      $this->db->select('cat_id, cat_name, cats', FALSE);
+      $this->db->from('demo_categories');
+      $this->db->where('cat_id !=', $id_marca);
+      $this->db->where(array('publico'=>1));
+      $this->db->where("cat_name !=", '');
+      if(trim($tipo_cats)!=''){
+        $primera = trim(current(explode(',', $tipo_cats)));
+        if($primera!='') $this->db->like('cats', $primera);
+      }
+      $this->db->order_by('RAND()');
+      $this->db->limit((int)$limit);
+      $q=$this->db->get();
+      return $q?$q->result():array();
+    }
+
     function get_items_portada($limit = 8) {
       // Caché de 5 minutos: query pesada (varios JOIN + GROUP_CONCAT) que se lanzaba
       // sin caché en cada visita a portada; bajo tráfico alto se llegaron a amontonar

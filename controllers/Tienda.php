@@ -2083,10 +2083,17 @@ class Tienda extends CI_Controller {
                     $this->data['meta_title'] .= ', catálogos actualizados';
                 }
                 $this->data['includes_header'][]='<link rel="stylesheet" href="/includes/content-collapse.css">';
-                // SEO marca (piloto): FAQs de la marca para la plantilla mejorada. Query indexada, vacia si no hay -> inocuo.
+                // SEO marca (piloto): datos para la plantilla mejorada (mockup). Queries solo lectura, inocuas.
                 $this->load->model('demo_cart_admin_model');
-                $this->data['faqs_marca'] = $this->demo_cart_admin_model->get_faqs_frontend('marca', $id_marca);
-                $this->data['id_marca_seo'] = $id_marca;
+                $this->data['faqs_marca']          = $this->demo_cart_admin_model->get_faqs_frontend('marca', $id_marca);
+                $this->data['id_marca_seo']        = $id_marca;
+                $this->data['destacados_marca']    = $this->flexi_cart_model->get_items_destacados_marca($id_marca, 4);
+                $this->data['conteo_colecciones']  = $this->flexi_cart_model->get_conteo_items_por_coleccion($id_marca);
+                $this->data['marcas_relacionadas'] = $this->flexi_cart_model->get_marcas_relacionadas($id_marca, isset($marca->cats)?$marca->cats:'', 6);
+                $mapa_tipo_seo = array('papel pintado'=>0,'foto murales'=>1,'fotomurales'=>1,'murales'=>1,'revestimientos'=>2,'telas'=>3,'alfombras'=>4);
+                $tipo_prim_seo = 0;
+                if (isset($marca->cats) && trim($marca->cats)!=''){ $pc=mb_strtolower(trim(current(explode(',',$marca->cats))),'UTF-8'); if(isset($mapa_tipo_seo[$pc])) $tipo_prim_seo=$mapa_tipo_seo[$pc]; }
+                $this->data['estancias_marca']     = $this->flexi_cart_model->get_estancias_home($tipo_prim_seo, 8);
                 $this->load->view('frontend/header', $this->data);
                 //$this->load->view('frontend/migas_nuevas_small', $this->data);
                 $this->load->view('frontend/listado-colecciones', $this->data);
