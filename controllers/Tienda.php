@@ -2082,7 +2082,11 @@ class Tienda extends CI_Controller {
                     // Si el title y el H1 son iguales, añadimos la coletilla
                     $this->data['meta_title'] .= ', catálogos actualizados';
                 }
-                $this->data['includes_header'][]='<link rel="stylesheet" href="/includes/content-collapse.css">';            
+                $this->data['includes_header'][]='<link rel="stylesheet" href="/includes/content-collapse.css">';
+                // SEO marca (piloto): FAQs de la marca para la plantilla mejorada. Query indexada, vacia si no hay -> inocuo.
+                $this->load->model('demo_cart_admin_model');
+                $this->data['faqs_marca'] = $this->demo_cart_admin_model->get_faqs_frontend('marca', $id_marca);
+                $this->data['id_marca_seo'] = $id_marca;
                 $this->load->view('frontend/header', $this->data);
                 //$this->load->view('frontend/migas_nuevas_small', $this->data);
                 $this->load->view('frontend/listado-colecciones', $this->data);

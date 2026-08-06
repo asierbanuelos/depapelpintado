@@ -8,7 +8,36 @@ if (isset($_GET['test']) && $_GET['test']=='eneko'){
   print '</xmp></pre>';
 }
 
+// ---- SEO marca (PILOTO gated con ?preview_seo=1). Para activar en TODAS las marcas: poner true. ----
+$preview_seo_marca = isset($_GET['preview_seo']);
+$marca_nombre_seo  = isset($fab->cat_name) ? trim($fab->cat_name) : '';
+$marca_slug_seo    = $marca_nombre_seo!=='' ? urlenc($marca_nombre_seo) : '';
+$marca_id_seo      = isset($id_marca_seo) ? (int)$id_marca_seo : (isset($fab->cat_id)?(int)$fab->cat_id:0);
+$tipos_marca_seo   = array(); // seg-url => etiqueta
+if (isset($fab->cats) && trim($fab->cats)!==''){
+  $map_seg_seo = array('papel pintado'=>'papel-pintado','foto murales'=>'murales','fotomurales'=>'murales','murales'=>'murales','revestimientos'=>'revestimientos','telas'=>'telas','alfombras'=>'alfombras');
+  foreach (explode(',', $fab->cats) as $t){
+    $t = trim($t); $k = mb_strtolower($t, 'UTF-8');
+    if (isset($map_seg_seo[$k])) $tipos_marca_seo[$map_seg_seo[$k]] = $t;
+  }
+}
 ?>
+<?php if ($preview_seo_marca): ?>
+<style>
+.marca-seo-intro .texto-seo{max-width:820px;margin:0 auto 6px;color:#555;line-height:1.6}
+.marca-seo-links{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center}
+.marca-seo-links .lbl{color:#888;font-size:.9rem}
+.btn-marca-seo{display:inline-block;padding:7px 14px;border:1px solid #d9c2ce;border-radius:24px;color:#8f3a63;font-size:.9rem;text-decoration:none;transition:.15s}
+.btn-marca-seo:hover{background:#8f3a63;color:#fff}
+.marca-seo-faqs{padding:24px 0 8px}
+.marca-seo-faqs .faq-item{max-width:820px;margin:0 auto 10px;border:1px solid #eee;border-radius:8px;padding:4px 16px;background:#fff}
+.marca-seo-faqs summary{cursor:pointer;font-weight:600;padding:12px 0;list-style:none}
+.marca-seo-faqs summary::-webkit-details-marker{display:none}
+.marca-seo-faqs summary::after{content:"+";float:right;color:#8f3a63;font-size:1.2rem}
+.marca-seo-faqs details[open] summary::after{content:"\2212"}
+.marca-seo-faqs .faq-respuesta{padding:0 0 14px;color:#555;line-height:1.6}
+</style>
+<?php endif; ?>
 
 <div class="categ-breadcrumb-bar">
   <div class="container">
@@ -18,6 +47,21 @@ if (isset($_GET['test']) && $_GET['test']=='eneko'){
 <div class="wrapper">
   <h1 class="titulo-1-grande pt-2 pb-4 text-center"><?php echo $texto_h1_seccion; ?></h1>
   <div class="container">
+    <?php if ($preview_seo_marca): ?>
+      <?php if (trim($fab->cat_text)==='' && $marca_nombre_seo!==''): ?>
+        <div class="col-12 marca-seo-intro">
+          <p class="text-center texto-seo">En <strong>depapelpintado.es</strong> encontrarás toda la colección de <strong><?php echo htmlspecialchars($marca_nombre_seo, ENT_QUOTES, 'UTF-8'); ?></strong><?php if(count($tipos_marca_seo)):?> en <?php echo htmlspecialchars(implode(', ', array_values($tipos_marca_seo)), ENT_QUOTES, 'UTF-8');?><?php endif;?>. Diseños originales con envío a toda España; explora sus colecciones y encuentra el tuyo.</p>
+        </div>
+      <?php endif; ?>
+      <?php if (count($tipos_marca_seo) && $marca_id_seo && $marca_slug_seo!==''): ?>
+        <div class="col-12 marca-seo-links pb-3">
+          <span class="lbl">Explorar:</span>
+          <?php foreach ($tipos_marca_seo as $seg=>$label): ?>
+            <a class="btn-marca-seo" href="/<?php echo $seg;?>/marca/<?php echo $marca_id_seo;?>/<?php echo $marca_slug_seo;?>">Ver <?php echo htmlspecialchars(mb_strtolower($label,'UTF-8').' '.$marca_nombre_seo, ENT_QUOTES, 'UTF-8');?></a>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+    <?php endif; ?>
     <?php
     if (trim($fab->cat_text)!=''){
       ?>
@@ -53,7 +97,7 @@ if (isset($_GET['test']) && $_GET['test']=='eneko'){
                 <?php echo $c['coleccion_name']; ?>
               </a>
             </h4>
-            <div class="subcategory-description"></div>
+            <div class="subcategory-description"><?php if($preview_seo_marca && $marca_nombre_seo!==''){ echo 'Colección de '.htmlspecialchars($marca_nombre_seo, ENT_QUOTES, 'UTF-8'); } ?></div>
           </div>
         </div>
         <?php
@@ -172,6 +216,35 @@ if (isset($_GET['test']) && $_GET['test']=='eneko'){
       ?>
   </div>
 </div>
+
+<?php if ($preview_seo_marca): ?>
+  <?php if (!empty($faqs_marca)): ?>
+  <div class="wrapper marca-seo-faqs">
+    <div class="container">
+      <h2 class="titulo-1 text-center pb-4">Preguntas frecuentes sobre <?php echo htmlspecialchars($marca_nombre_seo, ENT_QUOTES, 'UTF-8'); ?></h2>
+      <?php foreach ($faqs_marca as $f): ?>
+        <details class="faq-item">
+          <summary><?php echo htmlspecialchars($f->pregunta, ENT_QUOTES, 'UTF-8'); ?></summary>
+          <div class="faq-respuesta"><?php echo $f->respuesta; ?></div>
+        </details>
+      <?php endforeach; ?>
+    </div>
+  </div>
+  <?php endif; ?>
+  <?php
+  // Datos estructurados: Brand (+ FAQPage si hay preguntas)
+  $ld_blocks = array();
+  $ld_blocks[] = '{"@context":"https://schema.org","@type":"Brand","name":'.json_encode($marca_nombre_seo, JSON_UNESCAPED_UNICODE).',"url":'.json_encode(base_url().'marcas/'.$marca_slug_seo, JSON_UNESCAPED_UNICODE).'}';
+  if (!empty($faqs_marca)){
+    $qs = array();
+    foreach ($faqs_marca as $f){
+      $qs[] = '{"@type":"Question","name":'.json_encode(trim(strip_tags($f->pregunta)), JSON_UNESCAPED_UNICODE).',"acceptedAnswer":{"@type":"Answer","text":'.json_encode(trim(strip_tags($f->respuesta)), JSON_UNESCAPED_UNICODE).'}}';
+    }
+    $ld_blocks[] = '{"@context":"https://schema.org","@type":"FAQPage","mainEntity":['.implode(',', $qs).']}';
+  }
+  foreach ($ld_blocks as $blk) echo '<script type="application/ld+json">'.$blk.'</script>'."\n";
+  ?>
+<?php endif; ?>
 
 <script>
   var botones_collapse = document.getElementsByClassName("my_collapsible");
