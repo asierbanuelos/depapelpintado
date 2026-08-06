@@ -89,6 +89,12 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 .marca-seo-page .msq-price{position:absolute;bottom:10px;right:10px;background:var(--msq-surface);color:var(--msq-ink);font-size:13px;font-weight:700;padding:5px 11px;border-radius:999px;box-shadow:var(--msq-shadow);}
 .marca-seo-page .msq-pn{font-family:var(--msq-serif);font-size:16px;margin-top:12px;}
 .marca-seo-page .msq-pref{font-size:12px;color:var(--msq-muted);margin-top:3px;}
+.marca-seo-page .msq-marquee{overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);}
+.marca-seo-page .msq-marquee-track{display:flex;gap:22px;width:max-content;animation:msqMarquee 70s linear infinite;}
+.marca-seo-page .msq-marquee:hover .msq-marquee-track{animation-play-state:paused;}
+.marca-seo-page .msq-marquee .msq-pcard{width:230px;flex:0 0 auto;}
+@keyframes msqMarquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@media (prefers-reduced-motion:reduce){.marca-seo-page .msq-marquee-track{animation:none;}}
 .marca-seo-page .msq-rooms{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
 .marca-seo-page .msq-rooms a{text-decoration:none;font-size:13.5px;font-weight:600;background:var(--msq-surface);border:1px solid var(--msq-line2);color:var(--msq-ink);padding:11px 20px;border-radius:999px;transition:.18s;}
 .marca-seo-page .msq-rooms a:hover{border-color:var(--msq-accent);color:var(--msq-accent-ink);}
@@ -179,17 +185,23 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
         <h2>Productos destacados de <?php echo htmlspecialchars($marca_disp_seo, ENT_QUOTES, 'UTF-8');?></h2>
         <p>Entra directamente a algunos de sus dise&ntilde;os m&aacute;s populares.</p>
       </div>
-      <div class="msq-prod">
-        <?php foreach($destacados_marca as $p): ?>
-        <a class="msq-pcard" href="<?php echo $p['url'];?>" title="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8');?>">
-          <div class="msq-pthumb">
-            <img loading="lazy" src="<?php echo $p['img'];?>" alt="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8');?>">
-            <?php if($p['price']!==''):?><span class="msq-price"><?php echo $p['price'];?></span><?php endif;?>
-          </div>
-          <div class="msq-pn"><?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8');?></div>
-          <?php if(trim($p['ref'])!==''):?><div class="msq-pref">ref. <?php echo htmlspecialchars($p['ref'], ENT_QUOTES, 'UTF-8');?></div><?php endif;?>
-        </a>
-        <?php endforeach; ?>
+      <div class="msq-marquee" aria-label="Productos destacados de <?php echo htmlspecialchars($marca_disp_seo, ENT_QUOTES, 'UTF-8');?>">
+        <div class="msq-marquee-track">
+          <?php ob_start(); foreach($destacados_marca as $p): ?>
+          <a class="msq-pcard" href="<?php echo $p['url'];?>" title="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8');?>">
+            <div class="msq-pthumb">
+              <img loading="lazy" src="<?php echo $p['img'];?>" alt="<?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8');?>">
+              <?php if($p['price']!==''):?><span class="msq-price"><?php echo $p['price'];?></span><?php endif;?>
+            </div>
+            <div class="msq-pn"><?php echo htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8');?></div>
+            <?php if(trim($p['ref'])!==''):?><div class="msq-pref">ref. <?php echo htmlspecialchars($p['ref'], ENT_QUOTES, 'UTF-8');?></div><?php endif;?>
+          </a>
+          <?php endforeach;
+          $msq_cards = ob_get_clean();
+          echo $msq_cards; // set original
+          echo str_replace('<a class="msq-pcard"', '<a class="msq-pcard" aria-hidden="true" tabindex="-1"', $msq_cards); // copia para bucle continuo sin salto
+          ?>
+        </div>
       </div>
     </div>
   </section>

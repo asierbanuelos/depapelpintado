@@ -2087,7 +2087,7 @@ class Tienda extends CI_Controller {
                 $this->load->model('demo_cart_admin_model');
                 $this->data['faqs_marca']          = $this->demo_cart_admin_model->get_faqs_frontend('marca', $id_marca);
                 $this->data['id_marca_seo']        = $id_marca;
-                $this->data['destacados_marca']    = $this->flexi_cart_model->get_items_destacados_marca($id_marca, 4);
+                $this->data['destacados_marca']    = $this->flexi_cart_model->get_items_destacados_marca($id_marca, 10);
                 $this->data['conteo_colecciones']  = $this->flexi_cart_model->get_conteo_items_por_coleccion($id_marca);
                 $this->data['marcas_relacionadas'] = $this->flexi_cart_model->get_marcas_relacionadas($id_marca, isset($marca->cats)?$marca->cats:'', 6);
                 $mapa_tipo_seo = array('papel pintado'=>0,'foto murales'=>1,'fotomurales'=>1,'murales'=>1,'revestimientos'=>2,'telas'=>3,'alfombras'=>4);
