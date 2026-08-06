@@ -90,10 +90,10 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 .marca-seo-page .msq-pn{font-size:16px;margin-top:12px;}
 .marca-seo-page .msq-pref{font-size:12px;color:var(--msq-muted);margin-top:3px;}
 .marca-seo-page .msq-marquee{overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);}
-.marca-seo-page .msq-marquee-track{display:flex;gap:22px;width:max-content;animation:msqMarquee 70s linear infinite;}
+.marca-seo-page .msq-marquee-track{display:flex;gap:22px;width:max-content;align-items:flex-start;animation:msqMarquee 70s linear infinite;}
 .marca-seo-page .msq-marquee:hover .msq-marquee-track{animation-play-state:paused;}
 .marca-seo-page .msq-marquee .msq-slide{width:265px;flex:0 0 auto;}
-.marca-seo-page .msq-marquee .card{height:100%;margin-bottom:0;}
+.marca-seo-page .msq-marquee .card{margin-bottom:0;}
 @keyframes msqMarquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 @media (prefers-reduced-motion:reduce){.marca-seo-page .msq-marquee-track{animation:none;}}
 .marca-seo-page .msq-rooms{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
@@ -190,13 +190,15 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
         <div class="msq-marquee-track">
           <?php ob_start(); foreach($destacados_marca as $p): ?>
           <div class="msq-slide">
-            <div class="card mb-4">
-              <div class="card-img" style="overflow:hidden;position:relative;">
-                <a href="<?php echo $p['url'];?>"><img loading="lazy" width="313" height="417" class="card-img-top img-prefichas" src="<?php echo $p['img'];?>" title="<?php echo htmlspecialchars($p['titulo'], ENT_QUOTES, 'UTF-8');?>" alt="<?php echo htmlspecialchars($p['titulo'], ENT_QUOTES, 'UTF-8');?>"></a>
-              </div>
-              <div class="card-body px-0">
-                <span class="card-title"><a href="<?php echo $p['url'];?>"><?php echo htmlspecialchars($p['titulo'], ENT_QUOTES, 'UTF-8');?></a></span>
-                <?php if($p['price']!==''):?><p class="card-text precio"><strong><?php echo $p['price'];?></strong></p><?php endif;?>
+            <div class="articulo-block">
+              <div class="card mb-4">
+                <div class="card-img" style="overflow:hidden;position:relative;">
+                  <a href="<?php echo $p['url'];?>"><img loading="lazy" width="313" height="417" class="card-img-top img-prefichas" src="<?php echo $p['img'];?>" title="<?php echo htmlspecialchars($p['titulo'], ENT_QUOTES, 'UTF-8');?>" alt="<?php echo htmlspecialchars($p['titulo'], ENT_QUOTES, 'UTF-8');?>"></a>
+                </div>
+                <div class="card-body px-0">
+                  <span class="card-title"><a href="<?php echo $p['url'];?>"><?php echo htmlspecialchars($p['titulo'], ENT_QUOTES, 'UTF-8');?></a></span>
+                  <?php if($p['price']!==''):?><p class="card-text precio"><strong><?php echo $p['price'];?></strong></p><?php endif;?>
+                </div>
               </div>
             </div>
           </div>
