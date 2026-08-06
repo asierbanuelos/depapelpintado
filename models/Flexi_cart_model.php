@@ -4488,6 +4488,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
     function get_items_destacados_marca($id_marca, $limit=4){
       $id_marca=(int)$id_marca;
       if(!$id_marca) return array();
+      $ck=APPPATH.'cache/mkdestac_'.$id_marca.'_'.(int)$limit.'.cache';
+      if(file_exists($ck)&&(time()-filemtime($ck))<300){ $d=@unserialize(@file_get_contents($ck)); if($d!==false) return $d; }
       $this->db->select("i.item_id, i.item_name, i.item_ref, i.item_price, i.item_unidad, i.img, i.item_tipo, c.cat_name, cl.coleccion_name", FALSE);
       $this->db->from('demo_items i');
       $this->db->join('demo_categories c', 'i.item_cat_fk = c.cat_id');
@@ -4517,21 +4519,27 @@ class Flexi_cart_model extends Flexi_cart_lite_model
           'url'=> $url,
         );
       }
+      @file_put_contents($ck.'.tmp',serialize($out)); @rename($ck.'.tmp',$ck);
       return $out;
     }
     function get_conteo_items_por_coleccion($id_marca){
       $id_marca=(int)$id_marca; $out=array();
       if(!$id_marca) return $out;
+      $ck=APPPATH.'cache/mkconteo_'.$id_marca.'.cache';
+      if(file_exists($ck)&&(time()-filemtime($ck))<300){ $d=@unserialize(@file_get_contents($ck)); if($d!==false) return $d; }
       $this->db->select('item_coleccion_id, COUNT(*) AS n', FALSE);
       $this->db->from('demo_items');
       $this->db->where(array('item_cat_fk'=>$id_marca,'activo'=>1,'publico3'=>1));
       $this->db->group_by('item_coleccion_id');
       $q=$this->db->get();
       if($q) foreach($q->result_array() as $r) $out[(int)$r['item_coleccion_id']]=(int)$r['n'];
+      @file_put_contents($ck.'.tmp',serialize($out)); @rename($ck.'.tmp',$ck);
       return $out;
     }
     function get_marcas_relacionadas($id_marca, $tipo_cats='', $limit=6){
       $id_marca=(int)$id_marca;
+      $ckr=APPPATH.'cache/mkrelac_'.$id_marca.'.cache';
+      if(file_exists($ckr)&&(time()-filemtime($ckr))<300){ $d=@unserialize(@file_get_contents($ckr)); if($d!==false) return $d; }
       $this->db->select('cat_id, cat_name, cats', FALSE);
       $this->db->from('demo_categories');
       $this->db->where('cat_id !=', $id_marca);
@@ -4544,7 +4552,9 @@ class Flexi_cart_model extends Flexi_cart_lite_model
       $this->db->order_by('RAND()');
       $this->db->limit((int)$limit);
       $q=$this->db->get();
-      return $q?$q->result():array();
+      $res=$q?$q->result():array();
+      @file_put_contents($ckr.'.tmp',serialize($res)); @rename($ckr.'.tmp',$ckr);
+      return $res;
     }
 
     function get_items_portada($limit = 8) {
