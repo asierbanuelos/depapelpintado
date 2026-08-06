@@ -130,6 +130,15 @@ if (isset($fab->cat_text) && trim(strip_tags($fab->cat_text))!==''){
 .marca-seo-page .msq-brands a:hover{color:var(--msq-accent-ink);border-color:var(--msq-accent);}
 @media (max-width:860px){.marca-seo-page .msq-grid,.marca-seo-page .msq-prod{grid-template-columns:repeat(2,1fr);}.marca-seo-page .msq-trust .msq-wrap{grid-template-columns:repeat(2,1fr);}.marca-seo-page .msq-cell:nth-child(2){border-right:none;}}
 @media (max-width:480px){.marca-seo-page .msq-grid,.marca-seo-page .msq-prod{grid-template-columns:1fr;}}
+@media (max-width:640px){
+  .marca-seo-page .msq-trust .msq-wrap{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .marca-seo-page .msq-trust .msq-wrap::-webkit-scrollbar{display:none;}
+  .marca-seo-page .msq-trust .msq-cell{flex:0 0 62%;scroll-snap-align:center;border-right:1px solid var(--msq-line);padding:18px 14px;}
+  .marca-seo-page .msq-trust .msq-cell:last-child{border-right:none;}
+  .marca-seo-page .msq-rooms,.marca-seo-page .msq-brands{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:4px;}
+  .marca-seo-page .msq-rooms::-webkit-scrollbar,.marca-seo-page .msq-brands::-webkit-scrollbar{display:none;}
+  .marca-seo-page .msq-rooms a,.marca-seo-page .msq-brands a{flex:0 0 auto;scroll-snap-align:start;}
+}
 </style>
 
 <div class="marca-seo-page">
