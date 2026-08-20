@@ -8,20 +8,28 @@ if (!empty($il_slider) || !empty($il_chips_v)):
 ?>
 <section class="catalogo-interlinks" aria-label="Explora más del catálogo">
   <div class="container">
-    <?php if (!empty($interlinks_titulo)): ?>
-      <h2 class="il-h2"><?php echo $interlinks_titulo; // contiene <span class="il-kw"> ya saneado ?></h2>
-    <?php endif; ?>
-    <?php if (!empty($interlinks_sub)): ?>
-      <p class="il-sub"><?php echo htmlspecialchars($interlinks_sub); ?></p>
-    <?php endif; ?>
+    <div class="il-header-row">
+      <div class="il-header-text">
+        <?php if (!empty($interlinks_titulo)): ?>
+          <h2 class="il-h2"><?php echo $interlinks_titulo; // contiene <span class="il-kw"> ya saneado ?></h2>
+        <?php endif; ?>
+        <?php if (!empty($interlinks_sub)): ?>
+          <p class="il-sub"><?php echo htmlspecialchars($interlinks_sub); ?></p>
+        <?php endif; ?>
+      </div>
+      <?php if (!empty($interlinks_ver_todas)): ?>
+        <a class="il-vertodas" href="<?php echo $interlinks_ver_todas['url']; ?>"><?php echo htmlspecialchars($interlinks_ver_todas['texto']); ?></a>
+      <?php endif; ?>
+    </div>
 
     <?php if (!empty($il_slider)): ?>
     <div class="il-slider-wrap">
       <button type="button" class="il-nav prev" onclick="ilSlide(this,-1)" aria-label="Anterior">&lsaquo;</button>
       <div class="il-slider">
         <?php foreach ($il_slider as $c): ?>
+          <?php $il_thumb_class = (isset($c['fit']) && $c['fit']=='contain') ? 'il-thumb il-thumb-contain' : 'il-thumb'; ?>
           <a class="il-card" href="<?php echo $c['url']; ?>" title="<?php echo htmlspecialchars($c['nombre']); ?>">
-            <div class="il-thumb"><img src="<?php echo $c['img']; ?>" alt="<?php echo htmlspecialchars($c['nombre']); ?>" loading="lazy"></div>
+            <div class="<?php echo $il_thumb_class; ?>"><img src="<?php echo $c['img']; ?>" alt="<?php echo htmlspecialchars($c['nombre']); ?>" loading="lazy"></div>
             <div class="il-cap"><?php echo htmlspecialchars($c['nombre']); ?></div>
           </a>
         <?php endforeach; ?>
@@ -43,7 +51,10 @@ if (!empty($il_slider) || !empty($il_chips_v)):
   </div>
 </section>
 <style>
-.catalogo-interlinks { background:#faf8f6; border-top:1px solid #ece6e2; padding:44px 0 52px; }
+.catalogo-interlinks { background:#fff; border-top:1px solid #ece6e2; padding:44px 0 52px; }
+.catalogo-interlinks .il-header-row { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+.catalogo-interlinks .il-vertodas { font-family:'Poppins',sans-serif; font-size:13.5px; color:#BB8AA3; text-decoration:underline; text-underline-offset:3px; white-space:nowrap; padding-top:10px; }
+.catalogo-interlinks .il-vertodas:hover { color:#9c637f; }
 .catalogo-interlinks .il-h2 { font-family:'MoonCreme',Georgia,serif; font-size:25px; font-weight:400; color:#2e2a2c; margin:0 0 4px; }
 .catalogo-interlinks .il-kw { color:#9c637f; font-style:italic; }
 .catalogo-interlinks .il-sub { font-family:'Poppins',sans-serif; font-size:13px; color:#8a8288; margin:0 0 22px; }
@@ -59,6 +70,9 @@ if (!empty($il_slider) || !empty($il_chips_v)):
 .catalogo-interlinks .il-thumb { aspect-ratio:1/1; border:1px solid #ece6e2; border-radius:2px; overflow:hidden; background:#f6f1ee; box-shadow:0 10px 26px -18px rgba(46,42,44,.3); }
 .catalogo-interlinks .il-thumb img { width:100%; height:100%; object-fit:cover; transition:transform .5s; display:block; }
 .catalogo-interlinks .il-card:hover .il-thumb img { transform:scale(1.06); }
+.catalogo-interlinks .il-thumb-contain { aspect-ratio:16/9; background:#fff; display:flex; align-items:center; justify-content:center; }
+.catalogo-interlinks .il-thumb-contain img { width:auto; height:auto; max-width:78%; max-height:78%; object-fit:contain; }
+.catalogo-interlinks .il-card:hover .il-thumb-contain img { transform:none; }
 .catalogo-interlinks .il-cap { font-family:'MoonCreme',Georgia,serif; font-size:16px; text-align:center; margin-top:11px; color:#2e2a2c; transition:color .2s; }
 .catalogo-interlinks .il-card:hover .il-cap { color:#9c637f; }
 .catalogo-interlinks .il-nav { position:absolute; top:calc(50% - 26px); transform:translateY(-50%); width:40px; height:40px; border-radius:50%; background:#fff; border:1px solid #ddd4ce; color:#2e2a2c; font-size:20px; line-height:1; cursor:pointer; display:none; align-items:center; justify-content:center; box-shadow:0 4px 14px -6px rgba(0,0,0,.3); z-index:2; }
@@ -69,7 +83,12 @@ if (!empty($il_slider) || !empty($il_chips_v)):
 .catalogo-interlinks .il-chips { display:flex; flex-wrap:wrap; gap:9px; }
 .catalogo-interlinks .il-chip { font-family:'Poppins',sans-serif; font-size:13.5px; color:#444; text-decoration:none; background:#fff; border:1px solid #ddd4ce; border-radius:100px; padding:7px 15px; transition:all .18s; }
 .catalogo-interlinks .il-chip:hover { border-color:#BB8AA3; color:#9c637f; }
-@media (max-width:575px){ .catalogo-interlinks { padding:32px 0 40px; } .catalogo-interlinks .il-card { flex-basis:150px; } }
+@media (max-width:575px){
+  .catalogo-interlinks { padding:32px 0 40px; }
+  .catalogo-interlinks .il-card { flex-basis:150px; }
+  .catalogo-interlinks .il-nav { display:none !important; }
+  .catalogo-interlinks .il-vertodas { padding-top:0; margin-top:2px; }
+}
 </style>
 <script>
 (function(){

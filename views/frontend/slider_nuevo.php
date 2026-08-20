@@ -2,8 +2,8 @@
 .hero-static {
   position: relative;
   width: 100%;
-  height: calc(100vh - 36px);
-  min-height: 520px;
+  height: 66vh;
+  min-height: 400px;
   overflow: hidden;
 }
 .hero-static img {
@@ -41,7 +41,7 @@
 }
 .hero-static-h1 {
   font-family: 'MoonCreme', Georgia, serif;
-  font-size: clamp(48px, 8vw, 110px);
+  font-size: clamp(40px, 6.5vw, 90px);
   font-weight: normal;
   letter-spacing: 6px;
   line-height: 1.05;
@@ -77,8 +77,11 @@
   text-decoration: none;
 }
 @media (max-width: 767px) {
-  .hero-static { height: 70vh; min-height: 380px; }
+  .hero-static { height: 52vh; min-height: 320px; }
   .hero-static-h1 { font-size: clamp(36px, 12vw, 72px); letter-spacing: 3px; }
+}
+@media (min-width: 768px) {
+  .hero-static-h1 { margin-top: 24px; }
 }
 </style>
 

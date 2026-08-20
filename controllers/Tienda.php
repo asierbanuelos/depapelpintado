@@ -691,6 +691,46 @@ class Tienda extends CI_Controller {
         $this->data['images'] = $this->contenido_model->get_imagenes(true, "home");
         $this->data['mosaico'] = $this->contenido_model->get_imagenes_admin(true, 'mosaico');
         $this->data['novedades'] = $this->flexi_cart_model->get_items_portada(8);
+        // Marquee de logos de marca en el home
+        $marcas_marquee_src = $this->flexi_cart_model->get_categories('papeles_murales_revestimientos');
+        usort($marcas_marquee_src, function($a,$b){ return (isset($b->n_productos)?(int)$b->n_productos:0) - (isset($a->n_productos)?(int)$a->n_productos:0); });
+        $marcas_marquee = array();
+        foreach ($marcas_marquee_src as $mk_mq) {
+            $logo_path_mq = FCPATH.'includes/images/logos/'.$mk_mq->cat_id.'.jpg';
+            if (! file_exists($logo_path_mq)) continue;
+            $marcas_marquee[] = array(
+                'url'    => '/marcas/'.$this->urlenc_aux($mk_mq->cat_name),
+                'nombre' => $mk_mq->cat_name,
+                'img'    => base_url().'includes/images/logos/'.$mk_mq->cat_id.'.jpg',
+            );
+            if (count($marcas_marquee) >= 18) break;
+        }
+        $this->data['total_marcas_redondeo'] = (int)(floor(count($marcas_marquee_src) / 10) * 10);
+
+        // Slider de subcategorias (nueva_categoria) con foto real, rotando al azar.
+        // Excluye pruebas internas y "alfombras-a-medida" (ya es categoria principal en el home).
+        $subcats_excluir = array('alfombras-a-medida', 'alfombras-test-error', 'prueba-productos-relacionados');
+        $subcats_src = $this->db->select('nueva_categoria_id, nueva_categoria_name, nueva_categoria_name_url')
+            ->from('nueva_categoria')
+            ->where('nueva_categoria_activo', 1)
+            ->where('categoria_publico', 1)
+            ->where_not_in('nueva_categoria_name_url', $subcats_excluir)
+            ->get()->result();
+        shuffle($subcats_src);
+        $subcats_slider = array();
+        $subcats_root = FCPATH . 'includes/images/categorias-productos/';
+        foreach ($subcats_src as $sc) {
+            $img_file = $sc->nueva_categoria_id . '-' . $sc->nueva_categoria_name_url . '.jpg';
+            if (! file_exists($subcats_root . $img_file)) continue;
+            $subcats_slider[] = array(
+                'url'    => '/' . $sc->nueva_categoria_name_url,
+                'nombre' => $sc->nueva_categoria_name,
+                'img'    => base_url() . 'includes/images/categorias-productos/' . $img_file,
+            );
+            if (count($subcats_slider) >= 16) break;
+        }
+        $this->data['subcats_slider'] = $subcats_slider;
+        $this->data['marcas_marquee'] = $marcas_marquee;
         $this->data['estancias_home'] = $this->flexi_cart_model->get_estancias_home(0, 4);
         $this->data['fab'] = $this->flexi_cart_model->get_categories();
         $this->data['fabsamp'] = $this->flexi_cart_model->get_categoriessample();
@@ -1419,15 +1459,23 @@ class Tienda extends CI_Controller {
         $familia_kw_il = mb_strtolower($categ);
         $this->data['interlinks_titulo'] = 'Explora más <span class="il-kw">'.htmlspecialchars($familia_kw_il).'</span>';
         $this->data['interlinks_sub'] = 'Marcas y categorías relacionadas';
-        $this->data['interlinks_slider'] = array();
-        // Marcas destacadas (top por nº de productos)
+        // Marcas destacadas (top por nº de productos), con logo real de la marca
         $marcas_top_il = $this->flexi_cart_model->get_categories('papeles_murales_revestimientos');
-        usort($marcas_top_il, function($a,$b){ return (isset($b->n_productos)?(int)$b->n_productos:0) - (isset($a->n_productos)?(int)$a->n_productos:0); });
-        $enl_marcas_il = array();
-        foreach (array_slice($marcas_top_il, 0, 6) as $mk_il) {
-            $enl_marcas_il[] = array('url'=>'/marcas/'.$this->urlenc_aux($mk_il->cat_name), 'texto'=>$mk_il->cat_name);
+        shuffle($marcas_top_il); // orden aleatorio: reparte el link interno entre todas las marcas, no siempre las mismas
+        $slider_marcas_il = array();
+        foreach ($marcas_top_il as $mk_il) {
+            $logo_path_il = FCPATH.'includes/images/logos/'.$mk_il->cat_id.'.jpg';
+            if (! file_exists($logo_path_il)) continue;
+            $slider_marcas_il[] = array(
+                'url'   => '/marcas/'.$this->urlenc_aux($mk_il->cat_name),
+                'nombre'=> $mk_il->cat_name,
+                'img'   => base_url().'includes/images/logos/'.$mk_il->cat_id.'.jpg',
+                'fit'   => 'contain',
+            );
+            if (count($slider_marcas_il) >= 10) break;
         }
-        $enl_marcas_il[] = array('url'=>'/marcas', 'texto'=>'Todas las marcas →');
+        $this->data['interlinks_slider'] = $slider_marcas_il;
+        $this->data['interlinks_ver_todas'] = array('url'=>'/marcas', 'texto'=>'Ver todas las marcas →');
         $cats_il = array('papel-pintado'=>'Papel Pintado','murales'=>'Murales','revestimientos'=>'Revestimientos','telas'=>'Telas','alfombras'=>'Alfombras');
         $enlaces_cats_il = array();
         foreach ($cats_il as $slug_il=>$nombre_il) {
@@ -1435,7 +1483,6 @@ class Tienda extends CI_Controller {
             $enlaces_cats_il[] = array('url'=>'/'.$slug_il, 'texto'=>$nombre_il);
         }
         $this->data['interlinks_chips'] = array(
-            array('label'=>'Marcas de '.$familia_kw_il, 'enlaces'=>$enl_marcas_il),
             array('label'=>'Otras categorías', 'enlaces'=>$enlaces_cats_il),
         );
 

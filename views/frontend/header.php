@@ -372,6 +372,16 @@ if (!isset($url_canonica))
   /></noscript>
   <!-- End Meta Pixel Code -->
 
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xui8tsozie");
+  </script>
+  <!-- End Microsoft Clarity -->
+
 </head>
 <body id="cart" class="<?php echo (isset($images) && count($images)) ? 'tiene-slider' : 'sin-slider'; ?>">
   <!-- Overlay, must be placed direct after the opening body tag. -->
@@ -987,7 +997,7 @@ if (!isset($url_canonica))
 
   /* ===== FICHA PRODUCTO ===== */
   /* Aire en la zona superior (migas + título) */
-  body.sin-slider nav[aria-label="breadcrumb"] { padding: 24px 0 20px; }
+  body.sin-slider nav[aria-label="breadcrumb"] { padding: 0; }
   #inicio.wrapper { padding-top: 16px; }
   #inicio .heading-producto { padding-top: 16px; padding-bottom: 20px; border-bottom: 1px solid #e8e4df; margin-bottom: 16px; }
   .ficha-nombre-precio { padding-bottom: 20px; border-bottom: 1px solid #e8e4df; margin-bottom: 4px; }

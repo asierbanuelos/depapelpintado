@@ -105,7 +105,7 @@
     <h3 class="hecho-estilo-titulo">Hecho a tu estilo</h3>
     <div class="hecho-estilo-btns">
       <a href="/contacto" class="hecho-estilo-btn hecho-estilo-btn-outline">Contáctanos</a>
-      <a href="/tienda/mi_cuenta/nueva" class="hecho-estilo-btn hecho-estilo-btn-solid">Crear cuenta &amp; 10€ dto.</a>
+      <a href="/tienda/mi_cuenta/nueva" class="hecho-estilo-btn hecho-estilo-btn-solid">Crear cuenta &amp; 10% dto.</a>
     </div>
   </div>
 </div>

@@ -79,7 +79,7 @@
 
 							<p>A partir de ahora tienes acceso a nuestras ofertas y promociones en dePapelpintado.es. Infórmate antes que nadie de los mejores descuentos en papel pintado, alfombras, telas, fotomurales... de la mejor calidad.</p>
 
-							<p>Como bienvenida aquí tienes tu regalo del <strong>10,00€</strong> de descuento en el total de tu compra por la compra mínima de <strong>90,00€</strong>. Tan sólo tienes que activar el código <strong>HOLA10</strong>.</p>
+							<p>Como bienvenida aquí tienes tu regalo del <strong>10%</strong> de descuento en el total de tu compra por la compra mínima de <strong>90,00€</strong>. Tan sólo tienes que activar el código <strong>HOLA10</strong>.</p>
 
 							<p style=text-align='center'>
 								<a href="https://www.depapelpintado.es/" style="background-color:#a36185;border-radius:0;border:2px solid #a36185;color:#ffffff;display:block;font-family:'Helvetica Neue',Helvetica,Arial,Verdana,sans-serif;font-size:16px;font-weight:normal;font-style:normal;padding:16px 24px;text-decoration:none;min-width:30px;text-align:center;direction:ltr;letter-spacing:0px" target="_blank" >Accede a la Web</a>

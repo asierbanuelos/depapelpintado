@@ -53,35 +53,118 @@ if ($gaur <= '2022-08-26')
   padding: 0 20px;
 }
 .trust-badge-icon {
-  font-size: 28px;
+  font-size: 22px;
   color: #aaa;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   display: block;
 }
 .trust-badge-item .trust-badge-title {
   display: block;
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
   text-transform: uppercase;
   color: #333;
   margin: 0 0 6px;
 }
 .trust-badge-item p {
-  font-size: 17px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
   color: #888;
   margin: 0;
   line-height: 1.5;
 }
 
+/* ===== MARQUEE DE MARCAS ===== */
+.marcas-marquee-wrap {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 32px 0;
+  overflow: hidden;
+}
+.marcas-marquee-header {
+  max-width: 1450px;
+  margin: 0 auto 18px;
+  padding: 0 24px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.marcas-marquee-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #555;
+}
+.marcas-marquee-vertodas {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13.5px;
+  color: #BB8AA3;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
+.marcas-marquee-vertodas:hover { color: #9c637f; }
+.marcas-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marcasMarqueeScroll 60s linear infinite;
+}
+.marcas-marquee-wrap:hover .marcas-marquee-track {
+  animation-play-state: paused;
+}
+.marcas-marquee-item {
+  flex-shrink: 0;
+  width: 140px;
+  height: 70px;
+  margin: 0 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.marcas-marquee-item img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(100%);
+  opacity: 0.55;
+  transition: opacity 0.3s, filter 0.3s;
+}
+.marcas-marquee-item:hover img {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+@keyframes marcasMarqueeScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marcas-marquee-track { animation: none; }
+}
+
 /* ===== CATEGORÍAS GRID ===== */
+.categorias-home-titulo {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: #555;
+  margin: 40px 0 24px;
+  font-family: 'Poppins', sans-serif;
+}
 .categorias-home {
   display: flex;
   flex-wrap: wrap;
   border-top: 1px solid #ddd;
 }
 .categoria-tile {
-  flex: 0 0 25%;
+  flex: 0 0 16.6667%;
   min-width: 0;
   position: relative;
   overflow: hidden;
@@ -89,19 +172,11 @@ if ($gaur <= '2022-08-26')
   border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
 }
-.categoria-tile:nth-child(4n+1) { border-left: none; }
-/* Fila de 3 */
-.categoria-tile.tile-bottom { flex: 0 0 33.333%; }
-.categoria-tile.tile-bottom:first-of-type,
-.categorias-home .tile-bottom:nth-child(4n+1) { border-left: 1px solid #ddd; }
-.categorias-home .tile-bottom:first-child { border-left: none; }
+.categoria-tile:nth-child(6n+1) { border-left: none; }
 @media (max-width: 767px) {
   .categoria-tile { flex: 0 0 50%; }
   .categoria-tile:nth-child(odd) { border-left: none; }
   .categoria-tile:nth-child(even) { border-left: 1px solid #ddd; }
-  /* Bottom tiles: 2 primeros al 50%, último al 100% */
-  .categoria-tile.tile-bottom { flex: 0 0 50%; }
-  .categoria-tile.tile-bottom:last-child { flex: 0 0 100%; border-left: none !important; }
   /* Texto más grande en móvil */
   .categoria-tile-label a { font-size: 16px; }
 }
@@ -159,6 +234,95 @@ if ($gaur <= '2022-08-26')
   display: block;
 }
 .categoria-tile:hover .categoria-tile-label a { opacity: 0.85; }
+
+/* ===== SLIDER SUBCATEGORIAS ===== */
+.subcats-slider-wrap {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 32px 0 36px;
+}
+.subcats-slider-label {
+  max-width: 1450px;
+  margin: 0 auto 16px;
+  padding: 0 24px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #555;
+}
+.subcats-slider-outer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.subcats-slider-track {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 4px 24px 12px;
+  scrollbar-width: thin;
+  flex: 1 1 auto;
+  scroll-snap-type: x proximity;
+}
+.subcats-slider-nav {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #555;
+  font-size: 22px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  margin: 0 8px;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.subcats-slider-nav:hover {
+  background: #333;
+  border-color: #333;
+  color: #fff;
+}
+@media (max-width: 767px) {
+  .subcats-slider-nav { display: none; }
+}
+.subcats-slider-item {
+  flex: 0 0 150px;
+  text-decoration: none;
+  color: inherit;
+}
+.subcats-slider-img-wrap {
+  aspect-ratio: 1 / 1;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #f6f1ee;
+}
+.subcats-slider-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+.subcats-slider-item:hover .subcats-slider-img-wrap img { transform: scale(1.06); }
+.subcats-slider-cap {
+  display: block;
+  margin-top: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12.5px;
+  text-align: center;
+  color: #333;
+}
+@media (max-width: 767px) {
+  .subcats-slider-item { flex: 0 0 120px; }
+}
 
 /* ===== POPUP REGISTRO HOME ===== */
 .home-popup-overlay {
@@ -364,7 +528,7 @@ if ($gaur <= '2022-08-26')
             <div>
               <span class="home-popup-eyebrow">Inicio</span>
               <span class="home-popup-title" id="homeRegisterPopupTitle">Regístrate</span>
-              <p>¿No tienes cuenta en dePapelPintado? Regístrate y consigue 10 euros de descuento.</p>
+              <p>¿No tienes cuenta en dePapelPintado? Regístrate y consigue un 10% de descuento.</p>
               <div class="home-popup-actions">
                 <a class="home-popup-btn home-popup-btn-primary" href="/tienda/mi_cuenta/nueva">Regístrate</a>
                 <a class="home-popup-btn home-popup-btn-secondary" href="#" data-popup-close>Ahora no</a>
@@ -431,6 +595,25 @@ if ($gaur <= '2022-08-26')
       </div>
     </div>
 
+    <!-- ===== MARQUEE DE MARCAS ===== -->
+    <?php if (!empty($marcas_marquee)): ?>
+    <div class="marcas-marquee-wrap">
+      <div class="marcas-marquee-header">
+        <span class="marcas-marquee-label">Trabajamos con +<?= (!empty($total_marcas_redondeo) ? $total_marcas_redondeo : 100) ?> marcas</span>
+        <a class="marcas-marquee-vertodas" href="https://depapelpintado.es/marcas">Ver todas las marcas &rarr;</a>
+      </div>
+      <div class="marcas-marquee-track">
+        <?php for ($mq_rep = 0; $mq_rep < 2; $mq_rep++): ?>
+          <?php foreach ($marcas_marquee as $mq): ?>
+            <a class="marcas-marquee-item" href="<?= $mq['url'] ?>" title="<?= htmlspecialchars($mq['nombre']) ?>">
+              <img src="<?= htmlspecialchars($mq['img']) ?>" alt="<?= htmlspecialchars($mq['nombre']) ?>" loading="lazy">
+            </a>
+          <?php endforeach; ?>
+        <?php endfor; ?>
+      </div>
+    </div>
+    <?php endif; ?>
+
     <!-- ===== 4 TILES PRINCIPALES ===== -->
     <?php
     // Mapeo de imágenes por categoría
@@ -489,7 +672,6 @@ if ($gaur <= '2022-08-26')
     $cats_secundarias = [
       ['titulo' => 'TELAS',              'enlace' => '/telas',        'slug' => 'telas'],
       ['titulo' => 'ALFOMBRAS A MEDIDA', 'enlace' => '/alfombras-a-medida',  'slug' => 'alfombras-a-medida'],
-      ['titulo' => 'COMPLEMENTOS',       'enlace' => '/complementos', 'slug' => 'complementos'],
     ];
     foreach ($cats_secundarias as &$cs) {
       foreach ($mosaico_resto as $el) {
@@ -501,6 +683,7 @@ if ($gaur <= '2022-08-26')
     }
     unset($cs);
     ?>
+    <h2 class="categorias-home-titulo">Compra por categoría</h2>
     <div class="categorias-home">
       <?php foreach ($mosaico_principal as $i => $el):
         $title = ucwords(mb_strtolower($el->titulo));
@@ -925,6 +1108,34 @@ if ($gaur <= '2022-08-26')
     }
     <?php endforeach; ?>
   ]
+}
+</script>
+<?php endif; ?>
+
+<!-- ===== SLIDER SUBCATEGORIAS (interlinking) ===== -->
+<?php if (!empty($subcats_slider)): ?>
+<div class="subcats-slider-wrap">
+  <p class="subcats-slider-label">Descubre por estilo</p>
+  <div class="subcats-slider-outer">
+    <button type="button" class="subcats-slider-nav prev" onclick="subcatsSlide(this,-1)" aria-label="Anterior">&lsaquo;</button>
+    <div class="subcats-slider-track">
+      <?php foreach ($subcats_slider as $sc): ?>
+        <a class="subcats-slider-item" href="<?= $sc['url'] ?>" title="<?= htmlspecialchars($sc['nombre']) ?>">
+          <div class="subcats-slider-img-wrap">
+            <img src="<?= htmlspecialchars($sc['img']) ?>" alt="<?= htmlspecialchars($sc['nombre']) ?>" loading="lazy">
+          </div>
+          <span class="subcats-slider-cap"><?= htmlspecialchars($sc['nombre']) ?></span>
+        </a>
+      <?php endforeach; ?>
+    </div>
+    <button type="button" class="subcats-slider-nav next" onclick="subcatsSlide(this,1)" aria-label="Siguiente">&rsaquo;</button>
+  </div>
+</div>
+<script>
+function subcatsSlide(btn, dir) {
+  var outer = btn.closest('.subcats-slider-outer');
+  var track = outer.querySelector('.subcats-slider-track');
+  if (track) track.scrollBy({ left: dir * 480, behavior: 'smooth' });
 }
 </script>
 <?php endif; ?>

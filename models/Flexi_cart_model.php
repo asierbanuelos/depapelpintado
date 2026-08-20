@@ -4977,9 +4977,27 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			return $a_idak;
 	}
 
+	// Cachea 5 min las listas de categorias/colecciones publicas para evitar
+	// repetir estas 4 consultas en cada peticion de listado (get_items_filter).
+	private function get_categorias_colecciones_publicas_cache(){
+		$cache_file = APPPATH . 'cache/cat_col_publicas.cache';
+		if (file_exists($cache_file) && (time() - filemtime($cache_file)) < 300) {
+			$cached = @unserialize(@file_get_contents($cache_file));
+			if ($cached !== false) return $cached;
+		}
+		$data = array(
+			'a_kategoriak' => $this->get_erregistroak('demo_categories', 'cat_id', array('publico'=>1)),
+			'a_colecciones' => $this->get_erregistroak('demo_coleccion', 'coleccion_id', array('publico2'=>1)),
+			'kategoria_datuak' => $this->get_erregistroak_eremu_guztiak('demo_categories', 'cat_id', array('publico'=>1)),
+			'colecciones_datuak' => $this->get_erregistroak_eremu_guztiak('demo_coleccion', 'coleccion_id', array('publico2'=>1)),
+		);
+		@file_put_contents($cache_file, serialize($data));
+		return $data;
+	}
 	function get_items_filter($fab=null,$estilo=null,$gama=null,$page=-1, $categ=0, $econ=0,$losmas=0,  $order=''){
-		$a_kategoriak=$this->get_erregistroak('demo_categories', 'cat_id', array('publico'=>1));
-		$a_colecciones=$this->get_erregistroak('demo_coleccion', 'coleccion_id', array('publico2'=>1));
+		$cat_col_cache = $this->get_categorias_colecciones_publicas_cache();
+		$a_kategoriak = $cat_col_cache['a_kategoriak'];
+		$a_colecciones = $cat_col_cache['a_colecciones'];
 
 		$temp=$this->db->select("*",FALSE);
 		$temp->from('demo_items');
@@ -5017,7 +5035,10 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		if($order==""){
 			$temp->order_by('portada','desc');
 			$temp->order_by('IF(demo_items.orden > 0, demo_items.orden, 999999)', 'asc', FALSE);
-			$temp->order_by('RAND(FLOOR(TO_DAYS(NOW())/3))');
+			// RAND(...) quitado: obligaba a MySQL a ordenar TODAS las filas que
+			// cumplen el WHERE (decenas de miles) antes de aplicar el LIMIT 40.
+			// item_id como desempate es igual de "estable" y no tiene coste extra (es la PK).
+			$temp->order_by('demo_items.item_id', 'asc', FALSE);
 		}
 		else{
 			$temp->order_by($order);
@@ -5043,8 +5064,8 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		//$this->db->cache_off();	
 		
 		if($categ!=5){
-			$kategoria_datuak=$this->get_erregistroak_eremu_guztiak('demo_categories', 'cat_id', array('publico'=>1));
-			$colecciones_datuak=$this->get_erregistroak_eremu_guztiak('demo_coleccion', 'coleccion_id', array('publico2'=>1));
+			$kategoria_datuak = $cat_col_cache['kategoria_datuak'];
+			$colecciones_datuak = $cat_col_cache['colecciones_datuak'];
 		}
 		$a_item_idak=array();
 		foreach ($result as $i=>$ezaugarriak){
@@ -5097,12 +5118,28 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			$cached = @unserialize(@file_get_contents($cache_file));
 			if ($cached !== false) return $cached;
 		}
+		// Candado anti-estampida: si varias peticiones piden esto mismo a la vez y
+		// ninguna tiene cache todavia, solo una calcula la query pesada; el resto
+		// espera y lee la cache recien escrita (o sirve cache vencida si el lock tarda).
+		$lock_fp = $this->acquire_cache_lock($cache_file);
+		if ($lock_fp && file_exists($cache_file) && (time() - filemtime($cache_file)) < 600) {
+			$cached = @unserialize(@file_get_contents($cache_file));
+			if ($cached !== false) {
+				$this->release_cache_lock($lock_fp);
+				return $cached;
+			}
+		}
+		if (!$lock_fp && file_exists($cache_file)) {
+			$cached = @unserialize(@file_get_contents($cache_file));
+			if ($cached !== false) return $cached;
+		}
 
 		$filtros=array();
-		$a_kategoriak=$this->get_erregistroak('demo_categories', 'cat_id', array('publico'=>1));
-		
+		$cat_col_cache = $this->get_categorias_colecciones_publicas_cache();
+		$a_kategoriak = $cat_col_cache['a_kategoriak'];
+
 		if ($idcoleccion==0)
-			$a_colecciones=$this->get_erregistroak('demo_coleccion', 'coleccion_id', array('publico2'=>1));
+			$a_colecciones = $cat_col_cache['a_colecciones'];
 		else
 			$a_colecciones[$idcoleccion]=$idcoleccion;
 
@@ -5592,6 +5629,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 			// Guardar en caché
 		@file_put_contents($cache_file . '.tmp', serialize($filtros));
 		@rename($cache_file . '.tmp', $cache_file);
+		$this->release_cache_lock($lock_fp);
 
 		return $filtros;
 	}

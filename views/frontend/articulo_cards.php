@@ -162,9 +162,9 @@ foreach($all as $key){
 	if ($cont_actual < 4)
 		$lazy_load='';
 
-	$txt_columnas="col-6 col-md-4 col-lg-4";
+	$txt_columnas="col-6 col-md-4 col-lg-3";
 	if (isset($no_hay_filtros))
-		$txt_columnas="col-6 col-md-4 col-lg-4";
+		$txt_columnas="col-6 col-md-4 col-lg-3";
 	?>
 	<div class="articulo-block <?php echo $txt_columnas; ?>" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
 		<meta itemprop="position" content="<?php echo $item_position; ?>" />
