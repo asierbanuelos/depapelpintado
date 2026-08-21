@@ -10,7 +10,7 @@ if (isset($_GET['test'])){
   $div_display='';
 }
 ?>
-<div id="mini_cart" class="right minicarro errro">
+<div id="mini_cart" class="right minicarro errro" data-total-items="<?php echo (int) $this->$flexi_cart_library->total_items(false); ?>">
   <div style="display:inline">
     <?php
     //echo anchor('tienda/carrito', '<span style="width:100%;"  class="cartdisplay"><span class="precio-minicarro sombra">' . $this->$flexi_cart_library->total() . '</span><img src="'.$includes_dir.'images/carro.png" alt="carrito" title="carrito" /></span>','style="width:100%;"'); 

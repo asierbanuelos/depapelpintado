@@ -824,6 +824,7 @@ for($i=0;$i<count($otro);$i++){
               .toast-add-cart{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-20px);background:#fff;border:1px solid #ddd;border-left:4px solid #a36185;padding:14px 20px;border-radius:3px;box-shadow:0 6px 24px rgba(0,0,0,.15);z-index:2000;font-family:'Poppins',sans-serif;font-size:14px;color:#333;opacity:0;transition:opacity .3s ease, transform .3s ease;pointer-events:none;display:flex;align-items:center;gap:10px;}
               .toast-add-cart.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
               .toast-add-cart i{color:#a36185;}
+              .toast-add-cart .toast-count{color:#a36185;font-weight:700;}
               @media (prefers-reduced-motion: reduce){ .toast-add-cart{transition:none;} }
               </style>
               <script>
@@ -1482,20 +1483,23 @@ for($i=0;$i<count($otro);$i++){
         success: function(data){
           $('#mini_cart').replaceWith(data);
           activar_minicarro();
-          mostrarToastCarrito();
+          mostrarToastCarrito($('#mini_cart').data('total-items'));
         }
       });
     }
 
-    function mostrarToastCarrito() {
+    function mostrarToastCarrito(totalItems) {
       var toast = document.getElementById('toast-add-cart');
       if (!toast) {
         toast = document.createElement('div');
         toast.id = 'toast-add-cart';
         toast.className = 'toast-add-cart';
-        toast.innerHTML = '<i class="fas fa-check-circle"></i> Producto añadido al carrito';
         document.body.appendChild(toast);
       }
+      var textoCantidad = (totalItems !== undefined && totalItems !== null && totalItems !== '')
+        ? ' · <span class="toast-count">' + totalItems + '</span> en el carrito'
+        : '';
+      toast.innerHTML = '<i class="fas fa-check-circle"></i> Producto añadido' + textoCantidad;
       toast.classList.add('show');
       clearTimeout(window._toastCarritoTimer);
       window._toastCarritoTimer = setTimeout(function(){
