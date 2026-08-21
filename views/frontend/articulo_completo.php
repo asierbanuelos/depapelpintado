@@ -821,6 +821,10 @@ for($i=0;$i<count($otro);$i++){
               .sticky-add-cart-mobile{position:fixed;left:0;right:0;bottom:0;z-index:1040;background:#fff;padding:0;box-shadow:0 -4px 14px -6px rgba(0,0,0,.25);box-sizing:border-box;}
               .sticky-add-cart-mobile .sticky-add-cart-btn{width:100%;background-color:#a36185;color:#fff;border:2px solid #a36185;border-radius:3px;font-size:16px;font-weight:500;padding:12px;box-sizing:border-box;}
               @media (max-width:767.98px){ .cuerpo-producto{padding-bottom:74px;} html,body{overflow-x:hidden;} }
+              .toast-add-cart{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-20px);background:#fff;border:1px solid #ddd;border-left:4px solid #a36185;padding:14px 20px;border-radius:3px;box-shadow:0 6px 24px rgba(0,0,0,.15);z-index:2000;font-family:'Poppins',sans-serif;font-size:14px;color:#333;opacity:0;transition:opacity .3s ease, transform .3s ease;pointer-events:none;display:flex;align-items:center;gap:10px;}
+              .toast-add-cart.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
+              .toast-add-cart i{color:#a36185;}
+              @media (prefers-reduced-motion: reduce){ .toast-add-cart{transition:none;} }
               </style>
               <script>
               document.addEventListener('DOMContentLoaded', function(){
@@ -1478,8 +1482,25 @@ for($i=0;$i<count($otro);$i++){
         success: function(data){
           $('#mini_cart').replaceWith(data);
           activar_minicarro();
+          mostrarToastCarrito();
         }
       });
+    }
+
+    function mostrarToastCarrito() {
+      var toast = document.getElementById('toast-add-cart');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast-add-cart';
+        toast.className = 'toast-add-cart';
+        toast.innerHTML = '<i class="fas fa-check-circle"></i> Producto añadido al carrito';
+        document.body.appendChild(toast);
+      }
+      toast.classList.add('show');
+      clearTimeout(window._toastCarritoTimer);
+      window._toastCarritoTimer = setTimeout(function(){
+        toast.classList.remove('show');
+      }, 2600);
     }
     /*
     function ajax_update_mini_cart(data,esmuestra) {
