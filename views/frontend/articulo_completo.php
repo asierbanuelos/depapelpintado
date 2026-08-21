@@ -1483,23 +1483,20 @@ for($i=0;$i<count($otro);$i++){
         success: function(data){
           $('#mini_cart').replaceWith(data);
           activar_minicarro();
-          mostrarToastCarrito($('#mini_cart').data('total-items'));
+          mostrarToastCarrito();
         }
       });
     }
 
-    function mostrarToastCarrito(totalItems) {
+    function mostrarToastCarrito() {
       var toast = document.getElementById('toast-add-cart');
       if (!toast) {
         toast = document.createElement('div');
         toast.id = 'toast-add-cart';
         toast.className = 'toast-add-cart';
+        toast.innerHTML = '<i class="fas fa-check-circle"></i> Producto añadido al carrito';
         document.body.appendChild(toast);
       }
-      var textoCantidad = (totalItems !== undefined && totalItems !== null && totalItems !== '')
-        ? ' · <span class="toast-count">' + totalItems + '</span> en el carrito'
-        : '';
-      toast.innerHTML = '<i class="fas fa-check-circle"></i> Producto añadido' + textoCantidad;
       toast.classList.add('show');
       clearTimeout(window._toastCarritoTimer);
       window._toastCarritoTimer = setTimeout(function(){

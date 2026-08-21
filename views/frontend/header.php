@@ -531,6 +531,26 @@ if (!isset($url_canonica))
   body.sin-slider #btn-search-movil,
   .site-header.header-scrolled #btn-search-movil { color: #333; }
   #buscador-movil-bar { position: relative; z-index: 1049; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  /* ----- Insignia de nº de productos en el icono del carrito ----- */
+  .cart-icon-wrap { position: relative; display: inline-block; }
+  .cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: #a36185;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+  }
   @media (max-width: 991px) {
     /* Logo centrado en móvil */
     .header-main-row .col-6 {
