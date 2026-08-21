@@ -568,7 +568,7 @@ if (!isset($url_canonica))
       vertical-align: middle;
       margin-top: -20px;
     }
-    #mini_cart_movil > div:first-child { display: flex; align-items: center; margin-top: -10px; }
+    #mini_cart_movil > div:first-child { display: flex; align-items: center; margin-top: -4px; }
   }
 
   /* ----- Header fijo ----- */
