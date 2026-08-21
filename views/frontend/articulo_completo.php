@@ -818,9 +818,9 @@ for($i=0;$i<count($otro);$i++){
                 <button type="button" class="sticky-add-cart-btn">AÑADIR AL CARRITO</button>
               </div>
               <style>
-              .sticky-add-cart-mobile{position:fixed;left:0;right:0;bottom:0;z-index:1040;background:#fff;padding:0;box-shadow:0 -4px 14px -6px rgba(0,0,0,.25);}
-              .sticky-add-cart-mobile .sticky-add-cart-btn{width:100%;background-color:#a36185;color:#fff;border:2px solid #a36185;border-radius:3px;font-size:16px;font-weight:500;padding:12px;}
-              @media (max-width:767.98px){ .cuerpo-producto{padding-bottom:74px;} }
+              .sticky-add-cart-mobile{position:fixed;left:0;right:0;bottom:0;z-index:1040;background:#fff;padding:0;box-shadow:0 -4px 14px -6px rgba(0,0,0,.25);box-sizing:border-box;}
+              .sticky-add-cart-mobile .sticky-add-cart-btn{width:100%;background-color:#a36185;color:#fff;border:2px solid #a36185;border-radius:3px;font-size:16px;font-weight:500;padding:12px;box-sizing:border-box;}
+              @media (max-width:767.98px){ .cuerpo-producto{padding-bottom:74px;} html,body{overflow-x:hidden;} }
               </style>
               <script>
               document.addEventListener('DOMContentLoaded', function(){
