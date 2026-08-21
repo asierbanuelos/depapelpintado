@@ -548,7 +548,7 @@ if (!isset($url_canonica))
       vertical-align: middle;
       margin-top: -20px;
     }
-    #mini_cart_movil > div:first-child { display: flex; align-items: center; }
+    #mini_cart_movil > div:first-child { display: flex; align-items: center; margin-top: -10px; }
   }
 
   /* ----- Header fijo ----- */
@@ -672,7 +672,7 @@ if (!isset($url_canonica))
   .logo-dark  { display: inline; }
 
   /* Home (tiene-slider) antes del scroll: mostrar logo blanco */
-  body.tiene-slider .site-header:not(.header-scrolled) .logo-white { display: inline; margin: 0 20px; }
+  body.tiene-slider .site-header:not(.header-scrolled) .logo-white { display: inline; margin: 0; }
   body.tiene-slider .site-header:not(.header-scrolled) .logo-dark  { display: none; }
 
   /* Tras scroll o en páginas sin slider: logo oscuro */
