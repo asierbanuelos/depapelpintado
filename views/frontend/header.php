@@ -454,7 +454,7 @@ if (!isset($url_canonica))
         </div>
 
         <!-- Carrito/usuario (sólo móvil) -->
-        <div class="col-3 d-lg-none d-flex align-items-center justify-content-end p-0" style="gap:8px;">
+        <div class="col-3 d-lg-none d-flex align-items-center justify-content-end" style="gap:8px;padding:0 10px 0 0;">
           <?php
           $data_aux['ocultar_enlace'] = true;
           $this->load->view('frontend/menu_usuario_movil', $data_aux);
