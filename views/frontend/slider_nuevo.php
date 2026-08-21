@@ -78,7 +78,9 @@
 }
 @media (max-width: 767px) {
   .hero-static { height: 52vh; min-height: 320px; }
-  .hero-static-h1 { font-size: clamp(36px, 12vw, 72px); letter-spacing: 3px; }
+  .hero-static-content { padding-top: 32px; }
+  .hero-static-badge { margin-bottom: 26px; }
+  .hero-static-h1 { font-size: clamp(36px, 12vw, 72px); letter-spacing: 3px; margin: 0 0 26px; }
 }
 @media (min-width: 768px) {
   .hero-static-h1 { margin-top: 24px; }

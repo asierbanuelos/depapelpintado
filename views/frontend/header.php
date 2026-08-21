@@ -449,7 +449,7 @@ if (!isset($url_canonica))
         <div class="col-6 col-lg-2 text-center text-lg-left">
           <a href="/">
             <img class="logo logo-dark img-fluid" src="/images/logo-depapelpintado-nuevo2.png" alt="De Papel Pintado" height="50" width="232">
-            <img class="logo logo-white img-fluid" src="\images\logo-depapelpintado-blanco (2).png"
+            <img class="logo logo-white img-fluid" src="/images/logo-depapelpintado-blanco (2).png" alt="De Papel Pintado" height="36" width="285">
           </a>
         </div>
 
@@ -672,7 +672,7 @@ if (!isset($url_canonica))
   .logo-dark  { display: inline; }
 
   /* Home (tiene-slider) antes del scroll: mostrar logo blanco */
-  body.tiene-slider .site-header:not(.header-scrolled) .logo-white { display: inline; margin: 20px; }
+  body.tiene-slider .site-header:not(.header-scrolled) .logo-white { display: inline; margin: 0 20px; }
   body.tiene-slider .site-header:not(.header-scrolled) .logo-dark  { display: none; }
 
   /* Tras scroll o en páginas sin slider: logo oscuro */
