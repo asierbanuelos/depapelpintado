@@ -29,17 +29,6 @@ foreach ($todas as $l) {
   $por_letra[$inicial][] = $l;
 }
 ksort($por_letra);
-
-// SEO: nº total de marcas (redondeado, mismo criterio que la home) y selección editorial de marcas de lujo.
-$total_marcas_redondeo_local = (int)(floor(count($todas) / 10) * 10);
-$indice_marcas_nombre = [];
-foreach ($todas as $l) { $indice_marcas_nombre[mb_strtoupper(trim($l->cat_name), 'UTF-8')] = $l; }
-$nombres_marcas_lujo = ['Cole & Son','Sanderson','Designers Guild','Missoni Home','Casamance','Christian Lacroix','Elitis','Harlequin','Nobilis','Osborne & Little'];
-$marcas_lujo = [];
-foreach ($nombres_marcas_lujo as $nombre_lujo) {
-  $clave_lujo = mb_strtoupper($nombre_lujo, 'UTF-8');
-  if (isset($indice_marcas_nombre[$clave_lujo])) $marcas_lujo[] = $indice_marcas_nombre[$clave_lujo];
-}
 ?>
 
 <style>
@@ -160,49 +149,6 @@ foreach ($nombres_marcas_lujo as $nombre_lujo) {
   display: block; margin-bottom: 8px;
 }
 .marcas-sin-resultados p { font-family: 'Poppins', sans-serif; color: var(--mk-muted); margin: 0; }
-
-/* ---- Intro SEO ---- */
-.marcas-intro { max-width: 78ch; margin: 18px 0 0; }
-.marcas-intro p {
-  font-family: 'Poppins', sans-serif; font-size: 15px; line-height: 1.7; color: var(--mk-muted); margin: 0 0 12px;
-}
-
-/* ---- Marcas de lujo (editorial) ---- */
-.marcas-lujo { padding: 34px 0 38px; border-bottom: 1px solid var(--mk-line); margin-bottom: 8px; }
-.marcas-lujo-titulo {
-  font-family: 'MoonCreme', Georgia, serif; font-size: 26px; font-weight: 400; color: var(--mk-ink); margin: 0 0 6px;
-}
-.marcas-lujo-sub {
-  font-family: 'Poppins', sans-serif; font-size: 14px; color: var(--mk-muted); max-width: 68ch; margin: 0 0 20px;
-}
-.marcas-lujo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
-@media (max-width: 575px) { .marcas-lujo-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
-.marca-lujo-card { position: relative; }
-.marca-lujo-badge {
-  position: absolute; top: 8px; right: 8px; z-index: 2;
-  font-family: 'Poppins', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
-  color: #fff; background: var(--mk-accent-deep); padding: 3px 7px; border-radius: 2px;
-}
-
-/* ---- Cierre SEO + FAQ ---- */
-.marcas-cierre { padding: 46px 0 8px; max-width: 78ch; }
-.marcas-cierre h2 {
-  font-family: 'MoonCreme', Georgia, serif; font-size: 24px; font-weight: 400; color: var(--mk-ink); margin: 0 0 14px;
-}
-.marcas-cierre p {
-  font-family: 'Poppins', sans-serif; font-size: 15px; line-height: 1.7; color: var(--mk-muted); margin: 0 0 14px;
-}
-.marcas-faq { padding: 10px 0 50px; max-width: 78ch; }
-.marcas-faq h2 {
-  font-family: 'MoonCreme', Georgia, serif; font-size: 24px; font-weight: 400; color: var(--mk-ink); margin: 0 0 18px;
-}
-.marcas-faq-item { border-top: 1px solid var(--mk-line); padding: 18px 0; }
-.marcas-faq-item h3 {
-  font-family: 'Poppins', sans-serif; font-size: 15.5px; font-weight: 600; color: var(--mk-ink); margin: 0 0 8px;
-}
-.marcas-faq-item p {
-  font-family: 'Poppins', sans-serif; font-size: 14.5px; line-height: 1.65; color: var(--mk-muted); margin: 0;
-}
 </style>
 
 <div class="categ-breadcrumb-bar">
@@ -217,40 +163,8 @@ foreach ($nombres_marcas_lujo as $nombre_lujo) {
     <header class="marcas-hero">
       <p class="marcas-eyebrow">De Papel Pintado</p>
       <h1 class="marcas-title"><?php echo $texto_h1_seccion; ?></h1>
-      <p class="marcas-lede">Explora nuestras +<?= $total_marcas_redondeo_local ?> marcas de papel pintado, murales, telas y revestimientos: desde firmas de lujo con reconocimiento internacional hasta propuestas más actuales. Busca por nombre o navega con el índice alfabético.</p>
-      <div class="marcas-intro">
-        <p>En De Papel Pintado trabajamos directamente con los fabricantes originales, sin intermediarios que recorten catálogo ni calidad: cada marca de papel pintado que ves aquí mantiene sus colecciones completas y sus acabados tal y como salen de fábrica.</p>
-        <p>Si ya sabes qué marca buscas, usa el buscador o el índice alfabético de más abajo. Si todavía estás decidiendo, en la siguiente sección destacamos las marcas de papel pintado de lujo con más recorrido en diseño de interiores — un buen punto de partida para un proyecto con personalidad.</p>
-      </div>
+      <p class="marcas-lede">Explora nuestras firmas de papel pintado, murales, telas y revestimientos. Busca por nombre o navega con el índice alfabético.</p>
     </header>
-
-    <?php if (!empty($marcas_lujo)): ?>
-    <!-- Marcas de lujo (editorial) -->
-    <section class="marcas-lujo">
-      <h2 class="marcas-lujo-titulo">Marcas de papel pintado de lujo</h2>
-      <p class="marcas-lujo-sub">Firmas de referencia en diseño de interiores, con colecciones que llevan décadas marcando tendencia en papel pintado de alta gama.</p>
-      <div class="marcas-lujo-grid">
-        <?php foreach ($marcas_lujo as $l): ?>
-          <a class="marca-card marca-lujo-card" href="<?= '/marcas/'.urlenc($l->cat_name) ?>" title="<?= htmlspecialchars($l->cat_name) ?>">
-            <span class="marca-lujo-badge">Lujo</span>
-            <div class="marca-card-logo">
-              <?php if ($l->logo_src != ''): ?>
-                <img src="<?= $l->logo_src ?>" alt="<?= htmlspecialchars($l->cat_name) ?>" loading="lazy">
-              <?php else: ?>
-                <span class="marca-card-wordmark"><?= htmlspecialchars($l->cat_name) ?></span>
-              <?php endif; ?>
-            </div>
-            <div class="marca-card-meta">
-              <span class="marca-card-name"><?= htmlspecialchars($l->cat_name) ?></span>
-              <?php if (isset($l->n_productos) && (int)$l->n_productos > 0): ?>
-                <span class="marca-card-count"><?= number_format((int)$l->n_productos, 0, ',', '.') ?></span>
-              <?php endif; ?>
-            </div>
-          </a>
-        <?php endforeach; ?>
-      </div>
-    </section>
-    <?php endif; ?>
 
     <!-- Índice A-Z -->
     <div class="marcas-tools">
@@ -282,36 +196,6 @@ foreach ($nombres_marcas_lujo as $nombre_lujo) {
         </div>
       </div>
     <?php endforeach; ?>
-
-    <!-- Cierre SEO -->
-    <section class="marcas-cierre">
-      <h2>¿Por qué comprar tu papel pintado por marca?</h2>
-      <p>Elegir por marca de papel pintado, y no solo por diseño, es la forma más fiable de acertar con la calidad del material: cada fabricante trabaja con un soporte propio (vinilo, no tejido o tejido natural) y un proceso de impresión distinto, lo que determina la durabilidad, el comportamiento ante la humedad y la facilidad de colocación del papel.</p>
-      <p>Ya sea una marca de papel pintado de lujo con ediciones limitadas o una firma especializada en papel lavable para zonas de alto tránsito, en De Papel Pintado encuentras el catálogo completo y actualizado de cada fabricante.</p>
-    </section>
-
-    <!-- FAQ -->
-    <section class="marcas-faq" itemscope itemtype="https://schema.org/FAQPage">
-      <h2>Preguntas frecuentes sobre marcas de papel pintado</h2>
-      <div class="marcas-faq-item" itemprop="mainEntity" itemscope itemtype="https://schema.org/Question">
-        <h3 itemprop="name">¿Cuántas marcas de papel pintado hay disponibles?</h3>
-        <div itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer">
-          <p itemprop="text">Actualmente trabajamos con más de <?= $total_marcas_redondeo_local ?> marcas de papel pintado, murales, telas y revestimientos, entre fabricantes españoles y firmas internacionales de referencia.</p>
-        </div>
-      </div>
-      <div class="marcas-faq-item" itemprop="mainEntity" itemscope itemtype="https://schema.org/Question">
-        <h3 itemprop="name">¿Cuáles son las mejores marcas de papel pintado de lujo?</h3>
-        <div itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer">
-          <p itemprop="text">Entre las marcas de papel pintado de lujo más reconocidas están Cole &amp; Son, Sanderson, Designers Guild, Missoni Home, Casamance y Christian Lacroix, todas ellas con colecciones originales disponibles en nuestro catálogo.</p>
-        </div>
-      </div>
-      <div class="marcas-faq-item" itemprop="mainEntity" itemscope itemtype="https://schema.org/Question">
-        <h3 itemprop="name">¿Cómo elijo la marca de papel pintado adecuada para mi proyecto?</h3>
-        <div itemprop="acceptedAnswer" itemscope itemtype="https://schema.org/Answer">
-          <p itemprop="text">Depende del acabado que busques y del estilo: las firmas de lujo suelen ofrecer diseños más atrevidos y ediciones limitadas, mientras que otras marcas se especializan en papel pintado lavable o resistente para zonas de alto tránsito como pasillos o cocinas.</p>
-        </div>
-      </div>
-    </section>
 
   </div>
 </div>
