@@ -114,7 +114,7 @@ if (trim($texto_descripcion) != '') {
         ?>
         <div class="col-12 categ-paginacion">
           <?php if ($pagina > 0): ?>
-            <a href="<?= $url_base . ($pagina - 1) ?>" class="categ-pag-btn">&lsaquo;</a>
+            <a href="<?= $url_base . ($pagina - 1) ?>" class="categ-pag-btn" rel="nofollow">&lsaquo;</a>
           <?php endif; ?>
           <?php for ($p = 0; $p < $num_paginas; $p++):
             $rango_inicio = max(0, $pagina - 3);
@@ -122,10 +122,10 @@ if (trim($texto_descripcion) != '') {
             if ($p < $rango_inicio && $p != 0) { if ($p == 1) echo '<span class="categ-pag-ellipsis">…</span>'; continue; }
             if ($p > $rango_fin && $p != $num_paginas - 1) { if ($p == $rango_fin + 1) echo '<span class="categ-pag-ellipsis">…</span>'; continue; }
           ?>
-            <a href="<?= $url_base . $p ?>" class="categ-pag-btn <?= $p == $pagina ? 'active' : '' ?>"><?= $p + 1 ?></a>
+            <a href="<?= $url_base . $p ?>" class="categ-pag-btn <?= $p == $pagina ? 'active' : '' ?>" rel="nofollow"><?= $p + 1 ?></a>
           <?php endfor; ?>
           <?php if ($pagina < $num_paginas - 1): ?>
-            <a href="<?= $url_base . ($pagina + 1) ?>" class="categ-pag-btn">&rsaquo;</a>
+            <a href="<?= $url_base . ($pagina + 1) ?>" class="categ-pag-btn" rel="nofollow">&rsaquo;</a>
           <?php endif; ?>
         </div>
         <?php endif; ?>
