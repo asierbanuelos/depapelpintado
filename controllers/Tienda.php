@@ -2034,6 +2034,12 @@ class Tienda extends CI_Controller {
                 $this->data['url_marca'] = $categoria_principal.'/marca';
                 $this->data['a_migas'][$categoria_principal]=$categ;
                 $this->data['fab'] = $this->flexi_cart_model->get_categories('papeles_murales_revestimientos');
+                // SEO: título/descripción con el nº real de marcas (redondeado, mismo criterio que la home).
+                if ($this->data['categ']==0){
+                    $total_marcas_redondeo_seo = (int)(floor(count($this->data['fab']) / 10) * 10);
+                    $this->data['meta_title'] = "Marcas de Papel Pintado Online: +{$total_marcas_redondeo_seo} Firmas de Lujo";
+                    $this->data['meta_description'] = "Descubre +{$total_marcas_redondeo_seo} marcas de papel pintado, desde firmas de lujo como Cole & Son, Missoni Home o Sanderson hasta las más actuales. Compra online con envío a toda España.";
+                }
             }
             else{
                 $this->data['url_categoria_principal'] = $url_categoria_principal;
@@ -2161,9 +2167,9 @@ class Tienda extends CI_Controller {
         }
         else{
             if ($tipo_producto!=-1)
-                $this->data['texto_h1_seccion']='Listado de Marcas de '.$categ;
+                $this->data['texto_h1_seccion']='Marcas de '.$categ;
             else
-                $this->data['texto_h1_seccion']='Listado de Marcas';
+                $this->data['texto_h1_seccion']='Marcas';
 
             $this->load->view('frontend/header', $this->data);
             //$this->load->view('frontend/migas_nuevas_small', $this->data);
