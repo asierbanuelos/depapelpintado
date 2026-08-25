@@ -2202,6 +2202,15 @@ class Tienda extends CI_Controller {
             if (preg_match('/-(\d+)$/', $ultimo_segmento, $m_seo_id))
                 $array['id'] = $m_seo_id[1];
         }
+        // Formato antiguo /tienda/articulo/{ref}/id/{id} (y variante con doble barra //id/{id}),
+        // indexado por Google desde antes de la migracion a /{marca}/{coleccion}/: el ultimo
+        // segmento es puramente numerico -> es el id. Sin esto, uri_to_assoc(3) no lo detecta
+        // (solo funciona con 2 segmentos antes de "id") y cae en 404 aunque el producto exista.
+        if (empty($array['id'])) {
+            $ultimo_segmento = $this->uri->segment($this->uri->total_segments());
+            if (preg_match('/^\d+$/', $ultimo_segmento))
+                $array['id'] = $ultimo_segmento;
+        }
         $this->data['categ'] = 0;
         if (isset($array["Herramientas"]) || isset($array["herramientas"]) || $this->uri->segment(1)=='herramientas')
             $this->data['categ'] = 5;
