@@ -21,5 +21,8 @@ if ($hilabete_eguna=='07-25')
 if ($hilabete_eguna=='07-31')
   $horario= "31 de julio cerrado por festivo local \n";
 
+if ($gaur>='2026-08-26' && $gaur<='2026-08-28')
+  $horario.= "<br />Este viernes 28 de agosto cerrado por festivo local \n";
+
 echo $horario
 ?>
