@@ -52,8 +52,18 @@ if (trim($texto_descripcion) != '') {
   </div>
 </div>
 
+<?php
+  // Si ya viene un filtro activo en la URL (color, marca, estilo, calidad, limpieza),
+  // no se ocultan los filtros al cargar: si no, al pinchar en un filtro (que navega a
+  // una URL nueva) la barra se volvía a cerrar aunque se hubiera pulsado "Filtrar".
+  $hay_filtro_activo = false;
+  foreach (array('color', 'marca', 'estilo', 'calidad', 'limpieza') as $param_filtro) {
+    if (!empty($this->input->get($param_filtro))) { $hay_filtro_activo = true; break; }
+  }
+  $categ_wrapper_class = $hay_filtro_activo ? 'categ-wrapper' : 'categ-wrapper filtros-ocultos';
+?>
 <!-- Bloque blanco: filtros + catálogo -->
-<div class="categ-wrapper">
+<div class="<?php echo $categ_wrapper_class; ?>">
   <div class="container">
     <div class="row">
 
