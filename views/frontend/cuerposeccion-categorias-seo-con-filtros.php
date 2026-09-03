@@ -53,7 +53,7 @@ if (trim($texto_descripcion) != '') {
 </div>
 
 <!-- Bloque blanco: filtros + catálogo -->
-<div class="categ-wrapper filtros-ocultos">
+<div class="categ-wrapper">
   <div class="container">
     <div class="row">
 
