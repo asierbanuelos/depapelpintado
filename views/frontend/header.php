@@ -716,6 +716,7 @@ if (!isset($url_canonica))
   body.sin-slider .site-header .precio-minicarro { color: #333 !important; }
   body.sin-slider .site-header .precio-minicarro svg path { fill: #333 !important; }
   body.sin-slider .site-header #mini_cart a { color: #333 !important; }
+  body.sin-slider .site-header .icono-cuenta-desktop svg path { fill: #333 !important; }
   body.sin-slider .site-header .fa-bars { color: #333 !important; }
   body.sin-slider .site-header .txt-menu { color: #333 !important; }
   body.sin-slider .site-header .navbar-toggler-icon { border-color: rgba(0,0,0,0.3) !important; }
