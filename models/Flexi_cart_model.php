@@ -4374,41 +4374,61 @@ class Flexi_cart_model extends Flexi_cart_lite_model
       if (empty($search)) return array();
       $exploded = explode(" ", trim($search));
 
+      // Atajo rapido: si lo escrito coincide con el principio de una referencia,
+      // usamos el indice de item_ref (near-instant) y no hace falta escanear
+      // el resto de campos. Si no encuentra nada, cae a la busqueda amplia de abajo.
       $this->db->select("item_id, item_name, item_ref, item_price, img, cat_name, coleccion_name, item_tipo", FALSE);
       $this->db->from('demo_items');
       $this->db->join('demo_categories', 'item_cat_fk = cat_id');
       $this->db->join('demo_coleccion', 'item_coleccion_id = coleccion_id');
       $this->db->where(array('demo_items.activo'=>1,'publico'=>1,'publico2'=>1,'publico3'=>1));
       $this->db->where('demo_items.img !=', "");
-
-      $ref_where    = "(1=1";
-      $name_where   = "(1=1";
-      $cat_where    = "(1=1";
-      $colec_where  = "(1=1";
-      $estilo_where = "(1=1";
-      $cat_seo_where= "(1=1";
-      foreach ($exploded as $key) {
-        $escaped = $this->db->escape_like_str($key);
-        $ref_where    .= " AND item_ref LIKE '%".$escaped."%'";
-        $name_where   .= " AND item_name LIKE '%".$escaped."%'";
-        $cat_where    .= " AND cat_name LIKE '%".$escaped."%'";
-        $colec_where  .= " AND coleccion_name LIKE '%".$escaped."%'";
-        $estilo_where .= " AND item_id IN (SELECT ei.estilo_item_item FROM demo_estilo_item ei INNER JOIN demo_estilo e ON e.estilo_id=ei.estilo_item_estilo WHERE e.estilo_name LIKE '%".$escaped."%' AND e.activo=1)";
-        $cat_seo_where.= " AND item_id IN (SELECT nci.nuevacategoria_item_id FROM nueva_categoria_item nci INNER JOIN nueva_categoria nc ON nc.nueva_categoria_id=nci.nueva_categoria_id WHERE nc.nueva_categoria_name LIKE '%".$escaped."%' AND nc.nueva_categoria_activo=1)";
-      }
-      $ref_where    .= ")";
-      $name_where   .= ")";
-      $cat_where    .= ")";
-      $colec_where  .= ")";
-      $estilo_where .= ")";
-      $cat_seo_where.= ")";
-      $this->db->where("(".$ref_where." OR ".$name_where." OR ".$cat_where." OR ".$colec_where." OR ".$estilo_where." OR ".$cat_seo_where.")");
-
+      $this->db->like('item_ref', trim($search), 'after');
       $this->db->group_by('item_id');
       $this->db->order_by('portada', 'desc');
       $this->db->limit(8);
-
       $query = $this->db->get();
+
+      if ($query->num_rows() == 0) {
+        // Busqueda amplia: referencia (en cualquier posicion), nombre, categoria,
+        // coleccion, estilo y categoria SEO.
+        $this->db->select("item_id, item_name, item_ref, item_price, img, cat_name, coleccion_name, item_tipo", FALSE);
+        $this->db->from('demo_items');
+        $this->db->join('demo_categories', 'item_cat_fk = cat_id');
+        $this->db->join('demo_coleccion', 'item_coleccion_id = coleccion_id');
+        $this->db->where(array('demo_items.activo'=>1,'publico'=>1,'publico2'=>1,'publico3'=>1));
+        $this->db->where('demo_items.img !=', "");
+
+        $ref_where    = "(1=1";
+        $name_where   = "(1=1";
+        $cat_where    = "(1=1";
+        $colec_where  = "(1=1";
+        $estilo_where = "(1=1";
+        $cat_seo_where= "(1=1";
+        foreach ($exploded as $key) {
+          $escaped = $this->db->escape_like_str($key);
+          $ref_where    .= " AND item_ref LIKE '%".$escaped."%'";
+          $name_where   .= " AND item_name LIKE '%".$escaped."%'";
+          $cat_where    .= " AND cat_name LIKE '%".$escaped."%'";
+          $colec_where  .= " AND coleccion_name LIKE '%".$escaped."%'";
+          $estilo_where .= " AND item_id IN (SELECT ei.estilo_item_item FROM demo_estilo_item ei INNER JOIN demo_estilo e ON e.estilo_id=ei.estilo_item_estilo WHERE e.estilo_name LIKE '%".$escaped."%' AND e.activo=1)";
+          $cat_seo_where.= " AND item_id IN (SELECT nci.nuevacategoria_item_id FROM nueva_categoria_item nci INNER JOIN nueva_categoria nc ON nc.nueva_categoria_id=nci.nueva_categoria_id WHERE nc.nueva_categoria_name LIKE '%".$escaped."%' AND nc.nueva_categoria_activo=1)";
+        }
+        $ref_where    .= ")";
+        $name_where   .= ")";
+        $cat_where    .= ")";
+        $colec_where  .= ")";
+        $estilo_where .= ")";
+        $cat_seo_where.= ")";
+        $this->db->where("(".$ref_where." OR ".$name_where." OR ".$cat_where." OR ".$colec_where." OR ".$estilo_where." OR ".$cat_seo_where.")");
+
+        $this->db->group_by('item_id');
+        $this->db->order_by('portada', 'desc');
+        $this->db->limit(8);
+
+        $query = $this->db->get();
+      }
+
       $results = array();
 
       $search_rep  = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u,Á,É,Í,Ó,Ú,Ñ,!,(,)");
