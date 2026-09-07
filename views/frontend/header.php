@@ -780,7 +780,7 @@ if (!isset($url_canonica))
   .bo-live-msg b{ color:#333; }
   .bo-live .bo-chips{ margin-bottom:30px; }
   .bo-live h3{ margin-top:0; }
-  .bo-grid-live{ margin-bottom:8px; }
+  .bo-grid-live{ grid-template-columns:repeat(6,1fr); margin-bottom:8px; }
   .bo-ver-todo{ display:inline-block; margin-top:18px; font-size:13px; font-weight:600; color:#333; text-decoration:none; }
   .bo-ver-todo:hover{ color:#a36185; }
   @media (max-width:900px){
@@ -790,6 +790,7 @@ if (!isset($url_canonica))
     .bo-cols{ flex-direction:column; }
     .bo-col-left{ width:100%; border-right:none; border-bottom:1px solid #e8e4df; margin:0 0 24px; padding:0 0 24px; }
     .bo-grid{ grid-template-columns:repeat(2,1fr); }
+    .bo-grid-live{ grid-template-columns:repeat(3,1fr); }
   }
 
   /* ----- Búsqueda compacta ----- */
