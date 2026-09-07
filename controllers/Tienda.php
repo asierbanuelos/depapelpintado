@@ -908,7 +908,7 @@ class Tienda extends CI_Controller {
         // Productos recomendados para el estado por defecto del buscador
         // (overlay). Reutiliza get_items_portada() via el modelo, ya cacheada.
         header('Content-Type: application/json');
-        echo json_encode($this->flexi_cart_model->get_items_recomendados_busqueda(4));
+        echo json_encode($this->flexi_cart_model->get_items_recomendados_busqueda(12));
     }
 
     function busquedas_populares() {
@@ -916,6 +916,18 @@ class Tienda extends CI_Controller {
         // overlay del buscador. Devuelve vacío si aún no hay datos suficientes.
         header('Content-Type: application/json');
         echo json_encode($this->flexi_cart_model->get_busquedas_populares(7, 60));
+    }
+
+    function busqueda_sugerencias() {
+        // Marcas y estilos reales que coinciden con lo escrito, para el
+        // overlay del buscador (además de los productos).
+        header('Content-Type: application/json');
+        $search = $this->input->get('q', TRUE);
+        if (empty($search) || strlen($search) < 2) {
+            echo json_encode(array());
+            return;
+        }
+        echo json_encode($this->flexi_cart_model->get_sugerencias_categorias($search));
     }
 
     function tienda($param1='', $param2='', $param3='', $param4='', $param5='', $param6=''){
