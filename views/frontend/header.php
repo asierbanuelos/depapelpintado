@@ -642,7 +642,7 @@ if (!isset($url_canonica))
     text-transform: uppercase; color: #555; text-decoration: none;
   }
   .dropdown-cuenta-desktop li a:hover { color: #BB8AA3; background: #faf7f4; }
-  .icono-cuenta-desktop-wrap:hover .dropdown-cuenta-desktop { display: block; }
+  .icono-cuenta-desktop-wrap.abierto .dropdown-cuenta-desktop { display: block; }
   /* Icono cuenta blanco cuando header transparente */
   .site-header:not(.header-scrolled) .icono-cuenta-desktop svg path { fill: #fff; }
   .site-header:not(.header-scrolled) .icono-cuenta-desktop:hover svg path { fill: rgba(255,255,255,0.8); }
@@ -1367,6 +1367,20 @@ if (!isset($url_canonica))
   </style>
 
   <script>
+  // Menú de "Mi cuenta" al hacer click, no al pasar el cursor
+  (function(){
+    var wrap = document.querySelector('.icono-cuenta-desktop-wrap');
+    var toggle = document.querySelector('.icono-cuenta-desktop');
+    if (!wrap || !toggle) return;
+    toggle.addEventListener('click', function(e){
+      e.preventDefault();
+      wrap.classList.toggle('abierto');
+    });
+    document.addEventListener('click', function(e){
+      if (!wrap.contains(e.target)) wrap.classList.remove('abierto');
+    });
+  })();
+
   (function(){
     var timer = null;
     var field = document.getElementById('searchfield');
