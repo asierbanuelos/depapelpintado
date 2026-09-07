@@ -847,12 +847,6 @@ class Tienda extends CI_Controller {
             print '</xmp></pre>';
             exit;
             */
-            // Registro de búsquedas reales, para poder mostrar "búsquedas
-            // populares" basadas en uso de verdad en vez de una lista fija.
-            $termino_log = trim(mb_substr($_POST['search'], 0, 100));
-            if ($termino_log !== '') {
-                $this->db->insert('busqueda_log', array('termino' => $termino_log, 'fecha' => date('Y-m-d H:i:s')));
-            }
             // introducir aqui el contenido a mostrar en los metas
 
             $this->data['categ'] = -1;
@@ -890,6 +884,16 @@ class Tienda extends CI_Controller {
             $this->load->view('frontend/migas_nuevas_small', $this->data);
             $search = $_POST['search'];
             $this->data['all'] = $this->flexi_cart_model->search_items($search, 0);
+
+            // Registro de búsquedas reales, solo si han encontrado algo: no
+            // tiene sentido sugerir en "búsquedas populares" un término que
+            // luego no lleva a ningún resultado.
+            if (count($this->data['all'])) {
+                $termino_log = trim(mb_substr($search, 0, 100));
+                if ($termino_log !== '') {
+                    $this->db->insert('busqueda_log', array('termino' => $termino_log, 'fecha' => date('Y-m-d H:i:s')));
+                }
+            }
             //echo "<br />".$this->db->last_query();
             //$this->load->view('frontend/cuerposeccion-sin-filtros', $this->data);
             $this->load->view('frontend/cuerposeccion-busqueda', $this->data);
