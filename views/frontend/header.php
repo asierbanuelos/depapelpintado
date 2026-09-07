@@ -495,31 +495,20 @@ if (!isset($url_canonica))
     </div>
   </div>
 
-  <!-- Buscador escritorio desplegable -->
-  <div id="buscador-desktop-bar" style="display:none;background:#fff;border-top:1px solid #e8e4df;padding:14px 0;position:relative;z-index:1049;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
-    <div class="container">
-      <div id="search_widget" data-search-controller-url="/tienda/busqueda" style="position:relative;display:flex;align-items:center;gap:10px;">
-        <form action="/tienda/busqueda" method="post" autocomplete="off" class="d-flex align-items-center" style="flex:1;">
-          <input id="searchfield" type="text" name="search" placeholder="Buscar productos, marcas, colecciones..." autocomplete="off"
-            style="flex:1;border:none;border-bottom:1px solid #ccc;padding:8px 0;font-size:15px;font-family:'Poppins',sans-serif;outline:none;background:transparent;color:#333;"/>
-          <button class="btn-buscar-header" type="submit" aria-label="Buscar" style="color:#BB8AA3;font-size:18px;"><i class="fa fa-search"></i></button>
+  <!-- Buscador: overlay a pantalla completa (escritorio y móvil) -->
+  <div id="buscador-overlay">
+    <div class="bo-panel">
+      <div class="bo-top">
+        <span class="bo-logo d-none d-md-inline">De Papel Pintado</span>
+        <form id="bo-form" action="/tienda/busqueda" method="post" autocomplete="off" class="bo-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input id="searchfield" type="text" name="search" placeholder="Buscar por referencia, marca, estilo..." autocomplete="off">
           <label for="searchfield" class="sr-only">Búsqueda</label>
         </form>
-        <button id="btn-cerrar-busqueda-desktop" type="button" aria-label="Cerrar" style="background:none;border:none;font-size:24px;color:#999;cursor:pointer;line-height:1;padding:0;">&times;</button>
-        <div id="search-suggestions" style="display:none;"></div>
+        <span id="bo-close" class="bo-close" role="button" aria-label="Cerrar búsqueda">&times;</span>
       </div>
+      <div id="bo-body" class="bo-body"></div>
     </div>
-  </div>
-
-  <!-- Buscador móvil desplegable -->
-  <div id="buscador-movil-bar" class="d-lg-none" style="display:none !important; background:#fff; border-top:1px solid #eee; padding:10px 16px;">
-    <form action="/tienda/busqueda" method="post" autocomplete="off" class="d-flex align-items-center" style="gap:8px;">
-      <input id="searchfield-movil" type="text" name="search" placeholder="Buscar productos, marcas..." autocomplete="off"
-        style="flex:1;border:1px solid #ddd;border-radius:20px;padding:8px 16px;font-size:15px;outline:none;">
-      <button type="submit" aria-label="Buscar" style="background:#BB8AA3;border:none;border-radius:50%;width:38px;height:38px;color:#fff;flex-shrink:0;">
-        <i class="fa fa-search"></i>
-      </button>
-    </form>
   </div>
 
   <!-- Menú móvil off-canvas (FUERA de cualquier d-none) -->
@@ -530,7 +519,6 @@ if (!isset($url_canonica))
   #btn-search-movil { color: #fff; }
   body.sin-slider #btn-search-movil,
   .site-header.header-scrolled #btn-search-movil { color: #333; }
-  #buscador-movil-bar { position: relative; z-index: 1049; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
   /* ----- Insignia de nº de productos en el icono del carrito ----- */
   .cart-icon-wrap { position: relative; display: inline-block; }
   .cart-badge {
@@ -756,9 +744,57 @@ if (!isset($url_canonica))
   .site-header.header-scrolled #btn-search-desktop { color: #333 !important; }
   #btn-search-desktop:hover { opacity: 0.75; }
 
-  /* Barra búsqueda escritorio */
-  #buscador-desktop-bar input:focus { border-bottom-color: #BB8AA3; }
-  #search-suggestions { min-width: 300px; }
+  /* ----- Buscador: overlay a pantalla completa ----- */
+  #buscador-overlay{ display:none; position:fixed; inset:0; z-index:2000; background:rgba(20,15,10,.45); }
+  #buscador-overlay.abierto{ display:block; }
+  .bo-panel{ background:#fff; width:100%; max-height:88vh; overflow-y:auto; box-shadow:0 20px 50px -20px rgba(0,0,0,.3); }
+  .bo-top{ display:flex; align-items:center; gap:24px; padding:18px 24px; border-bottom:1px solid #e8e4df; max-width:1200px; margin:0 auto; }
+  .bo-logo{ font-family:'Poppins',sans-serif; font-size:16px; font-weight:600; letter-spacing:.03em; color:#333; white-space:nowrap; }
+  .bo-search{ flex:1; display:flex; align-items:center; gap:12px; border-bottom:2px solid #333; padding-bottom:9px; }
+  .bo-search svg{ width:18px; height:18px; flex-shrink:0; color:#727272; }
+  .bo-search input{ flex:1; border:none; outline:none; background:none; font-family:'Poppins',sans-serif; font-size:16px; color:#333; }
+  .bo-search input::placeholder{ color:#b8b2a8; }
+  .bo-close{ width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:50%; cursor:pointer; color:#727272; font-size:20px; flex-shrink:0; line-height:1; }
+  .bo-close:hover{ background:#fbfaf8; color:#333; }
+  .bo-body{ max-width:1200px; margin:0 auto; padding:28px 24px 40px; }
+  .bo-body h3{ font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#727272; font-weight:600; margin:0 0 16px; }
+  .bo-cols{ display:flex; gap:0; }
+  .bo-col-left{ width:230px; flex-shrink:0; padding-right:32px; border-right:1px solid #e8e4df; margin-right:32px; }
+  .bo-col-right{ flex:1; min-width:0; }
+  .bo-brand-featured{ display:block; cursor:pointer; background:linear-gradient(135deg,#a36185,#BB8AA3); border-radius:6px; padding:16px 16px 14px; margin-bottom:24px; }
+  .bo-brand-featured .eyebrow{ font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.8); margin:0 0 5px; }
+  .bo-brand-featured .brand-name{ font-family:'Poppins',sans-serif; font-size:18px; font-weight:600; color:#fff; margin:0 0 3px; }
+  .bo-brand-featured .brand-sub{ font-size:11px; color:rgba(255,255,255,.85); margin:0; }
+  .bo-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .bo-col-left .bo-chips{ flex-direction:column; align-items:flex-start; gap:12px; }
+  .bo-chip{ font-size:13.5px; color:#333; cursor:pointer; }
+  .bo-col-left .bo-chip{ font-size:14px; }
+  .bo-chip:hover{ color:#a36185; }
+  .bo-body .bo-col-right .bo-chip,
+  .bo-live .bo-chip{ padding:8px 16px; border:1px solid #e8e4df; border-radius:20px; }
+  .bo-live .bo-chip:hover{ border-color:#a36185; }
+  .bo-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+  .bo-pcard{ text-decoration:none; color:inherit; display:block; }
+  .bo-img{ aspect-ratio:3/4; border-radius:3px; overflow:hidden; background:#fbfaf8; margin-bottom:9px; }
+  .bo-img img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .bo-cat{ font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:#727272; margin:0 0 3px; }
+  .bo-name{ font-size:12.5px; font-weight:500; color:#333; margin:0 0 4px; }
+  .bo-price{ font-size:12.5px; font-weight:600; color:#333; margin:0; }
+  .bo-live-msg{ font-size:13.5px; color:#727272; margin:0 0 20px; }
+  .bo-live-msg b{ color:#333; }
+  .bo-live .bo-chips{ margin-bottom:30px; }
+  .bo-live h3{ margin-top:0; }
+  .bo-grid-live{ margin-bottom:8px; }
+  .bo-ver-todo{ display:inline-block; margin-top:18px; font-size:13px; font-weight:600; color:#333; text-decoration:none; }
+  .bo-ver-todo:hover{ color:#a36185; }
+  @media (max-width:900px){
+    .bo-panel{ max-height:100vh; height:100%; }
+    .bo-top{ padding:14px 16px; gap:14px; }
+    .bo-body{ padding:20px 16px 40px; }
+    .bo-cols{ flex-direction:column; }
+    .bo-col-left{ width:100%; border-right:none; border-bottom:1px solid #e8e4df; margin:0 0 24px; padding:0 0 24px; }
+    .bo-grid{ grid-template-columns:repeat(2,1fr); }
+  }
 
   /* ----- Búsqueda compacta ----- */
   .search-widget-header { position: relative; display: flex; align-items: center; }
@@ -819,32 +855,6 @@ if (!isset($url_canonica))
   body.sin-slider .site-header .buscador-header::placeholder { color: #aaa !important; }
   .site-header.header-scrolled .btn-buscar-header,
   body.sin-slider .site-header .btn-buscar-header { color: #444 !important; }
-
-  /* ----- Autocomplete ----- */
-  #search-suggestions {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-top: none;
-    z-index: 9999;
-    max-height: 400px;
-    overflow-y: auto;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    min-width: 300px;
-  }
-  #search-suggestions a {
-    display: flex; align-items: center; padding: 8px 12px;
-    text-decoration: none; color: #333; border-bottom: 1px solid #eee; transition: background 0.2s;
-  }
-  #search-suggestions a:hover { background: #f5f5f5; }
-  #search-suggestions .search-thumb { width: 50px; height: 50px; object-fit: cover; margin-right: 12px; flex-shrink: 0; }
-  #search-suggestions .search-info { flex: 1; text-align: left; min-width: 0; }
-  #search-suggestions .search-info .search-label { font-size: 13px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  #search-suggestions .search-info .search-price { font-size: 12px; color: #999; margin-top: 2px; }
-  #search-suggestions .search-all { display: block; text-align: center; padding: 10px; font-weight: bold; color: #333; border-bottom: none; }
 
   /* ===== BREADCRUMB BAR (fondo blanco, unido al header) ===== */
   .categ-breadcrumb-bar { background: #fff; padding: 16px 0; }
@@ -1381,57 +1391,161 @@ if (!isset($url_canonica))
     });
   })();
 
+  // Buscador: overlay a pantalla completa
   (function(){
-    var timer = null;
-    var field = document.getElementById('searchfield');
-    var box = document.getElementById('search-suggestions');
-    if (!field || !box) return;
+    var overlay = document.getElementById('buscador-overlay');
+    var body    = document.getElementById('bo-body');
+    var field   = document.getElementById('searchfield');
+    var form    = document.getElementById('bo-form');
+    var closeBtn = document.getElementById('bo-close');
+    var openBtns = [document.getElementById('btn-search-desktop'), document.getElementById('btn-search-movil')];
+    if (!overlay || !body || !field || !form) return;
 
-    function doSearch(q) {
+    function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+    var POPULARES = [
+      {label:'Ikat', term:'Ikat'},
+      {label:'Rayas', term:'Rayas'},
+      {label:'Geométrico', term:'Geometrico'},
+      {label:'Vegetación', term:'Vegetacion'},
+      {label:'Infantil', term:'Infantil'},
+      {label:'Thibaut', term:'Thibaut'},
+      {label:'Coordonné', term:'Coordonne'}
+    ];
+    var MARCA = {nombre:'Casadeco', sub:'La marca con más productos en catálogo', term:'Casadeco'};
+
+    var recomendadosCache = null;
+    function getRecomendados(cb){
+      if (recomendadosCache) { cb(recomendadosCache); return; }
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/tienda/busqueda_recomendados');
+      xhr.onload = function(){
+        try { recomendadosCache = JSON.parse(xhr.responseText) || []; } catch(e) { recomendadosCache = []; }
+        cb(recomendadosCache);
+      };
+      xhr.onerror = function(){ cb([]); };
+      xhr.send();
+    }
+
+    function popularesHtml(){
+      var html = '<div class="bo-brand-featured" data-term="' + MARCA.term + '">'
+        + '<p class="eyebrow">Marca destacada</p>'
+        + '<p class="brand-name">' + MARCA.nombre + '</p>'
+        + '<p class="brand-sub">' + MARCA.sub + '</p></div>';
+      html += '<h3>Búsquedas populares</h3><div class="bo-chips">';
+      POPULARES.forEach(function(p){ html += '<span class="bo-chip" data-term="' + p.term + '">' + p.label + '</span>'; });
+      html += '</div>';
+      return html;
+    }
+
+    function productosHtml(items, keyName, keyCat){
+      if (!items || !items.length) return '';
+      var html = '<h3>Productos recomendados</h3><div class="bo-grid">';
+      items.forEach(function(it){
+        html += '<a class="bo-pcard" href="' + it.url + '">'
+          + '<div class="bo-img"><img src="' + it.img + '" alt="" loading="lazy"></div>'
+          + '<p class="bo-cat">' + (it[keyCat] || '') + '</p>'
+          + '<p class="bo-name">' + (it[keyName] || it.ref || '') + '</p>'
+          + '<p class="bo-price">' + it.price + '</p></a>';
+      });
+      html += '</div>';
+      return html;
+    }
+
+    function bindInteractive(){
+      body.querySelectorAll('[data-term]').forEach(function(el){
+        el.addEventListener('click', function(){
+          field.value = el.getAttribute('data-term');
+          form.submit();
+        });
+      });
+    }
+
+    function renderDefault(){
+      body.innerHTML = '<div class="bo-cols"><div class="bo-col-left">' + popularesHtml() + '</div>'
+        + '<div class="bo-col-right"><div id="bo-recom"></div></div></div>';
+      bindInteractive();
+      getRecomendados(function(items){
+        var el = document.getElementById('bo-recom');
+        if (el) el.innerHTML = productosHtml(items, 'name', 'cat');
+      });
+    }
+
+    function renderResultados(q, data){
+      var hasResults = data && data.length;
+      var html = '<div class="bo-live">';
+      if (hasResults) {
+        html += '<div class="bo-grid bo-grid-live">';
+        data.forEach(function(it){
+          html += '<a class="bo-pcard" href="' + it.url + '">'
+            + '<div class="bo-img"><img src="' + it.img + '" alt="" loading="lazy"></div>'
+            + '<p class="bo-cat">' + (it.label || '') + '</p>'
+            + '<p class="bo-name">' + (it.name || it.ref || '') + '</p>'
+            + '<p class="bo-price">' + it.price + '</p></a>';
+        });
+        html += '</div><a class="bo-ver-todo" href="#" id="bo-ver-todo">Ver todos los resultados &rarr;</a>';
+      } else {
+        html += '<p class="bo-live-msg">No hay resultados para <b>"' + esc(q) + '"</b>. Prueba con:</p>';
+        html += popularesHtml();
+        html += '<div id="bo-recom-fallback"></div>';
+      }
+      html += '</div>';
+      body.innerHTML = html;
+      bindInteractive();
+      if (hasResults) {
+        var verTodo = document.getElementById('bo-ver-todo');
+        if (verTodo) verTodo.addEventListener('click', function(e){ e.preventDefault(); form.submit(); });
+      } else {
+        getRecomendados(function(items){
+          var el = document.getElementById('bo-recom-fallback');
+          if (el) el.innerHTML = productosHtml(items, 'name', 'cat');
+        });
+      }
+    }
+
+    var timer = null;
+    function doSearch(q){
       var xhr = new XMLHttpRequest();
       xhr.open('GET', '/tienda/busqueda?ajax=1&q=' + encodeURIComponent(q));
       xhr.onload = function(){
-        if (xhr.status !== 200) { box.style.display='none'; return; }
-        // Extraer sólo el JSON (por si CI añade algo extra al principio/final)
+        if (xhr.status !== 200) { renderResultados(q, []); return; }
         var raw = xhr.responseText.trim();
         var jsonStart = raw.indexOf('[');
-        if (jsonStart === -1) { box.style.display='none'; return; }
+        if (jsonStart === -1) { renderResultados(q, []); return; }
         raw = raw.substring(jsonStart);
         var jsonEnd = raw.lastIndexOf(']');
-        if (jsonEnd === -1) { box.style.display='none'; return; }
+        if (jsonEnd === -1) { renderResultados(q, []); return; }
         raw = raw.substring(0, jsonEnd + 1);
         var data;
-        try { data = JSON.parse(raw); } catch(e) { box.style.display='none'; return; }
-        if (!data || !data.length) { box.style.display='none'; return; }
-        var html = '';
-        for (var i = 0; i < data.length; i++) {
-          html += '<a href="' + data[i].url + '">';
-          html += '<img class="search-thumb" src="' + data[i].img + '" alt=""/>';
-          html += '<div class="search-info">';
-          html += '<div class="search-label">' + data[i].label + '</div>';
-          html += '<div class="search-price">' + data[i].price + '</div>';
-          html += '</div></a>';
-        }
-        html += '<a class="search-all" href="#" onclick="document.getElementById(\'searchfield\').closest(\'form\').submit();return false;">Ver todos los resultados &rarr;</a>';
-        box.innerHTML = html;
-        box.style.display = 'block';
+        try { data = JSON.parse(raw); } catch(e) { renderResultados(q, []); return; }
+        renderResultados(q, data);
       };
-      xhr.onerror = function(){ box.style.display='none'; };
+      xhr.onerror = function(){ renderResultados(q, []); };
       xhr.send();
     }
 
     field.addEventListener('input', function(){
       clearTimeout(timer);
       var q = this.value.trim();
-      if (q.length < 3) { box.style.display='none'; return; }
+      if (q.length === 0) { renderDefault(); return; }
+      if (q.length < 2) return;
       timer = setTimeout(function(){ doSearch(q); }, 800);
     });
-    document.addEventListener('click', function(e){
-      if (!field.contains(e.target) && !box.contains(e.target)) box.style.display = 'none';
-    });
-    field.addEventListener('focus', function(){
-      if (box.innerHTML && this.value.trim().length >= 2) box.style.display = 'block';
-    });
+
+    function abrir(){
+      overlay.classList.add('abierto');
+      document.body.style.overflow = 'hidden';
+      if (!field.value.trim()) renderDefault();
+      setTimeout(function(){ field.focus(); }, 50);
+    }
+    function cerrar(){
+      overlay.classList.remove('abierto');
+      document.body.style.overflow = '';
+    }
+    openBtns.forEach(function(btn){ if (btn) btn.addEventListener('click', abrir); });
+    if (closeBtn) closeBtn.addEventListener('click', cerrar);
+    overlay.addEventListener('click', function(e){ if (e.target === overlay) cerrar(); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') cerrar(); });
   })();
 
   // Header transparente → blanco al hacer scroll
@@ -1464,40 +1578,6 @@ if (!isset($url_canonica))
     checkBarraScroll();
   })();
 
-  // Toggle buscador móvil
-  (function(){
-    var btn = document.getElementById('btn-search-movil');
-    var bar = document.getElementById('buscador-movil-bar');
-    if (!btn || !bar) return;
-    btn.addEventListener('click', function(){
-      var visible = bar.style.display === 'block';
-      bar.style.setProperty('display', visible ? 'none' : 'block', 'important');
-      if (!visible) {
-        var input = bar.querySelector('input');
-        if (input) setTimeout(function(){ input.focus(); }, 50);
-      }
-    });
-  })();
-
-  // Toggle buscador escritorio
-  (function(){
-    var btnOpen  = document.getElementById('btn-search-desktop');
-    var btnClose = document.getElementById('btn-cerrar-busqueda-desktop');
-    var bar      = document.getElementById('buscador-desktop-bar');
-    var field    = document.getElementById('searchfield');
-    if (!btnOpen || !bar) return;
-    btnOpen.addEventListener('click', function(){
-      var open = bar.style.display !== 'none';
-      bar.style.display = open ? 'none' : 'block';
-      if (!open && field) setTimeout(function(){ field.focus(); }, 50);
-    });
-    if (btnClose) btnClose.addEventListener('click', function(){ bar.style.display = 'none'; });
-    document.addEventListener('click', function(e){
-      if (bar.style.display === 'none') return;
-      if (!bar.contains(e.target) && e.target !== btnOpen && !btnOpen.contains(e.target))
-        bar.style.display = 'none';
-    });
-  })();
   </script>
 
 </header>

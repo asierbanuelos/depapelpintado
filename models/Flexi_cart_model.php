@@ -4625,6 +4625,28 @@ class Flexi_cart_model extends Flexi_cart_lite_model
       return $result;
     }
 
+    function get_items_recomendados_busqueda($limit = 8) {
+      // Reutiliza get_items_portada() (ya cacheado 5 min) y le da el mismo
+      // formato de salida que get_items_destacados_marca(): url, imagen y
+      // precio listos para el overlay del buscador.
+      $rows = $this->get_items_portada($limit);
+      $out = array();
+      $pre_map = array(0=>'Papel Pintado',1=>'Mural',2=>'Revestimiento',3=>'Tela',4=>'Alfombra',5=>'Herramientas');
+      foreach ($rows as $r) {
+        $nombre = (trim($r['item_name'])!='') ? $r['item_name'] : ((isset($r['item_ref']) && trim($r['item_ref'])!='') ? $r['item_ref'] : 'producto');
+        $url = '/'.$this->_slug_seo($r['cat_name']).'/'.$this->_slug_seo($r['coleccion_name']).'/'.$this->_slug_seo($nombre).'-'.$r['item_id'];
+        if ($r['item_tipo'] == 5) $url = '/herramientas/'.$this->_slug_seo($nombre).'-'.$r['item_id'];
+        $out[] = array(
+          'cat'   => isset($pre_map[(int)$r['item_tipo']]) ? $pre_map[(int)$r['item_tipo']] : $r['cat_name'],
+          'name'  => $nombre,
+          'price' => ($r['item_price'] > 0) ? number_format($r['item_price'], 2, ',', '.').' €' : '',
+          'img'   => '/includes/'.str_replace('../', '', $r['img']).'med.jpg',
+          'url'   => $url,
+        );
+      }
+      return $out;
+    }
+
     function search_items($search="",$page=-1){
       $exploded=explode(" ",$search);
       

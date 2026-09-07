@@ -894,6 +894,13 @@ class Tienda extends CI_Controller {
         }
     }
 
+    function busqueda_recomendados() {
+        // Productos recomendados para el estado por defecto del buscador
+        // (overlay). Reutiliza get_items_portada() via el modelo, ya cacheada.
+        header('Content-Type: application/json');
+        echo json_encode($this->flexi_cart_model->get_items_recomendados_busqueda(8));
+    }
+
     function tienda($param1='', $param2='', $param3='', $param4='', $param5='', $param6=''){
         $this->error_url($_SERVER['SCRIPT_URL']);
         /*
