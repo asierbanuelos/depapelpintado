@@ -4647,6 +4647,36 @@ class Flexi_cart_model extends Flexi_cart_lite_model
       return $out;
     }
 
+    function get_busquedas_populares($limit = 7, $dias = 60) {
+      // Términos más buscados de verdad, a partir de busqueda_log (se
+      // registra cada vez que alguien lanza una búsqueda real, ver
+      // Tienda::busqueda()). Cache de 15 min. Vacío hasta que haya datos.
+      $cache_key = 'busquedas_populares_' . (int)$limit . '_' . (int)$dias;
+      $cache_file = APPPATH . 'cache/' . $cache_key . '.cache';
+      if (file_exists($cache_file) && (time() - filemtime($cache_file)) < 900) {
+        $cached = @unserialize(@file_get_contents($cache_file));
+        if ($cached !== false) return $cached;
+      }
+      $sql = "
+        SELECT LOWER(TRIM(termino)) AS term, COUNT(*) AS n
+        FROM busqueda_log
+        WHERE fecha >= DATE_SUB(NOW(), INTERVAL " . (int)$dias . " DAY)
+          AND CHAR_LENGTH(TRIM(termino)) >= 3
+        GROUP BY LOWER(TRIM(termino))
+        ORDER BY n DESC
+        LIMIT " . (int)$limit;
+      $query = $this->db->query($sql);
+      $rows = $query ? $query->result_array() : array();
+      $out = array();
+      foreach ($rows as $r) {
+        $t = $r['term'];
+        $out[] = mb_strtoupper(mb_substr($t, 0, 1)) . mb_substr($t, 1);
+      }
+      @file_put_contents($cache_file . '.tmp', serialize($out));
+      @rename($cache_file . '.tmp', $cache_file);
+      return $out;
+    }
+
     function search_items($search="",$page=-1){
       $exploded=explode(" ",$search);
       

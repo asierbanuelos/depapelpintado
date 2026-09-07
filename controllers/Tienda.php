@@ -847,6 +847,12 @@ class Tienda extends CI_Controller {
             print '</xmp></pre>';
             exit;
             */
+            // Registro de búsquedas reales, para poder mostrar "búsquedas
+            // populares" basadas en uso de verdad en vez de una lista fija.
+            $termino_log = trim(mb_substr($_POST['search'], 0, 100));
+            if ($termino_log !== '') {
+                $this->db->insert('busqueda_log', array('termino' => $termino_log, 'fecha' => date('Y-m-d H:i:s')));
+            }
             // introducir aqui el contenido a mostrar en los metas
 
             $this->data['categ'] = -1;
@@ -899,6 +905,13 @@ class Tienda extends CI_Controller {
         // (overlay). Reutiliza get_items_portada() via el modelo, ya cacheada.
         header('Content-Type: application/json');
         echo json_encode($this->flexi_cart_model->get_items_recomendados_busqueda(8));
+    }
+
+    function busquedas_populares() {
+        // Términos más buscados de verdad (tabla busqueda_log), para el
+        // overlay del buscador. Devuelve vacío si aún no hay datos suficientes.
+        header('Content-Type: application/json');
+        echo json_encode($this->flexi_cart_model->get_busquedas_populares(7, 60));
     }
 
     function tienda($param1='', $param2='', $param3='', $param4='', $param5='', $param6=''){

@@ -761,10 +761,6 @@ if (!isset($url_canonica))
   .bo-cols{ display:flex; gap:0; }
   .bo-col-left{ width:230px; flex-shrink:0; padding-right:32px; border-right:1px solid #e8e4df; margin-right:32px; }
   .bo-col-right{ flex:1; min-width:0; }
-  .bo-brand-featured{ display:block; cursor:pointer; background:linear-gradient(135deg,#a36185,#BB8AA3); border-radius:6px; padding:16px 16px 14px; margin-bottom:24px; }
-  .bo-brand-featured .eyebrow{ font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.8); margin:0 0 5px; }
-  .bo-brand-featured .brand-name{ font-family:'Poppins',sans-serif; font-size:18px; font-weight:600; color:#fff; margin:0 0 3px; }
-  .bo-brand-featured .brand-sub{ font-size:11px; color:rgba(255,255,255,.85); margin:0; }
   .bo-chips{ display:flex; flex-wrap:wrap; gap:8px; }
   .bo-col-left .bo-chips{ flex-direction:column; align-items:flex-start; gap:12px; }
   .bo-chip{ font-size:13.5px; color:#333; cursor:pointer; }
@@ -1403,16 +1399,9 @@ if (!isset($url_canonica))
 
     function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
-    var POPULARES = [
-      {label:'Ikat', term:'Ikat'},
-      {label:'Rayas', term:'Rayas'},
-      {label:'Geométrico', term:'Geometrico'},
-      {label:'Vegetación', term:'Vegetacion'},
-      {label:'Infantil', term:'Infantil'},
-      {label:'Thibaut', term:'Thibaut'},
-      {label:'Coordonné', term:'Coordonne'}
-    ];
-    var MARCA = {nombre:'Casadeco', sub:'La marca con más productos en catálogo', term:'Casadeco'};
+    // Respaldo mientras no haya suficientes búsquedas reales registradas
+    // (tabla busqueda_log, se llena con el uso real de /tienda/busqueda_populares)
+    var FALLBACK_POPULARES = ['Ikat','Rayas','Geométrico','Vegetación','Infantil','Thibaut','Coordonné'];
 
     var recomendadosCache = null;
     function getRecomendados(cb){
@@ -1427,15 +1416,31 @@ if (!isset($url_canonica))
       xhr.send();
     }
 
-    function popularesHtml(){
-      var html = '<div class="bo-brand-featured" data-term="' + MARCA.term + '">'
-        + '<p class="eyebrow">Marca destacada</p>'
-        + '<p class="brand-name">' + MARCA.nombre + '</p>'
-        + '<p class="brand-sub">' + MARCA.sub + '</p></div>';
-      html += '<h3>Búsquedas populares</h3><div class="bo-chips">';
-      POPULARES.forEach(function(p){ html += '<span class="bo-chip" data-term="' + p.term + '">' + p.label + '</span>'; });
-      html += '</div>';
-      return html;
+    var popularesCache = null;
+    function getPopulares(cb){
+      if (popularesCache) { cb(popularesCache); return; }
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/tienda/busquedas_populares');
+      xhr.onload = function(){
+        var data = [];
+        try { data = JSON.parse(xhr.responseText) || []; } catch(e) { data = []; }
+        popularesCache = data.length ? data : FALLBACK_POPULARES;
+        cb(popularesCache);
+      };
+      xhr.onerror = function(){ cb(FALLBACK_POPULARES); };
+      xhr.send();
+    }
+
+    function popularesShell(){
+      return '<h3>Búsquedas populares</h3><div class="bo-chips" id="bo-popular-terms"></div>';
+    }
+    function fillPopulares(){
+      getPopulares(function(terms){
+        var el = document.getElementById('bo-popular-terms');
+        if (!el) return;
+        el.innerHTML = terms.map(function(t){ return '<span class="bo-chip" data-term="' + t + '">' + t + '</span>'; }).join('');
+        bindInteractive();
+      });
     }
 
     function productosHtml(items, keyName, keyCat){
@@ -1462,9 +1467,10 @@ if (!isset($url_canonica))
     }
 
     function renderDefault(){
-      body.innerHTML = '<div class="bo-cols"><div class="bo-col-left">' + popularesHtml() + '</div>'
+      body.innerHTML = '<div class="bo-cols"><div class="bo-col-left">' + popularesShell() + '</div>'
         + '<div class="bo-col-right"><div id="bo-recom"></div></div></div>';
       bindInteractive();
+      fillPopulares();
       getRecomendados(function(items){
         var el = document.getElementById('bo-recom');
         if (el) el.innerHTML = productosHtml(items, 'name', 'cat');
@@ -1486,7 +1492,7 @@ if (!isset($url_canonica))
         html += '</div><a class="bo-ver-todo" href="#" id="bo-ver-todo">Ver todos los resultados &rarr;</a>';
       } else {
         html += '<p class="bo-live-msg">No hay resultados para <b>"' + esc(q) + '"</b>. Prueba con:</p>';
-        html += popularesHtml();
+        html += popularesShell();
         html += '<div id="bo-recom-fallback"></div>';
       }
       html += '</div>';
@@ -1496,6 +1502,7 @@ if (!isset($url_canonica))
         var verTodo = document.getElementById('bo-ver-todo');
         if (verTodo) verTodo.addEventListener('click', function(e){ e.preventDefault(); form.submit(); });
       } else {
+        fillPopulares();
         getRecomendados(function(items){
           var el = document.getElementById('bo-recom-fallback');
           if (el) el.innerHTML = productosHtml(items, 'name', 'cat');
