@@ -4677,32 +4677,6 @@ class Flexi_cart_model extends Flexi_cart_lite_model
       return $out;
     }
 
-    function get_sugerencias_categorias($search) {
-      // Marcas y estilos reales que coinciden con lo escrito, para
-      // ofrecerlos como filtro directo (overlay del buscador) mientras
-      // se escribe, además de los productos.
-      $exploded = explode(" ", trim($search));
-      if (!count($exploded)) return array();
-      $out = array();
-
-      $this->db->select('cat_id, cat_name', FALSE)->from('demo_categories')->where('publico', 1);
-      foreach ($exploded as $key) { $this->db->like('cat_name', $key); }
-      $marcas = $this->db->order_by('cat_name', 'asc')->limit(4)->get()->result_array();
-      foreach ($marcas as $m) {
-        $out[] = array('tipo' => 'Marca', 'label' => $m['cat_name'], 'url' => '/papel-pintado?marca=' . $m['cat_id']);
-      }
-
-      $this->db->select('estilo_id, estilo_name', FALSE)->from('demo_estilo')->where('activo', 1);
-      foreach ($exploded as $key) { $this->db->like('estilo_name', $key); }
-      $estilos = $this->db->order_by('estilo_name', 'asc')->limit(4)->get()->result_array();
-      foreach ($estilos as $e) {
-        $nombre = mb_strtoupper(mb_substr($e['estilo_name'], 0, 1)) . mb_strtolower(mb_substr($e['estilo_name'], 1));
-        $out[] = array('tipo' => 'Estilo', 'label' => $nombre, 'url' => '/papel-pintado?estilo=' . $e['estilo_id']);
-      }
-
-      return array_slice($out, 0, 6);
-    }
-
     function search_items($search="",$page=-1){
       $exploded=explode(" ",$search);
       

@@ -783,19 +783,6 @@ if (!isset($url_canonica))
   .bo-grid-live{ grid-template-columns:repeat(6,1fr); margin-bottom:8px; }
   .bo-ver-todo{ display:inline-block; margin-top:18px; font-size:13px; font-weight:600; color:#333; text-decoration:none; }
   .bo-ver-todo:hover{ color:#a36185; }
-  .bo-sugerencias{ margin-bottom:24px; }
-  .bo-sug-chip{ display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border:1px solid #e8e4df; border-radius:20px; font-size:13px; color:#333; text-decoration:none; margin:0 8px 8px 0; }
-  .bo-sug-chip:hover{ border-color:#a36185; color:#a36185; }
-  .bo-sug-chip .tipo{ font-size:9px; text-transform:uppercase; letter-spacing:.05em; color:#a36185; font-weight:600; }
-  /* Productos recomendados: slider horizontal */
-  .bo-slider-wrap{ position:relative; }
-  .bo-slider{ display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:2px; scrollbar-width:none; -ms-overflow-style:none; }
-  .bo-slider::-webkit-scrollbar{ display:none; }
-  .bo-slider .bo-pcard{ flex:0 0 150px; scroll-snap-align:start; }
-  .bo-slider-arrow{ position:absolute; top:38%; transform:translateY(-50%); width:32px; height:32px; border-radius:50%; background:#fff; border:1px solid #e8e4df; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.12); z-index:2; font-size:13px; color:#333; }
-  .bo-slider-arrow:hover{ border-color:#a36185; color:#a36185; }
-  .bo-slider-arrow.prev{ left:-14px; }
-  .bo-slider-arrow.next{ right:-14px; }
   @media (max-width:900px){
     .bo-panel{ max-height:100vh; height:100%; }
     .bo-top{ padding:14px 16px; gap:14px; }
@@ -804,8 +791,6 @@ if (!isset($url_canonica))
     .bo-col-left{ width:100%; border-right:none; border-bottom:1px solid #e8e4df; margin:0 0 24px; padding:0 0 24px; }
     .bo-grid{ grid-template-columns:repeat(2,1fr); }
     .bo-grid-live{ grid-template-columns:repeat(3,1fr); }
-    .bo-slider .bo-pcard{ flex-basis:130px; }
-    .bo-slider-arrow{ display:none; }
   }
 
   /* ----- Búsqueda compacta ----- */
@@ -1461,41 +1446,23 @@ if (!isset($url_canonica))
 
     function productosHtml(items, keyName, keyCat){
       if (!items || !items.length) return '';
-      var cards = items.map(function(it){
-        return '<a class="bo-pcard" href="' + it.url + '">'
+      var html = '<h3>Productos recomendados</h3><div class="bo-grid">';
+      items.forEach(function(it){
+        html += '<a class="bo-pcard" href="' + it.url + '">'
           + '<div class="bo-img"><img src="' + it.img + '" alt="" loading="lazy"></div>'
           + '<p class="bo-cat">' + (it[keyCat] || '') + '</p>'
           + '<p class="bo-name">' + (it[keyName] || it.ref || '') + '</p>'
           + '<p class="bo-price">' + it.price + '</p></a>';
-      }).join('');
-      return '<h3>Productos recomendados</h3><div class="bo-slider-wrap">'
-        + '<span class="bo-slider-arrow prev" data-slide="-1" aria-label="Anterior">&#8249;</span>'
-        + '<div class="bo-slider">' + cards + '</div>'
-        + '<span class="bo-slider-arrow next" data-slide="1" aria-label="Siguiente">&#8250;</span>'
-        + '</div>';
-    }
-
-    function sugerenciasHtml(items){
-      if (!items || !items.length) return '';
-      return '<div class="bo-sugerencias">' + items.map(function(it){
-        return '<a class="bo-sug-chip" href="' + it.url + '"><span class="tipo">' + it.tipo + '</span>' + it.label + '</a>';
-      }).join('') + '</div>';
+      });
+      html += '</div>';
+      return html;
     }
 
     function bindInteractive(){
-      body.querySelectorAll('[data-term]:not([data-bound])').forEach(function(el){
-        el.setAttribute('data-bound', '1');
+      body.querySelectorAll('[data-term]').forEach(function(el){
         el.addEventListener('click', function(){
           field.value = el.getAttribute('data-term');
           form.submit();
-        });
-      });
-      body.querySelectorAll('.bo-slider-arrow:not([data-bound])').forEach(function(arrow){
-        arrow.setAttribute('data-bound', '1');
-        var track = arrow.parentElement.querySelector('.bo-slider');
-        arrow.addEventListener('click', function(){
-          var dir = parseInt(arrow.getAttribute('data-slide'), 10);
-          track.scrollBy({left: dir * 320, behavior: 'smooth'});
         });
       });
     }
@@ -1507,14 +1474,13 @@ if (!isset($url_canonica))
       fillPopulares();
       getRecomendados(function(items){
         var el = document.getElementById('bo-recom');
-        if (el) { el.innerHTML = productosHtml(items, 'name', 'cat'); bindInteractive(); }
+        if (el) el.innerHTML = productosHtml(items, 'name', 'cat');
       });
     }
 
-    function renderResultados(q, data, sugerencias){
+    function renderResultados(q, data){
       var hasResults = data && data.length;
       var html = '<div class="bo-live">';
-      html += sugerenciasHtml(sugerencias);
       if (hasResults) {
         html += '<div class="bo-grid bo-grid-live">';
         data.forEach(function(it){
@@ -1540,48 +1506,30 @@ if (!isset($url_canonica))
         fillPopulares();
         getRecomendados(function(items){
           var el = document.getElementById('bo-recom-fallback');
-          if (el) { el.innerHTML = productosHtml(items, 'name', 'cat'); bindInteractive(); }
+          if (el) el.innerHTML = productosHtml(items, 'name', 'cat');
         });
       }
     }
 
     var timer = null;
     function doSearch(q){
-      var results = null, sugerencias = null;
-      function checkDone(){
-        if (results !== null && sugerencias !== null) renderResultados(q, results, sugerencias);
-      }
-
       var xhr = new XMLHttpRequest();
       xhr.open('GET', '/tienda/busqueda?ajax=1&q=' + encodeURIComponent(q));
       xhr.onload = function(){
-        var data = [];
-        if (xhr.status === 200) {
-          var raw = xhr.responseText.trim();
-          var jsonStart = raw.indexOf('[');
-          if (jsonStart !== -1) {
-            raw = raw.substring(jsonStart);
-            var jsonEnd = raw.lastIndexOf(']');
-            if (jsonEnd !== -1) {
-              raw = raw.substring(0, jsonEnd + 1);
-              try { data = JSON.parse(raw) || []; } catch(e) { data = []; }
-            }
-          }
-        }
-        results = data;
-        checkDone();
+        if (xhr.status !== 200) { renderResultados(q, []); return; }
+        var raw = xhr.responseText.trim();
+        var jsonStart = raw.indexOf('[');
+        if (jsonStart === -1) { renderResultados(q, []); return; }
+        raw = raw.substring(jsonStart);
+        var jsonEnd = raw.lastIndexOf(']');
+        if (jsonEnd === -1) { renderResultados(q, []); return; }
+        raw = raw.substring(0, jsonEnd + 1);
+        var data;
+        try { data = JSON.parse(raw); } catch(e) { renderResultados(q, []); return; }
+        renderResultados(q, data);
       };
-      xhr.onerror = function(){ results = []; checkDone(); };
+      xhr.onerror = function(){ renderResultados(q, []); };
       xhr.send();
-
-      var xhr2 = new XMLHttpRequest();
-      xhr2.open('GET', '/tienda/busqueda_sugerencias?q=' + encodeURIComponent(q));
-      xhr2.onload = function(){
-        try { sugerencias = JSON.parse(xhr2.responseText) || []; } catch(e) { sugerencias = []; }
-        checkDone();
-      };
-      xhr2.onerror = function(){ sugerencias = []; checkDone(); };
-      xhr2.send();
     }
 
     field.addEventListener('input', function(){
