@@ -4386,7 +4386,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
       $this->db->like('item_ref', trim($search), 'after');
       $this->db->group_by('item_id');
       $this->db->order_by('portada', 'desc');
-      $this->db->limit(8);
+      $this->db->limit(4);
       $query = $this->db->get();
 
       if ($query->num_rows() == 0) {
@@ -4424,7 +4424,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 
         $this->db->group_by('item_id');
         $this->db->order_by('portada', 'desc');
-        $this->db->limit(8);
+        $this->db->limit(4);
 
         $query = $this->db->get();
       }
