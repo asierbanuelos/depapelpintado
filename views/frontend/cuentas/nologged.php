@@ -42,13 +42,9 @@
               <div class="">
                 <input class="boton-opciones" type="submit" name="identificate" value="Enviar">
               </div>
-              <?php
-              /*
               <div class="forgot-password">
-                <a href="https://presta.depapelpintado.es/recuperar-contraseña" rel="nofollow">¿Olvidaste tu contraseña?</a>
+                <a href="/tienda/recuperar_contrasena" rel="nofollow">¿Olvidaste tu contraseña?</a>
               </div>
-              */
-              ?>
             </div>
           </div>
         </div>
