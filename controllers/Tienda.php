@@ -908,7 +908,7 @@ class Tienda extends CI_Controller {
         // Productos recomendados para el estado por defecto del buscador
         // (overlay). Reutiliza get_items_portada() via el modelo, ya cacheada.
         header('Content-Type: application/json');
-        echo json_encode($this->flexi_cart_model->get_items_recomendados_busqueda(8));
+        echo json_encode($this->flexi_cart_model->get_items_recomendados_busqueda(4));
     }
 
     function busquedas_populares() {
