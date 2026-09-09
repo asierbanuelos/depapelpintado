@@ -27,8 +27,8 @@ foreach ($datos_resumen_pantalla['items_pedido'] as $id_item => $item_pedido) {
         default:   $seccionbase="papel_pintado";$seccionbase_name="Papel pintado"; break;
     }
 
-    $datos_pedido_envio['products'][$kont_productos]['id']=$item_pedido['name'];
-    $datos_pedido_envio['products'][$kont_productos]['name']=$item_pedido['id'];
+    $datos_pedido_envio['products'][$kont_productos]['id']=$item_pedido['id'];
+    $datos_pedido_envio['products'][$kont_productos]['name']=$item_pedido['name'];
     $datos_pedido_envio['products'][$kont_productos]['category_id']=$item_pedido['category'];
     $datos_pedido_envio['products'][$kont_productos]['category_name']=$seccionbase_name;
     $datos_pedido_envio['products'][$kont_productos]['qty']=$item_pedido['quantity'];
