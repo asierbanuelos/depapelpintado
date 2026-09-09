@@ -1007,28 +1007,28 @@ if (!isset($url_canonica))
     letter-spacing: 2px;
     width: 100%;
     text-align: center;
-    background: #FCF9F4;
-    color: #BB8AA3;
+    background: #a36185;
+    color: #fff;
     border: none;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     transform: translateY(100%);
-    transition: transform 0.25s ease;
+    transition: transform 0.25s ease, background 0.2s ease;
     z-index: 3;
   }
   .listado-productos .articulo-block:hover .card-text .boton-opciones { transform: translateY(0); }
   .listado-productos .card-text .boton-opciones:hover,
-  .listado-productos .card-text .boton-opciones:focus { background: #FCF9F4 !important; color: #BB8AA3 !important; }
+  .listado-productos .card-text .boton-opciones:focus { background: #333 !important; color: #fff !important; }
   @media (max-width: 767px) {
     .listado-productos .card-text .boton-opciones {
       position: static;
       transform: none;
       display: block;
       margin-top: 8px;
-      background: #FCF9F4;
-      color: #BB8AA3;
+      background: #a36185;
+      color: #fff;
     }
     .listado-productos .articulo-block:hover .card-text .boton-opciones { transform: none; }
   }
