@@ -2,8 +2,8 @@
 .hero-static {
   position: relative;
   width: 100%;
-  height: 66vh;
-  min-height: 400px;
+  height: 74vh;
+  min-height: 450px;
   overflow: hidden;
 }
 .hero-static img {
@@ -77,7 +77,7 @@
   text-decoration: none;
 }
 @media (max-width: 767px) {
-  .hero-static { height: 52vh; min-height: 320px; }
+  .hero-static { height: 58vh; min-height: 360px; }
   .hero-static-content { padding-top: 32px; }
   .hero-static-badge { margin-bottom: 26px; }
   .hero-static-h1 { font-size: clamp(36px, 12vw, 72px); letter-spacing: 3px; margin: 0 0 26px; }
