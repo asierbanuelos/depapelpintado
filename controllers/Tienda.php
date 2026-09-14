@@ -5010,6 +5010,13 @@ $this->db->cache_off();
     function cron_ratings_productos() {
         if ($this->input->get('k') !== 'rt8f2k5q1x9z') { show_404(); return; }
 
+        // Este proceso tarda varios minutos (miles de llamadas a la API de
+        // reseñas); el límite de 300s de PHP-FPM para este sitio se queda
+        // corto. Se libera SOLO para esta función, sin tocar la
+        // configuración compartida del servidor.
+        set_time_limit(0);
+        ignore_user_abort(true);
+
         $items = $this->flexi_cart_model->get_items_candidatos_rating();
 
         header('Content-Type: text/plain; charset=utf-8');
