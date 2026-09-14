@@ -2513,7 +2513,7 @@ class Tienda extends CI_Controller {
                 $this->data['meta_title'] = $this->data['key']['meta_title'];
             else{
                 if ($this->data['key']['item_tipo'] != 5)
-                        $this->data['meta_title'] = $tipo_producto.' '.$this->data['key']['item_ref'].' de '. $marca->cat_name.', colección '.$coleccion[0]->coleccion_name;
+                        $this->data['meta_title'] = $tipo_producto.' '.trim($this->data['key']['item_name'].' '.$this->data['key']['item_ref']).' de '. $marca->cat_name.', colección '.$coleccion[0]->coleccion_name;
                 else{
                     $this->data['meta_title'] = $this->data['key']['item_name'].' - '.$this->data['key']['item_ref'];
                     //$this->data['meta_title'] = $this->data['key']['item_name'].' - '.$this->data['key']['item_ref'].' ('. $marca->cat_name.', colección '.$coleccion[0]->coleccion_name.')';
@@ -2522,8 +2522,8 @@ class Tienda extends CI_Controller {
 
             if(trim($this->data['key']['meta_description'])!='')
                 $this->data['meta_description'] = $this->data['key']['meta_description'];
-            else    
-                $this->data['meta_description'] = '';
+            else
+                $this->data['meta_description'] = 'Compra '.$tipo_producto.' '.trim($this->data['key']['item_name'].' '.$this->data['key']['item_ref']).' de '.$marca->cat_name.', colección '.$coleccion[0]->coleccion_name.'. Envío gratis a España. Descúbrelo en De Papel Pintado.';
             
             /*
             $this->data['meta_title'] = "Listado de marcas de Alfombras a medida. ¡Decora tu ambiente!";
