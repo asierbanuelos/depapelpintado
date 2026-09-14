@@ -285,8 +285,14 @@ $this->load->view('frontend/articulo_modal_carrito', $this->data);
       }
     }
 
-    body.style.maxHeight = '0';
-    header.classList.add('filtro-cerrado');
+    // Si el grupo ya tiene un filtro aplicado, se queda abierto para que se vea
+    // de un vistazo qué está activo ahora mismo.
+    if (body.querySelector('.filtros-seleccionados')) {
+      body.style.maxHeight = body.scrollHeight + 'px';
+    } else {
+      body.style.maxHeight = '0';
+      header.classList.add('filtro-cerrado');
+    }
     header.addEventListener('click', function() {
       var cerrado = header.classList.toggle('filtro-cerrado');
       body.style.maxHeight = cerrado ? '0' : body.scrollHeight + 'px';
