@@ -157,7 +157,7 @@ if (!isset($url_canonica))
   <link rel="stylesheet" href="/includes/js/jquery_ui/jquery-ui.min.css">  // quitar carpeta jquery_ui/ para coger el css original ; 
   */
   ?>
-  <link rel="shortcut icon" href="https://www.depapelpintado.es/favicon.ico"> 
+  <link rel="shortcut icon" href="https://depapelpintado.es/favicon.ico"> 
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="/includes/bootstrap4/css/bootstrap.min.css" >
@@ -247,10 +247,10 @@ if (!isset($url_canonica))
     "@context": "https://schema.org",
     "@type": "Organization",
     "name" : "De Papel Pintado",
-    "url" : "https://www.depapelpintado.es/",
+    "url" : "https://depapelpintado.es/",
     "logo": {
       "@type": "ImageObject",
-      "url":"https://www.depapelpintado.es/includes/images/depapelpintado-logo.jpg"
+      "url":"https://depapelpintado.es/includes/images/depapelpintado-logo.jpg"
     }
   }
   </script>
