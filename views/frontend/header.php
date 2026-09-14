@@ -295,6 +295,13 @@ if (!isset($url_canonica))
         "@type": "Brand",
         "name": "<?php echo htmlspecialchars($key['cat_name'], ENT_QUOTES); ?>"
         },
+      <?php if (isset($rating_producto) && $rating_producto['total'] > 0): ?>
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "<?php echo htmlspecialchars($rating_producto['average'], ENT_QUOTES); ?>",
+        "reviewCount": "<?php echo htmlspecialchars($rating_producto['total'], ENT_QUOTES); ?>"
+        },
+      <?php endif; ?>
       "offers": {
         "@type": "Offer",
         "price": "<?php echo number_format(round($prod_precio,2),2, '.',''); ?>",
@@ -305,7 +312,7 @@ if (!isset($url_canonica))
         }
       }
       </script>
-      <?php 
+      <?php
     }
     else{
       ?>
@@ -318,6 +325,13 @@ if (!isset($url_canonica))
         "<?php echo $img_1; ?>"
         ],
       "sku": "<?php echo htmlspecialchars($key['item_ref'], ENT_QUOTES); ?>",
+      <?php if (isset($rating_producto) && $rating_producto['total'] > 0): ?>
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "<?php echo htmlspecialchars($rating_producto['average'], ENT_QUOTES); ?>",
+        "reviewCount": "<?php echo htmlspecialchars($rating_producto['total'], ENT_QUOTES); ?>"
+        },
+      <?php endif; ?>
       "offers": {
         "@type": "Offer",
         "price": "<?php echo number_format(round($prod_precio,2),2, '.',''); ?>",

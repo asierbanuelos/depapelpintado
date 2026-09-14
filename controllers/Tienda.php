@@ -2524,7 +2524,12 @@ class Tienda extends CI_Controller {
                 $this->data['meta_description'] = $this->data['key']['meta_description'];
             else
                 $this->data['meta_description'] = 'Compra '.$tipo_producto.' '.trim($this->data['key']['item_name'].' '.$this->data['key']['item_ref']).' de '.$marca->cat_name.', colección '.$coleccion[0]->coleccion_name.'. Envío gratis a España. Descúbrelo en De Papel Pintado.';
-            
+
+            // Valoracion del producto: SOLO lectura de la cache en disco
+            // (actualizada aparte por el cron cron_ratings_productos), nunca
+            // se llama a la API de reseñas en directo desde una visita real.
+            $this->data['rating_producto'] = $this->flexi_cart_model->get_rating_producto_cache($this->data['key']['item_id']);
+
             /*
             $this->data['meta_title'] = "Listado de marcas de Alfombras a medida. ¡Decora tu ambiente!";
             $this->data['meta_description'] ='Todas las alfombras agrupadas por marcas, seguro que tenemos lo que buscas. ¡Visítanos!'; 
@@ -4991,6 +4996,35 @@ $this->db->cache_off();
             }
         }
         echo "\nFin.\n";
+    }
+
+    /**
+     * cron_ratings_productos
+     * Actualiza la caché en disco de valoraciones (guaranteed-reviews.com)
+     * de los productos que se han vendido alguna vez. Es la ÚNICA función
+     * que llama a esa API externa; la ficha de producto solo lee la caché
+     * ya guardada (Flexi_cart_model::get_rating_producto_cache), nunca
+     * llama en directo. Protegido por clave: ?k=<clave>. Pensado para un
+     * cron diario (via 127.0.0.1).
+     */
+    function cron_ratings_productos() {
+        if ($this->input->get('k') !== 'rt8f2k5q1x9z') { show_404(); return; }
+
+        $items = $this->flexi_cart_model->get_items_candidatos_rating();
+
+        header('Content-Type: text/plain; charset=utf-8');
+        echo "Productos a actualizar: ".count($items)."\n\n";
+
+        $con_reseñas = 0;
+        foreach ($items as $item_id) {
+            $rating = $this->flexi_cart_model->refrescar_rating_producto($item_id);
+            if ($rating['total'] > 0) {
+                $con_reseñas++;
+                echo $item_id." -> ".$rating['total']." reseñas, media ".$rating['average']."\n";
+            }
+            usleep(50000); // 50ms de cortesía entre llamadas
+        }
+        echo "\nFin. Productos con al menos una reseña: ".$con_reseñas."\n";
     }
 
     ###++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++###

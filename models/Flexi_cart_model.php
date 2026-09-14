@@ -4703,6 +4703,60 @@ class Flexi_cart_model extends Flexi_cart_lite_model
       return array_slice($out, 0, 6);
     }
 
+    function get_items_candidatos_rating() {
+      // Solo productos que se han vendido alguna vez (los únicos que
+      // pueden tener reseñas reales en guaranteed-reviews.com). Evita
+      // tener que consultar el catálogo entero.
+      $this->db->select('DISTINCT ord_det_item_fk', FALSE)->from('order_details');
+      $rows = $this->db->get()->result_array();
+      $out = array();
+      foreach ($rows as $r) { $out[] = (int)$r['ord_det_item_fk']; }
+      return $out;
+    }
+
+    function refrescar_rating_producto($item_id) {
+      // SOLO se llama desde el cron (Tienda::cron_ratings_productos), nunca
+      // desde una visita real. Hace la llamada externa y guarda el
+      // resultado en caché en disco; la ficha de producto solo lee esa
+      // caché (get_rating_producto_cache), jamás llama a la API en vivo.
+      $item_id = (int)$item_id;
+      $out = array('total' => 0, 'average' => 0);
+      if ($item_id <= 0) return $out;
+
+      $ch = curl_init('https://api.guaranteed-reviews.com/public/v3/reviews/c0711d58629393101bc6a58b2a8e79c2/' . $item_id);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
+      curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+      $response = curl_exec($ch);
+      curl_close($ch);
+
+      if ($response) {
+        $data = json_decode($response, true);
+        if (isset($data['ratings']['total']) && (int)$data['ratings']['total'] > 0) {
+          $out = array('total' => (int)$data['ratings']['total'], 'average' => (float)$data['ratings']['average']);
+        }
+      }
+
+      $cache_file = APPPATH . 'cache/rating_producto_' . $item_id . '.cache';
+      @file_put_contents($cache_file . '.tmp', serialize($out));
+      @rename($cache_file . '.tmp', $cache_file);
+      return $out;
+    }
+
+    function get_rating_producto_cache($item_id) {
+      // Lectura PURAMENTE local, sin red: la usa la ficha de producto en
+      // cada visita real. Si el cron todavía no ha pasado por este
+      // producto, no hay caché y simplemente no se muestra valoración.
+      $item_id = (int)$item_id;
+      if ($item_id <= 0) return array('total' => 0, 'average' => 0);
+      $cache_file = APPPATH . 'cache/rating_producto_' . $item_id . '.cache';
+      if (file_exists($cache_file)) {
+        $cached = @unserialize(@file_get_contents($cache_file));
+        if ($cached !== false) return $cached;
+      }
+      return array('total' => 0, 'average' => 0);
+    }
+
     function search_items($search="",$page=-1){
       $exploded=explode(" ",$search);
       
