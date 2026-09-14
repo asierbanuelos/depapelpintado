@@ -5893,7 +5893,7 @@ class Flexi_cart_model extends Flexi_cart_lite_model
 		//$join_txt=implode(' AND ', $a_join);
 		$join_txt=implode(' ', $a_join);
 
-		$registros_por_pagina=42;
+		$registros_por_pagina=44;
 		if($page>0)
 			$limit_txt=" LIMIT $registros_por_pagina OFFSET ".$page*$registros_por_pagina;
 		else

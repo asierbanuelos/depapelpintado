@@ -1176,7 +1176,7 @@ class Tienda extends CI_Controller {
         */
         $pagina_actual = isset($_GET['page']) && (int)$_GET['page'] > 0 ? (int)$_GET['page'] : 0;
         $this->data['pagina_actual'] = $pagina_actual;
-        $this->data['registros_por_pagina'] = 42;
+        $this->data['registros_por_pagina'] = 44;
         $this->data['total_productos'] = $this->flexi_cart_model->count_items_filtros_nuevo_listado($categoria_seo->tipo_producto, $this->data['filtros_categorias_seo']['ids_categoria'], $categoria_seo->nueva_categoria_id);
         $this->data['all'] = $this->flexi_cart_model->get_items_filtros_nuevo_listado($categoria_seo->tipo_producto, $this->data['filtros_categorias_seo']['ids_categoria'], $pagina_actual, $ord, $categoria_seo->nueva_categoria_id);
         
@@ -1449,7 +1449,7 @@ class Tienda extends CI_Controller {
         
         $pagina_actual = isset($_GET['page']) && (int)$_GET['page'] > 0 ? (int)$_GET['page'] : 0;
         $this->data['pagina_actual'] = $pagina_actual;
-        $this->data['registros_por_pagina'] = 42;
+        $this->data['registros_por_pagina'] = 44;
         $this->data['total_productos'] = count($this->data['filtros_categorias_seo']['ids_categoria']);
         $this->data['all'] = $this->flexi_cart_model->get_items_filtros_nuevo_listado($this->data['categ'], $this->data['filtros_categorias_seo']['ids_categoria'], $pagina_actual, $ord);
         /*
@@ -1771,7 +1771,7 @@ class Tienda extends CI_Controller {
             $this->data['mostrar_categorias_seo']=count($this->data['menu_categorias_seo']) ? true : false;
             $pagina_actual_col = isset($_GET['page']) && (int)$_GET['page'] > 0 ? (int)$_GET['page'] : 0;
             $this->data['pagina_actual'] = $pagina_actual_col;
-            $this->data['registros_por_pagina'] = 42;
+            $this->data['registros_por_pagina'] = 44;
             $this->data['total_productos'] = $this->flexi_cart_model->count_items_filtros_nuevo_listado($this->data['categ'], $this->data['filtros_categorias_seo']['ids_categoria']);
             $this->data['all'] = $this->flexi_cart_model->get_items_filtros_nuevo_listado($this->data['categ'], $this->data['filtros_categorias_seo']['ids_categoria'], $pagina_actual_col, $ord);
 
@@ -1954,7 +1954,7 @@ class Tienda extends CI_Controller {
             $this->data['mostrar_categorias_seo']=count($this->data['menu_categorias_seo']) ? true : false;
             $pagina_actual_col = isset($_GET['page']) && (int)$_GET['page'] > 0 ? (int)$_GET['page'] : 0;
             $this->data['pagina_actual'] = $pagina_actual_col;
-            $this->data['registros_por_pagina'] = 42;
+            $this->data['registros_por_pagina'] = 44;
             $this->data['total_productos'] = $this->flexi_cart_model->count_items_filtros_nuevo_listado($this->data['categ'], $this->data['filtros_categorias_seo']['ids_categoria']);
             $this->data['all'] = $this->flexi_cart_model->get_items_filtros_nuevo_listado($this->data['categ'], $this->data['filtros_categorias_seo']['ids_categoria'], $pagina_actual_col, $ord);
 
