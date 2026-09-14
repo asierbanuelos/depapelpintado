@@ -328,11 +328,25 @@ if (!isset($url_canonica))
         }
       }
       </script>
-      <?php 
-    } 
+      <?php
+    }
   }
+  ?>
+  <?php
+  // Etiquetas Open Graph (título/imagen al compartir en redes) — usa el
+  // mismo título/descripción que la página, y la imagen del producto
+  // cuando existe (calculada arriba), o el logo del sitio si no.
+  $og_image = isset($img_1) ? $img_1 : 'https://depapelpintado.es/includes/images/depapelpintado-logo.jpg';
+  ?>
+  <meta property="og:type" content="<?php echo (isset($key) && !empty($key)) ? 'product' : 'website'; ?>" />
+  <meta property="og:title" content="<?php echo htmlspecialchars($meta_datos['title'], ENT_QUOTES); ?>" />
+  <meta property="og:description" content="<?php echo htmlspecialchars($meta_datos['description'], ENT_QUOTES); ?>" />
+  <meta property="og:url" content="<?php echo current_url(); ?>" />
+  <meta property="og:site_name" content="De Papel Pintado" />
+  <meta property="og:image" content="<?php echo $og_image; ?>" />
 
-  if(isset($cssseo)) 
+  <?php
+  if(isset($cssseo))
     echo htmlspecialchars_decode($cssseo->texto);
   //if(isset($recaptcha_v3)) // Al meter la newsletter en el footer, siempre vamos a necesitar el recatcha
   echo "  <script src='https://www.google.com/recaptcha/api.js?render=".RECAPTCHA_V3_SITE_KEY."'></script>";
